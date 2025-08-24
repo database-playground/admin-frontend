@@ -19,7 +19,7 @@ export function LoginForm({
         <CardContent>
           <div className="grid gap-6">
             <div className="flex flex-col gap-4">
-              <a href={buildUri("/api/auth/google/login")}>
+              <a href={buildUri(`/api/auth/google/login?redirect_uri=${process.env.APP_REDIRECT_URL}`)}>
                 <Button variant="outline" className="w-full">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
