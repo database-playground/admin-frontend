@@ -31,7 +31,10 @@ export default function RootLayout({
       <head>
         <PreloadResources />
 
-        <link rel="stylesheet" href="https://assets.dbplay.app/ibm-plex-sans-tc/css/ibm-plex-sans-tc-default.min.css" />
+        <link
+          rel="stylesheet"
+          href="https://assets.dbplay.app/ibm-plex-sans-tc/css/ibm-plex-sans-tc-default-swap.min.css"
+        />
       </head>
       <body
         className={`
