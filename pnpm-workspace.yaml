@@ -2,6 +2,7 @@ onlyBuiltDependencies:
   - '@ibm/plex-sans-tc'
   - '@parcel/watcher'
   - '@tailwindcss/oxide'
+  - core-js
   - dprint
   - sharp
   - unrs-resolver
