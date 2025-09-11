@@ -14,6 +14,7 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { DeleteUserDropdownTrigger } from "./delete";
 import { UpdateUserDropdownTrigger } from "./update";
+import { LogoutUserDevicesDropdownTrigger } from "./logout-devices";
 
 export interface User {
   id: string;
@@ -104,6 +105,8 @@ export const columns: ColumnDef<User>[] = [
             <DropdownMenuSeparator />
             <UpdateUserDropdownTrigger id={row.original.id} />
             <DeleteUserDropdownTrigger id={row.original.id} />
+            <DropdownMenuSeparator />
+            <LogoutUserDevicesDropdownTrigger id={row.original.id} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -13,3 +13,10 @@ export const USER_DELETE_MUTATION = graphql(`
     deleteUser(id: $id)
   }
 `);
+
+
+export const USER_LOGOUT_DEVICES_MUTATION = graphql(`
+  mutation LogoutUserDevices($userID: ID!) {
+    logoutUser(userID: $userID)
+  }
+`);

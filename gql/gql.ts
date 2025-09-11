@@ -51,6 +51,7 @@ type Documents = {
     "\n  query UserAuditInfo($id: ID!) {\n    user(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.UserAuditInfoDocument,
     "\n  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {\n    updateUser(id: $id, input: $input) {\n      id\n    }\n  }\n": typeof types.UpdateUserDocument,
     "\n  mutation DeleteUser($id: ID!) {\n    deleteUser(id: $id)\n  }\n": typeof types.DeleteUserDocument,
+    "\n  mutation LogoutUserDevices($userID: ID!) {\n    logoutUser(userID: $userID)\n  }\n": typeof types.LogoutUserDevicesDocument,
     "\n  query UserById($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n      avatar\n      createdAt\n      updatedAt\n      group {\n        id\n        name\n      }\n    }\n  }\n": typeof types.UserByIdDocument,
     "\n  query GroupList {\n    groups {\n      id\n      name\n    }\n  }\n": typeof types.GroupListDocument,
     "\n  query UsersTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n  ) {\n    users(first: $first, after: $after, last: $last, before: $before) {\n      edges {\n        node {\n          id\n          name\n          email\n          avatar\n          createdAt\n          updatedAt\n          group {\n            id\n            name\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": typeof types.UsersTableDocument,
@@ -96,6 +97,7 @@ const documents: Documents = {
     "\n  query UserAuditInfo($id: ID!) {\n    user(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n": types.UserAuditInfoDocument,
     "\n  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {\n    updateUser(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateUserDocument,
     "\n  mutation DeleteUser($id: ID!) {\n    deleteUser(id: $id)\n  }\n": types.DeleteUserDocument,
+    "\n  mutation LogoutUserDevices($userID: ID!) {\n    logoutUser(userID: $userID)\n  }\n": types.LogoutUserDevicesDocument,
     "\n  query UserById($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n      avatar\n      createdAt\n      updatedAt\n      group {\n        id\n        name\n      }\n    }\n  }\n": types.UserByIdDocument,
     "\n  query GroupList {\n    groups {\n      id\n      name\n    }\n  }\n": types.GroupListDocument,
     "\n  query UsersTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n  ) {\n    users(first: $first, after: $after, last: $last, before: $before) {\n      edges {\n        node {\n          id\n          name\n          email\n          avatar\n          createdAt\n          updatedAt\n          group {\n            id\n            name\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": types.UsersTableDocument,
@@ -266,6 +268,10 @@ export function graphql(source: "\n  mutation UpdateUser($id: ID!, $input: Updat
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation DeleteUser($id: ID!) {\n    deleteUser(id: $id)\n  }\n"): (typeof documents)["\n  mutation DeleteUser($id: ID!) {\n    deleteUser(id: $id)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation LogoutUserDevices($userID: ID!) {\n    logoutUser(userID: $userID)\n  }\n"): (typeof documents)["\n  mutation LogoutUserDevices($userID: ID!) {\n    logoutUser(userID: $userID)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

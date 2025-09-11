@@ -284,8 +284,6 @@ type Mutation {
   deleteDatabase(id: ID!): Boolean!
   """Delete a group."""
   deleteGroup(id: ID!): Boolean!
-  """Delete the current user."""
-  deleteMe: Boolean!
   """Delete a question."""
   deleteQuestion(id: ID!): Boolean!
   """Delete a scope set."""
@@ -301,6 +299,8 @@ type Mutation {
   impersonateUser(userID: ID!): String!
   """Logout from all the devices of the current user."""
   logoutAll: Boolean!
+  """Logout a user from all his devices."""
+  logoutUser(userID: ID!): Boolean!
   """Update a database."""
   updateDatabase(id: ID!, input: UpdateDatabaseInput!): Database!
   """Update a group."""
