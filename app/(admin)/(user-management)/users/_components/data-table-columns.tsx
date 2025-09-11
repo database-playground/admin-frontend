@@ -13,6 +13,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { DeleteUserDropdownTrigger } from "./delete";
+import { LogoutUserDevicesDropdownTrigger } from "./logout-devices";
 import { UpdateUserDropdownTrigger } from "./update";
 
 export interface User {
@@ -104,6 +105,8 @@ export const columns: ColumnDef<User>[] = [
             <DropdownMenuSeparator />
             <UpdateUserDropdownTrigger id={row.original.id} />
             <DeleteUserDropdownTrigger id={row.original.id} />
+            <DropdownMenuSeparator />
+            <LogoutUserDevicesDropdownTrigger id={row.original.id} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

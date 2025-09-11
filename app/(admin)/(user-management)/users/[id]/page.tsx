@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { DeleteUserButtonTrigger } from "../_components/delete";
+import { LogoutUserDevicesButtonTrigger } from "../_components/logout-devices";
 import { UpdateUserButtonTrigger } from "../_components/update";
 import { AuditInfoCard } from "./_components/audit-info";
 import { GroupsCard } from "./_components/groups";
@@ -25,6 +26,7 @@ export default async function UserPage({
           <Header id={id as string} />
 
           <div className="flex items-center gap-2">
+            <LogoutUserDevicesButtonTrigger id={id as string} />
             <UpdateUserButtonTrigger id={id as string} />
             <DeleteUserButtonTrigger id={id as string} />
           </div>
