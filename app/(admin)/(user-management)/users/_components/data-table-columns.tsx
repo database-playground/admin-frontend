@@ -13,8 +13,8 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { DeleteUserDropdownTrigger } from "./delete";
-import { UpdateUserDropdownTrigger } from "./update";
 import { LogoutUserDevicesDropdownTrigger } from "./logout-devices";
+import { UpdateUserDropdownTrigger } from "./update";
 
 export interface User {
   id: string;

@@ -1,10 +1,10 @@
 import { SiteHeader } from "@/components/site-header";
 import { DeleteUserButtonTrigger } from "../_components/delete";
+import { LogoutUserDevicesButtonTrigger } from "../_components/logout-devices";
 import { UpdateUserButtonTrigger } from "../_components/update";
 import { AuditInfoCard } from "./_components/audit-info";
 import { GroupsCard } from "./_components/groups";
 import { Header } from "./_components/header";
-import { LogoutUserDevicesButtonTrigger } from "../_components/logout-devices";
 
 export default async function UserPage({
   params,
