@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -38,6 +38,7 @@ export function UpdateGroupDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateGroupDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -62,6 +63,7 @@ export function UpdateGroupButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateGroupDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -74,15 +76,25 @@ export function UpdateGroupButtonTrigger({ id }: { id: string }) {
 
 function UpdateGroupDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data: scopeSetList } = useSuspenseQuery(SCOPE_SET_LIST_QUERY);
-  const { data: group } = useSuspenseQuery(GROUP_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data: scopeSetList } = useSuspenseQuery(
+    SCOPE_SET_LIST_QUERY,
+    open ? {} : skipToken
+  );
+  const { data: group } = useSuspenseQuery(
+    GROUP_BY_ID_QUERY,
+    open
+      ? {
+          variables: { id },
+        }
+      : skipToken
+  );
 
   const [updateGroup] = useMutation(GROUP_UPDATE_MUTATION, {
     refetchQueries: [GROUPS_TABLE_QUERY],
@@ -102,9 +114,9 @@ function UpdateGroupDialogContent({
   const onSubmit = (data: UpdateGroupFormData) => {
     try {
       const addScopeSetIDs = data.scopeSetIDs.filter(
-        (id) => !group.group.scopeSets?.some((scopeSet) => scopeSet.id === id),
+        (id) => !group?.group.scopeSets?.some((scopeSet) => scopeSet.id === id),
       );
-      const removeScopeSetIDs = group.group.scopeSets
+      const removeScopeSetIDs = group?.group.scopeSets
         ?.filter((scopeSet) => !data.scopeSetIDs.includes(scopeSet.id))
         .map((scopeSet) => scopeSet.id) ?? undefined;
       const clearScopeSets = data.scopeSetIDs.length === 0;
@@ -138,13 +150,13 @@ function UpdateGroupDialogContent({
       </DialogHeader>
       <UpdateGroupForm
         defaultValues={{
-          name: group.group.name,
-          description: group.group.description ?? undefined,
-          scopeSetSlugs: group.group.scopeSets?.map((scopeSet) => scopeSet.slug) ?? [],
+          name: group?.group.name || "",
+          description: group?.group.description ?? undefined,
+          scopeSetSlugs: group?.group.scopeSets?.map((scopeSet) => scopeSet.slug) ?? [],
         }}
         onSubmit={onSubmit}
         action="update"
-        scopeSetList={scopeSetList.scopeSets}
+        scopeSetList={scopeSetList?.scopeSets || []}
       />
     </DialogContent>
   );

@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -38,6 +38,7 @@ export function UpdateUserDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateUserDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -62,6 +63,7 @@ export function UpdateUserButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateUserDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -74,15 +76,25 @@ export function UpdateUserButtonTrigger({ id }: { id: string }) {
 
 function UpdateUserDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data: groupList } = useSuspenseQuery(GROUP_LIST_QUERY);
-  const { data: user } = useSuspenseQuery(USER_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data: groupList } = useSuspenseQuery(
+    GROUP_LIST_QUERY,
+    open ? {} : skipToken
+  );
+  const { data: user } = useSuspenseQuery(
+    USER_BY_ID_QUERY,
+    open
+      ? {
+          variables: { id },
+        }
+      : skipToken
+  );
 
   const [updateUser] = useMutation(USER_UPDATE_MUTATION, {
     refetchQueries: [USERS_TABLE_QUERY],
@@ -124,13 +136,13 @@ function UpdateUserDialogContent({
       </DialogHeader>
       <UpdateUserForm
         defaultValues={{
-          name: user.user.name,
-          avatar: user.user.avatar ?? undefined,
-          groupID: user.user.group.id,
+          name: user?.user.name || "",
+          avatar: user?.user.avatar ?? undefined,
+          groupID: user?.user.group.id || "",
         }}
         onSubmit={onSubmit}
         action="update"
-        groupList={groupList.groups}
+        groupList={groupList?.groups || []}
       />
     </DialogContent>
   );

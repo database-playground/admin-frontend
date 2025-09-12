@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -42,6 +42,7 @@ export function DeleteQuestionDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <DeleteQuestionAlertDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -66,6 +67,7 @@ export function DeleteQuestionButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <DeleteQuestionAlertDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.push("/questions");
@@ -78,14 +80,21 @@ export function DeleteQuestionButtonTrigger({ id }: { id: string }) {
 
 function DeleteQuestionAlertDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data } = useSuspenseQuery(QUESTION_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data } = useSuspenseQuery(
+    QUESTION_BY_ID_QUERY,
+    open
+      ? {
+          variables: { id },
+        }
+      : skipToken
+  );
 
   const [deleteQuestion] = useMutation(QUESTION_DELETE_MUTATION, {
     refetchQueries: [QUESTIONS_TABLE_QUERY],
@@ -106,7 +115,7 @@ function DeleteQuestionAlertDialogContent({
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>
-          確定要刪除「{data.question.title}」題目嗎？
+          確定要刪除「{data?.question.title}」題目嗎？
         </AlertDialogTitle>
         <AlertDialogDescription>
           刪除後將無法復原此題目。請謹慎操作。

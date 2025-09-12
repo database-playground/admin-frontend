@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -42,6 +42,7 @@ export function DeleteDatabaseDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <DeleteDatabaseAlertDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -66,6 +67,7 @@ export function DeleteDatabaseButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <DeleteDatabaseAlertDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.push("/database");
@@ -78,14 +80,16 @@ export function DeleteDatabaseButtonTrigger({ id }: { id: string }) {
 
 function DeleteDatabaseAlertDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data } = useSuspenseQuery(DATABASE_BY_ID_QUERY, {
+  const { data } = useSuspenseQuery(DATABASE_BY_ID_QUERY, open ? {
     variables: { id },
-  });
+  } : skipToken);
 
   const [deleteDatabase] = useMutation(DATABASE_DELETE_MUTATION, {
     refetchQueries: [DATABASES_TABLE_QUERY],
@@ -106,7 +110,7 @@ function DeleteDatabaseAlertDialogContent({
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>
-          確定要刪除「{data.database.slug}」資料庫嗎？
+          確定要刪除「{data?.database.slug}」資料庫嗎？
         </AlertDialogTitle>
         <AlertDialogDescription>
           刪除後將無法復原此資料庫，且相關的題目可能會受到影響。請謹慎操作。

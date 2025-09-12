@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -38,6 +38,7 @@ export function UpdateDatabaseDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateDatabaseDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -62,6 +63,7 @@ export function UpdateDatabaseButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateDatabaseDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -74,14 +76,21 @@ export function UpdateDatabaseButtonTrigger({ id }: { id: string }) {
 
 function UpdateDatabaseDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data: database } = useSuspenseQuery(DATABASE_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data: database } = useSuspenseQuery(
+    DATABASE_BY_ID_QUERY,
+    open
+      ? {
+          variables: { id },
+        }
+      : skipToken
+  );
 
   const [updateDatabase] = useMutation(DATABASE_UPDATE_MUTATION, {
     refetchQueries: [DATABASES_TABLE_QUERY],
@@ -126,16 +135,16 @@ function UpdateDatabaseDialogContent({
           編輯 SQL 練習用資料庫，包含資料結構和關係圖。
         </DialogDescription>
       </DialogHeader>
-      <UpdateDatabaseForm
-        defaultValues={{
-          slug: database.database.slug,
-          description: database.database.description || undefined,
-          schema: database.database.schema,
-          relationFigure: database.database.relationFigure,
-        }}
-        onSubmit={onSubmit}
-        action="update"
-      />
+        <UpdateDatabaseForm
+          defaultValues={{
+            slug: database?.database.slug || "",
+            description: database?.database.description || undefined,
+            schema: database?.database.schema || "",
+            relationFigure: database?.database.relationFigure || "",
+          }}
+          onSubmit={onSubmit}
+          action="update"
+        />
     </DialogContent>
   );
 }

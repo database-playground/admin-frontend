@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -40,6 +40,7 @@ export function UpdateScopeSetDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateScopeSetDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -64,6 +65,7 @@ export function UpdateScopeSetButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateScopeSetDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -76,14 +78,21 @@ export function UpdateScopeSetButtonTrigger({ id }: { id: string }) {
 
 function UpdateScopeSetDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data } = useSuspenseQuery(SCOPE_SET_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data } = useSuspenseQuery(
+    SCOPE_SET_BY_ID_QUERY,
+    open
+      ? {
+          variables: { id },
+        }
+      : skipToken
+  );
 
   const [updateScopeSet] = useMutation(UPDATE_SCOPE_SET_MUTATION, {
     refetchQueries: [SCOPE_SET_TABLE_QUERY, SCOPE_SET_BY_ID_QUERY],
@@ -134,9 +143,9 @@ function UpdateScopeSetDialogContent({
       </DialogHeader>
       <UpdateScopeSetForm
         defaultValues={{
-          slug: data.scopeSet.slug,
-          description: data.scopeSet.description ?? "",
-          scopes: data.scopeSet.scopes ?? [],
+          slug: data?.scopeSet.slug || "",
+          description: data?.scopeSet.description ?? "",
+          scopes: data?.scopeSet.scopes ?? [],
         }}
         onSubmit={onSubmit}
         action="update"

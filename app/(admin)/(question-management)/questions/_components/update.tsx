@@ -10,7 +10,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { QuestionDifficulty } from "@/gql/graphql";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -38,6 +39,7 @@ export function UpdateQuestionDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateQuestionDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -62,6 +64,7 @@ export function UpdateQuestionButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <UpdateQuestionDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -74,15 +77,25 @@ export function UpdateQuestionButtonTrigger({ id }: { id: string }) {
 
 function UpdateQuestionDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data: databaseList } = useSuspenseQuery(DATABASE_LIST_QUERY);
-  const { data: question } = useSuspenseQuery(QUESTION_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data: databaseList } = useSuspenseQuery(
+    DATABASE_LIST_QUERY,
+    open ? {} : skipToken
+  );
+  const { data: question } = useSuspenseQuery(
+    QUESTION_BY_ID_QUERY,
+    open
+      ? {
+          variables: { id },
+        }
+      : skipToken
+  );
 
   const [updateQuestion] = useMutation(QUESTION_UPDATE_MUTATION, {
     refetchQueries: [QUESTIONS_TABLE_QUERY],
@@ -124,16 +137,16 @@ function UpdateQuestionDialogContent({
       </DialogHeader>
       <UpdateQuestionForm
         defaultValues={{
-          title: question.question.title,
-          description: question.question.description,
-          category: question.question.category,
-          difficulty: question.question.difficulty,
-          referenceAnswer: question.question.referenceAnswer,
-          databaseID: question.question.database.id,
+          title: question?.question.title || "",
+          description: question?.question.description || "",
+          category: question?.question.category || "",
+          difficulty: question?.question.difficulty || QuestionDifficulty.Easy,
+          referenceAnswer: question?.question.referenceAnswer || "",
+          databaseID: question?.question.database.id || "",
         }}
         onSubmit={onSubmit}
         action="update"
-        databaseList={databaseList.databases}
+        databaseList={databaseList?.databases || []}
       />
     </DialogContent>
   );

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -42,6 +42,7 @@ export function DeleteUserDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <DeleteUserAlertDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -66,6 +67,7 @@ export function DeleteUserButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <DeleteUserAlertDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.push(".");
@@ -78,14 +80,21 @@ export function DeleteUserButtonTrigger({ id }: { id: string }) {
 
 function DeleteUserAlertDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data } = useSuspenseQuery(USER_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data } = useSuspenseQuery(
+    USER_BY_ID_QUERY,
+    open
+      ? {
+          variables: { id },
+        }
+      : skipToken
+  );
 
   const [deleteUser] = useMutation(USER_DELETE_MUTATION, {
     refetchQueries: [USERS_TABLE_QUERY],
@@ -106,7 +115,7 @@ function DeleteUserAlertDialogContent({
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>
-          確定要刪除「{data.user.name}」使用者嗎？
+          確定要刪除「{data?.user.name}」使用者嗎？
         </AlertDialogTitle>
         <AlertDialogDescription>
           刪除後將無法復原此使用者。請謹慎操作。
