@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { QuestionDifficulty } from "@/gql/graphql";
+import { useFormDirtyWarning } from "@/hooks/use-form-dirty-warning";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -50,6 +51,9 @@ export function UpdateQuestionForm({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  // 使用 hook 来监听表单状态变化并在页面离开时警告用户
+  useFormDirtyWarning(form.formState.isDirty);
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     // For creation, require databaseID

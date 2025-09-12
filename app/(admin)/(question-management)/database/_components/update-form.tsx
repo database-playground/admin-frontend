@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useFormDirtyWarning } from "@/hooks/use-form-dirty-warning";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,6 +37,8 @@ export function UpdateDatabaseForm({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  useFormDirtyWarning(form.formState.isDirty);
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     form.reset();

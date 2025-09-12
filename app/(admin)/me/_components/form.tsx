@@ -4,6 +4,7 @@ import AppAvatar from "@/components/avatar";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useFormDirtyWarning } from "@/hooks/use-form-dirty-warning";
 import { BASIC_USER_INFO_QUERY } from "@/lib/user";
 import { useUser } from "@/providers/use-user";
 import { useMutation } from "@apollo/client/react";
@@ -28,6 +29,8 @@ export function MeForm() {
       avatar: user?.avatar ?? undefined,
     },
   });
+
+  useFormDirtyWarning(form.formState.isDirty);
 
   const avatar = form.watch("avatar");
 
