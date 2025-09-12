@@ -105,7 +105,7 @@ export function UpdateDatabaseForm({
                 <Textarea
                   {...field}
                   placeholder="請輸入完整的 SQL 建表語句"
-                  className="min-h-[200px] font-mono text-sm"
+                  className="min-h-[200px] max-h-[500px] font-mono text-sm"
                 />
               </FormControl>
               <FormDescription>完整的 SQL DDL 語句，包含所有表格定義。</FormDescription>
