@@ -185,14 +185,7 @@ export function UpdateQuestionForm({
                   <SelectContent>
                     {databaseList.map((database) => (
                       <SelectItem key={database.id} value={database.id}>
-                        <div className="flex flex-col text-left">
-                          <span>{database.slug}</span>
-                          {database.description && (
-                            <span className="text-xs text-muted-foreground">
-                              {database.description}
-                            </span>
-                          )}
-                        </div>
+                        {database.slug}
                       </SelectItem>
                     ))}
                   </SelectContent>
