@@ -50,6 +50,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@swc-contrib/plugin-graphql-codegen-client-preset':
+        specifier: ^0.6.0
+        version: 0.6.0
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1546,6 +1549,10 @@ packages:
 
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
+
+  '@swc-contrib/plugin-graphql-codegen-client-preset@0.6.0':
+    resolution: {integrity: sha512-E3PUJ6HV708XOmfsCF11xAY15hNQyFqwWS5s0Z4sKb4nWbGs8OoXl0prCSLrilUXFhcyFLdk4PEhsPO6n7rQfA==}
+    engines: {node: '>=16'}
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
@@ -5570,6 +5577,8 @@ snapshots:
   '@rushstack/eslint-patch@1.12.0': {}
 
   '@standard-schema/utils@0.3.0': {}
+
+  '@swc-contrib/plugin-graphql-codegen-client-preset@0.6.0': {}
 
   '@swc/helpers@0.5.15':
     dependencies:

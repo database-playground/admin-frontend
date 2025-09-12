@@ -27,6 +27,7 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@swc-contrib/plugin-graphql-codegen-client-preset": "^0.6.0",
     "@tanstack/react-table": "^8.21.3",
     "babel-plugin-react-compiler": "19.1.0-rc.3",
     "class-variance-authority": "^0.7.1",
