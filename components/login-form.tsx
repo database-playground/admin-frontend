@@ -86,6 +86,8 @@ function getErrorMessage(error: string, description?: string): string {
       return "認證過程中發生錯誤，請重新登入。";
     case "logout_failed":
       return "登出時發生錯誤，但您的本地工作階段已清除。";
+    case "forbidden":
+      return "您沒有權限存取此應用程式。";
     default:
       return "登入時發生未知錯誤，請重試。";
   }

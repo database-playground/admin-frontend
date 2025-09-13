@@ -4,9 +4,9 @@ import {
   generateCodeVerifier,
   generateState,
   OAUTH_CONFIG,
-  redirectIfAuthenticated,
   setOAuthState,
 } from "@/lib/auth";
+import { redirectIfAuthenticated } from "@/lib/auth.rsc";
 
 /**
  * OAuth 2.0 Authorization Code Flow with PKCE - Login Initiation

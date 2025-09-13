@@ -1,11 +1,15 @@
+import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import type { BasicUserInfo } from "@/lib/user";
+import { redirectIfAuthenticated } from "@/lib/auth.rsc";
 import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
-import { Logo } from "../logo";
 
-export default function Forbidden({ user }: { user: BasicUserInfo }) {
+export default async function ForbiddenPage({ searchParams }: { searchParams: Promise<{ name?: string; email?: string }> }) {
+  await redirectIfAuthenticated();
+
+  const { name, email } = await searchParams;
+
   return (
     <div
       className={`
@@ -38,14 +42,14 @@ export default function Forbidden({ user }: { user: BasicUserInfo }) {
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4">
           <Button asChild variant="outline">
-            <Link href="/">回到主程式</Link>
+            <Link href="/login">重新登入</Link>
           </Button>
         </CardContent>
         <CardFooter
           className={`justify-center text-center text-xs text-muted-foreground`}
         >
           <section className="flex flex-col items-center gap-1">
-            <p>您目前登入的帳號是：{user.name} ({user.email})</p>
+            <p>您目前登入的帳號是：{name} ({email})</p>
             <p>如果這不是您想登入的帳號，請切換 Google 帳號後重新登入</p>
           </section>
         </CardFooter>

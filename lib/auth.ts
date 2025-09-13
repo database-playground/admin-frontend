@@ -1,7 +1,9 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { getIronSession } from "iron-session";
 import buildUri from "./build-uri";
+import { makeUpstreamClient } from "./apollo";
+import { BASIC_USER_INFO_QUERY, isAdmin, type BasicUserInfo } from "./user";
+import { CombinedGraphQLErrors } from "@apollo/client";
 
 // Constants for OAuth 2.0 PKCE flow
 export const OAUTH_CONFIG = {
@@ -20,7 +22,6 @@ export interface SessionData {
   access_token?: string;
   token_type?: string;
   expires_in?: number;
-  isLoggedIn: boolean;
 }
 
 if (!process.env.AUTH_SECRET) {
@@ -83,7 +84,6 @@ export async function setAuthToken(
   session.access_token = token;
   session.token_type = tokenType;
   session.expires_in = expiresIn;
-  session.isLoggedIn = true;
   
   await session.save();
 }
@@ -91,7 +91,7 @@ export async function setAuthToken(
 export async function getAuthToken(): Promise<string | null> {
   const session = await getSession();
   
-  if (!session.isLoggedIn || !session.access_token) {
+  if (!session.access_token) {
     return null;
   }
   
@@ -221,19 +221,49 @@ export async function revokeToken(token: string): Promise<void> {
 }
 
 // Auth validation
-export async function validateAuth(): Promise<boolean> {
+export interface AuthStatus {
+  loggedIn: boolean;
+  
+  role?: "admin" | "user";
+  user?: BasicUserInfo;
+}
+
+export async function getAuthStatus(): Promise<AuthStatus> {
   const token = await getAuthToken();
-  return token !== null;
-}
+  if (!token) {
+    return {
+      loggedIn: false,
+    };
+  }
 
-// Redirect helpers
-export async function requireAuth(): Promise<never> {
-  redirect("/login");
-}
+  // get user info
+  const client = makeUpstreamClient({ token });
 
-export async function redirectIfAuthenticated(): Promise<void> {
-  const isAuthenticated = await validateAuth();
-  if (isAuthenticated) {
-    redirect("/");
+  try {
+    const { data } = await client.query({
+      query: BASIC_USER_INFO_QUERY,
+    });
+    if (!data) {
+      return {
+        loggedIn: true,
+      };
+    }
+
+    return {
+      role: isAdmin(data?.me) ? "admin" : "user",
+      user: data.me,
+      loggedIn: true,
+    };
+  } catch (error) {
+    if (CombinedGraphQLErrors.is(error) && error.message === 'require authentication') {
+      return {
+        loggedIn: false,
+      };
+    }
+
+    console.log("Error validating auth:", error);
+    return {
+      loggedIn: false,
+    };
   }
 }

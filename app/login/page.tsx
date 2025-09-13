@@ -1,6 +1,6 @@
 import { LoginForm } from "@/components/login-form";
 import { Logo } from "@/components/logo";
-import { redirectIfAuthenticated } from "@/lib/auth";
+import { redirectIfAuthenticated } from "@/lib/auth.rsc";
 import Link from "next/link";
 
 interface LoginPageProps {

@@ -1,24 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getIronSession } from "iron-session";
-import { sessionOptions, type SessionData } from "@/lib/auth";
-import { cookies } from "next/headers";
-
-/**
- * Authentication Middleware for Next.js
- * 
- * This middleware implements server-side authentication according to the
- * OAuth 2.0 for Browser-Based Applications RFC draft.
- * 
- * It runs on every request and:
- * 1. Checks for valid authentication tokens in HttpOnly cookies
- * 2. Redirects unauthenticated users to login page
- * 3. Allows authenticated users to access protected routes
- * 4. Handles public routes without authentication
- */
+import { getAuthStatus } from "@/lib/auth";
 
 // Define public routes that don't require authentication
 const PUBLIC_ROUTES = [
   "/login",
+  "/forbidden",
   "/api/auth/login",
   "/api/auth/callback",
   "/api/auth/logout",
@@ -29,7 +15,7 @@ const PUBLIC_ROUTES = [
 ];
 
 // Define API routes that should return JSON errors instead of redirects
-const API_ROUTES = ["/api/", "/query"];
+const API_ROUTES = ["/api/"];
 
 function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(route => pathname.startsWith(route));
@@ -48,10 +34,9 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Check for authentication session
-    const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-    
-    if (!session.isLoggedIn || !session.access_token) {
+    const { role, loggedIn, user } = await getAuthStatus();
+
+    if (!loggedIn) {
       // Handle unauthenticated requests
       if (isApiRoute(pathname)) {
         // Return JSON error for API routes
@@ -70,16 +55,24 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    // Add auth token to request headers for downstream consumption
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-auth-token", session.access_token);
+    if (role !== "admin") {
+      if (isApiRoute(pathname)) {
+        return NextResponse.json(
+          { 
+            error: "forbidden", 
+            error_description: "You must be an admin to access this resource" 
+          },
+          { status: 403 }
+        );
+      } else {
+        const loginUrl = new URL("/forbidden", request.url);
+        loginUrl.searchParams.set("name", user?.name ?? '');
+        loginUrl.searchParams.set("email", user?.email ?? '');
+        return NextResponse.redirect(loginUrl);
+      }
+    }
 
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-
+    return NextResponse.next();
   } catch (error) {
     console.error("Middleware authentication error:", error);
     

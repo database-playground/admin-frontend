@@ -44,9 +44,7 @@ export default function RootLayout({
         `}
       >
         <ApolloWrapper>
-          <UserProvider>
-            {children}
-          </UserProvider>
+          {children}
         </ApolloWrapper>
         <Toaster />
       </body>
