@@ -28,7 +28,7 @@ export function UpdateFormBody<T extends FieldValues>({
       callback: (data) => {
         onFormStateChange?.(data.isDirty ?? false);
       },
-    })
+    });
 
     return () => unsubscribe();
   }, [form, onFormStateChange]);

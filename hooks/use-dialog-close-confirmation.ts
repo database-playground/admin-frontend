@@ -28,7 +28,7 @@ export function useDialogCloseConfirmation({
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [isDirty])
+  }, [isDirty]);
 
   const handleDialogOpenChange = useCallback(
     (newOpen: boolean) => {
