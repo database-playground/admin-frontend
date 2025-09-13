@@ -161,7 +161,10 @@ function UpdateScopeSetDialogContent({
   );
 
   const [updateScopeSet] = useMutation(UPDATE_SCOPE_SET_MUTATION, {
-    refetchQueries: [SCOPE_SET_TABLE_QUERY, SCOPE_SET_BY_ID_QUERY],
+    refetchQueries: [
+      { query: SCOPE_SET_TABLE_QUERY },
+      { query: SCOPE_SET_BY_ID_QUERY, variables: { id } },
+    ],
 
     onError(error) {
       toast.error("權限集更新失敗", {

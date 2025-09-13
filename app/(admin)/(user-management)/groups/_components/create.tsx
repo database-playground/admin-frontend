@@ -77,7 +77,7 @@ function CreateGroupDialogContent({
   const { data: scopeSetList } = useSuspenseQuery(SCOPE_SET_LIST_QUERY);
 
   const [createGroup] = useMutation(GROUP_CREATE_MUTATION, {
-    refetchQueries: [GROUPS_TABLE_QUERY],
+    refetchQueries: [{ query: GROUPS_TABLE_QUERY }],
 
     onError(error) {
       toast.error("群組建立失敗", {

@@ -164,7 +164,10 @@ function UpdateQuestionDialogContent({
   );
 
   const [updateQuestion] = useMutation(QUESTION_UPDATE_MUTATION, {
-    refetchQueries: [QUESTIONS_TABLE_QUERY],
+    refetchQueries: [
+      { query: QUESTIONS_TABLE_QUERY },
+      { query: QUESTION_BY_ID_QUERY, variables: { id } },
+    ],
 
     onError(error) {
       toast.error("題目更新失敗", {

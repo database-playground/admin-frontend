@@ -163,7 +163,10 @@ function UpdateGroupDialogContent({
   );
 
   const [updateGroup] = useMutation(GROUP_UPDATE_MUTATION, {
-    refetchQueries: [GROUPS_TABLE_QUERY],
+    refetchQueries: [
+      { query: GROUPS_TABLE_QUERY },
+      { query: GROUP_BY_ID_QUERY, variables: { id } },
+    ],
 
     onError(error) {
       toast.error("群組更新失敗", {

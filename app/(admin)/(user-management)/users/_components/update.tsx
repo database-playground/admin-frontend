@@ -163,7 +163,10 @@ function UpdateUserDialogContent({
   );
 
   const [updateUser] = useMutation(USER_UPDATE_MUTATION, {
-    refetchQueries: [USERS_TABLE_QUERY],
+    refetchQueries: [
+      { query: USERS_TABLE_QUERY },
+      { query: USER_BY_ID_QUERY, variables: { id } },
+    ],
 
     onError(error) {
       toast.error("使用者更新失敗", {

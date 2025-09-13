@@ -78,7 +78,7 @@ function CreateQuestionDialogContent({
   const { data: databaseList } = useSuspenseQuery(DATABASE_LIST_QUERY);
 
   const [createQuestion] = useMutation(QUESTION_CREATE_MUTATION, {
-    refetchQueries: [QUESTIONS_TABLE_QUERY],
+    refetchQueries: [{ query: QUESTIONS_TABLE_QUERY }],
 
     onError(error) {
       toast.error("題目建立失敗", {

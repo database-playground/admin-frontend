@@ -76,7 +76,7 @@ function CreateScopeSetDialogContent({
   onFormStateChange: (isDirty: boolean) => void;
 }) {
   const [createScopeSet] = useMutation(CREATE_SCOPE_SET_MUTATION, {
-    refetchQueries: [SCOPE_SET_TABLE_QUERY],
+    refetchQueries: [{ query: SCOPE_SET_TABLE_QUERY }],
 
     onError(error) {
       toast.error("權限集建立失敗", {
