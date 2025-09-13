@@ -135,8 +135,20 @@ export async function getOAuthState(): Promise<{ state: string | null; codeVerif
 
 export async function clearOAuthState(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.delete(OAUTH_CONFIG.STATE_COOKIE_NAME);
-  cookieStore.delete(OAUTH_CONFIG.CODE_VERIFIER_COOKIE_NAME);
+  cookieStore.delete({
+    name: OAUTH_CONFIG.STATE_COOKIE_NAME,
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  });
+  cookieStore.delete({
+    name: OAUTH_CONFIG.CODE_VERIFIER_COOKIE_NAME,
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  });
 }
 
 // OAuth URL builders
