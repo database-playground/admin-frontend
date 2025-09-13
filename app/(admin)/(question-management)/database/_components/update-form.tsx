@@ -49,9 +49,9 @@ export function UpdateDatabaseForm({
         name="slug"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>標識</FormLabel>
+            <FormLabel>slug</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="例如：sakila, northwind" />
+              <Input {...field} placeholder="例如：sakila, northwind" disabled={action === "update"} />
             </FormControl>
             <FormDescription>
               資料庫的唯一識別符，通常為小寫英文。
