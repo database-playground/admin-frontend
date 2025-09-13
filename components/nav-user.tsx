@@ -85,7 +85,7 @@ export function NavUser({
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <Link href="/api/auth/logout">
+            <Link href="/api/auth/logout" prefetch={false}>
               <DropdownMenuItem>
                 <LogOut />
                 登出
