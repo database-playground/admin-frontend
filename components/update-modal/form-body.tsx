@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { useFormDirtyWarning } from "@/hooks/use-form-dirty-warning";
 import React, { useEffect } from "react";
 import { type FieldValues, type SubmitHandler, type UseFormReturn } from "react-hook-form";
 
@@ -21,12 +20,18 @@ export function UpdateFormBody<T extends FieldValues>({
   onFormStateChange,
   children,
 }: UpdateFormBodyProps<T>) {
-  useFormDirtyWarning(form.formState.isDirty);
-
-  // Notify parent component about form dirty state changes
   useEffect(() => {
-    onFormStateChange?.(form.formState.isDirty);
-  }, [form.formState.isDirty, onFormStateChange]);
+    const unsubscribe = form.subscribe({
+      formState: {
+        isDirty: true,
+      },
+      callback: (data) => {
+        onFormStateChange?.(data.isDirty ?? false);
+      },
+    })
+
+    return () => unsubscribe();
+  }, [form, onFormStateChange]);
 
   const handleSubmit = (data: T) => {
     form.reset();

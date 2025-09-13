@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export interface UseDialogCloseConfirmationOptions {
   isDirty: boolean;
@@ -12,6 +12,23 @@ export function useDialogCloseConfirmation({
   onConfirmedClose,
 }: UseDialogCloseConfirmationOptions) {
   const [showConfirmation, setShowConfirmation] = useState(false);
+
+  useEffect(() => {
+    const message = "您有尚未儲存的更動。確定要關閉而不儲存嗎？您的更動將會遺失。";
+    if (!isDirty) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = message;
+      return message;
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isDirty])
 
   const handleDialogOpenChange = useCallback(
     (newOpen: boolean) => {
