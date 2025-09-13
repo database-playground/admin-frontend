@@ -46,14 +46,14 @@ export function NavUser({
       toast.error("登出失敗", {
         description: errorData.error_description || res.statusText,
       });
-      
+
       // Even if server logout fails, redirect to clear client state
       window.location.href = "/login?error=logout_failed";
     } catch (error) {
       toast.error("登出失敗", {
         description: error instanceof Error ? error.message : "未知錯誤",
       });
-      
+
       // Redirect to clear client state
       window.location.href = "/login?error=logout_failed";
     } finally {

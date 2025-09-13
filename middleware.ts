@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getAuthStatus } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
 
 // Define public routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -41,11 +41,11 @@ export async function middleware(request: NextRequest) {
       if (isApiRoute(pathname)) {
         // Return JSON error for API routes
         return NextResponse.json(
-          { 
-            error: "unauthorized", 
-            error_description: "Authentication required" 
+          {
+            error: "unauthorized",
+            error_description: "Authentication required",
           },
-          { status: 401 }
+          { status: 401 },
         );
       } else {
         // Redirect to login for web routes
@@ -58,11 +58,11 @@ export async function middleware(request: NextRequest) {
     if (role !== "admin") {
       if (isApiRoute(pathname)) {
         return NextResponse.json(
-          { 
-            error: "forbidden", 
-            error_description: "You must be an admin to access this resource" 
+          {
+            error: "forbidden",
+            error_description: "You must be an admin to access this resource",
           },
-          { status: 403 }
+          { status: 403 },
         );
       } else {
         const loginUrl = new URL("/forbidden", request.url);
@@ -73,14 +73,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   } catch (error) {
     console.error("Middleware authentication error:", error);
-    
+
     if (isApiRoute(pathname)) {
       return NextResponse.json(
-        { 
-          error: "server_error", 
-          error_description: "Authentication validation failed" 
+        {
+          error: "server_error",
+          error_description: "Authentication validation failed",
         },
-        { status: 500 }
+        { status: 500 },
       );
     } else {
       const loginUrl = new URL("/login", request.url);

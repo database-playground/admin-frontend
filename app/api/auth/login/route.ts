@@ -1,19 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
-import {
-  buildAuthorizeUrl,
-  generateCodeVerifier,
-  generateState,
-  OAUTH_CONFIG,
-  setOAuthState,
-} from "@/lib/auth";
+import { buildAuthorizeUrl, generateCodeVerifier, generateState, OAUTH_CONFIG, setOAuthState } from "@/lib/auth";
 import { redirectIfAuthenticated } from "@/lib/auth.rsc";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * OAuth 2.0 Authorization Code Flow with PKCE - Login Initiation
- * 
+ *
  * This endpoint initiates the OAuth 2.0 authorization flow according to
  * RFC 6749 and RFC 7636 (PKCE for OAuth Public Clients).
- * 
+ *
  * The flow follows these steps:
  * 1. Generate PKCE code verifier and challenge
  * 2. Generate state parameter for CSRF protection
@@ -40,14 +34,13 @@ export async function GET(request: NextRequest) {
 
     // Redirect to authorization server
     return NextResponse.redirect(authorizeUrl);
-
   } catch (error) {
     console.error("Login initiation failed:", error);
-    
+
     const errorUrl = new URL("/login", request.url);
     errorUrl.searchParams.set("error", "server_error");
     errorUrl.searchParams.set("error_description", "Failed to initiate login");
-    
+
     return NextResponse.redirect(errorUrl);
   }
 }

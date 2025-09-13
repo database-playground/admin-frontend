@@ -41,7 +41,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           </div>
           Database Playground
         </Link>
-        <LoginForm 
+        <LoginForm
           error={params.error}
           errorDescription={params.error_description}
           message={params.message}
