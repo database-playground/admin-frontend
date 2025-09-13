@@ -1,6 +1,7 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +11,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { QuestionDifficulty } from "@/gql/graphql";
+import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -22,70 +25,149 @@ import { UpdateQuestionForm, type UpdateQuestionFormData } from "./update-form";
 export function UpdateQuestionDropdownTrigger({ id }: { id: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
+
+  const {
+    showConfirmation,
+    handleDialogOpenChange,
+    handleConfirmClose,
+    handleCancelClose,
+  } = useDialogCloseConfirmation({
+    isDirty: isFormDirty,
+    setOpen,
+    onConfirmedClose: () => {
+      setIsFormDirty(false);
+    },
+  });
+
+  const handleFormStateChange = (isDirty: boolean) => {
+    setIsFormDirty(isDirty);
+  };
+
+  const handleCompleted = () => {
+    setIsFormDirty(false);
+    setOpen(false);
+    router.refresh();
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <DropdownMenuItem
-          onClick={(e) => {
-            e.preventDefault();
-            setOpen(true);
-          }}
-        >
-          編輯題目
-        </DropdownMenuItem>
-      </DialogTrigger>
-      <Suspense>
-        <UpdateQuestionDialogContent
-          id={id}
-          onCompleted={() => {
-            setOpen(false);
-            router.refresh();
-          }}
-        />
-      </Suspense>
-    </Dialog>
+    <>
+      <Dialog open={open} onOpenChange={handleDialogOpenChange}>
+        <DialogTrigger asChild>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(true);
+            }}
+          >
+            編輯題目
+          </DropdownMenuItem>
+        </DialogTrigger>
+        <Suspense>
+          <UpdateQuestionDialogContent
+            id={id}
+            open={open}
+            onCompleted={handleCompleted}
+            onFormStateChange={handleFormStateChange}
+          />
+        </Suspense>
+      </Dialog>
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        onOpenChange={() => {}}
+        onConfirm={handleConfirmClose}
+        onCancel={handleCancelClose}
+      />
+    </>
   );
 }
 
 export function UpdateQuestionButtonTrigger({ id }: { id: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
+
+  const {
+    showConfirmation,
+    handleDialogOpenChange,
+    handleConfirmClose,
+    handleCancelClose,
+  } = useDialogCloseConfirmation({
+    isDirty: isFormDirty,
+    setOpen,
+    onConfirmedClose: () => {
+      setIsFormDirty(false);
+    },
+  });
+
+  const handleFormStateChange = (isDirty: boolean) => {
+    setIsFormDirty(isDirty);
+  };
+
+  const handleCompleted = () => {
+    setIsFormDirty(false);
+    setOpen(false);
+    router.refresh();
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className={buttonVariants()}>
-        <Pencil className="h-4 w-4" />
-        編輯
-      </DialogTrigger>
+    <>
+      <Dialog open={open} onOpenChange={handleDialogOpenChange}>
+        <DialogTrigger className={buttonVariants()}>
+          <Pencil className="h-4 w-4" />
+          編輯
+        </DialogTrigger>
 
-      <Suspense>
-        <UpdateQuestionDialogContent
-          id={id}
-          onCompleted={() => {
-            setOpen(false);
-            router.refresh();
-          }}
-        />
-      </Suspense>
-    </Dialog>
+        <Suspense>
+          <UpdateQuestionDialogContent
+            id={id}
+            open={open}
+            onCompleted={handleCompleted}
+            onFormStateChange={handleFormStateChange}
+          />
+        </Suspense>
+      </Dialog>
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        onOpenChange={() => {}}
+        onConfirm={handleConfirmClose}
+        onCancel={handleCancelClose}
+      />
+    </>
   );
 }
 
 function UpdateQuestionDialogContent({
   id,
+  open,
   onCompleted,
+  onFormStateChange,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
+  onFormStateChange: (isDirty: boolean) => void;
 }) {
-  const { data: databaseList } = useSuspenseQuery(DATABASE_LIST_QUERY);
-  const { data: question } = useSuspenseQuery(QUESTION_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data: databaseList } = useSuspenseQuery(
+    DATABASE_LIST_QUERY,
+    open ? {} : skipToken,
+  );
+  const { data: question } = useSuspenseQuery(
+    QUESTION_BY_ID_QUERY,
+    open
+      ? {
+        variables: { id },
+      }
+      : skipToken,
+  );
 
   const [updateQuestion] = useMutation(QUESTION_UPDATE_MUTATION, {
-    refetchQueries: [QUESTIONS_TABLE_QUERY],
+    refetchQueries: [
+      { query: QUESTIONS_TABLE_QUERY },
+      { query: QUESTION_BY_ID_QUERY, variables: { id } },
+    ],
 
     onError(error) {
       toast.error("題目更新失敗", {
@@ -124,16 +206,17 @@ function UpdateQuestionDialogContent({
       </DialogHeader>
       <UpdateQuestionForm
         defaultValues={{
-          title: question.question.title,
-          description: question.question.description,
-          category: question.question.category,
-          difficulty: question.question.difficulty,
-          referenceAnswer: question.question.referenceAnswer,
-          databaseID: question.question.database.id,
+          title: question?.question.title || "",
+          description: question?.question.description || "",
+          category: question?.question.category || "",
+          difficulty: question?.question.difficulty || QuestionDifficulty.Easy,
+          referenceAnswer: question?.question.referenceAnswer || "",
+          databaseID: question?.question.database.id || "",
         }}
         onSubmit={onSubmit}
         action="update"
-        databaseList={databaseList.databases}
+        onFormStateChange={onFormStateChange}
+        databaseList={databaseList?.databases || []}
       />
     </DialogContent>
   );

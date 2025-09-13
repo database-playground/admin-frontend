@@ -1,39 +1,10 @@
 "use client";
 
-import { BASIC_USER_INFO_QUERY, type BasicUserInfo } from "@/lib/user";
-import { useQuery } from "@apollo/client/react";
-import { createContext, useContext } from "react";
-
-export interface UserContextValue {
-  user?: BasicUserInfo;
-  isInitialized: boolean;
-}
-
-export const UserContext = createContext<UserContextValue>({
-  user: undefined,
-  isInitialized: false,
-});
+import { BASIC_USER_INFO_QUERY } from "@/lib/user";
+import { useSuspenseQuery } from "@apollo/client/react";
 
 export function useUser() {
-  const user = useContext(UserContext);
-  if (!user) {
-    throw new Error("UserContext not found");
-  }
+  const { data } = useSuspenseQuery(BASIC_USER_INFO_QUERY);
 
-  return user;
-}
-
-export function UserProvider({ children }: { children: React.ReactNode }) {
-  const { data, loading } = useQuery(BASIC_USER_INFO_QUERY);
-
-  return (
-    <UserContext.Provider
-      value={{
-        user: data?.me,
-        isInitialized: !loading,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
+  return { user: data?.me };
 }

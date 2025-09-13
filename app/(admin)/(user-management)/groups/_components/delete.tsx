@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useMutation, useSuspenseQuery } from "@apollo/client/react";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -42,6 +42,7 @@ export function DeleteGroupDropdownTrigger({ id }: { id: string }) {
       <Suspense>
         <DeleteGroupAlertDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.refresh();
@@ -66,6 +67,7 @@ export function DeleteGroupButtonTrigger({ id }: { id: string }) {
       <Suspense>
         <DeleteGroupAlertDialogContent
           id={id}
+          open={open}
           onCompleted={() => {
             setOpen(false);
             router.push(".");
@@ -78,14 +80,21 @@ export function DeleteGroupButtonTrigger({ id }: { id: string }) {
 
 function DeleteGroupAlertDialogContent({
   id,
+  open,
   onCompleted,
 }: {
   id: string;
+  open: boolean;
   onCompleted: () => void;
 }) {
-  const { data } = useSuspenseQuery(GROUP_BY_ID_QUERY, {
-    variables: { id },
-  });
+  const { data } = useSuspenseQuery(
+    GROUP_BY_ID_QUERY,
+    open
+      ? {
+        variables: { id },
+      }
+      : skipToken,
+  );
 
   const [deleteGroup] = useMutation(GROUP_DELETE_MUTATION, {
     refetchQueries: [GROUPS_TABLE_QUERY],
@@ -106,7 +115,7 @@ function DeleteGroupAlertDialogContent({
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>
-          確定要刪除「{data.group.name}」群組嗎？
+          確定要刪除「{data?.group.name}」群組嗎？
         </AlertDialogTitle>
         <AlertDialogDescription>
           刪除後將無法復原這個群組。請謹慎操作。

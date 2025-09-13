@@ -1,9 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { UpdateFormBody } from "@/components/update-modal/form-body";
+import type { UpdateFormBaseProps } from "@/components/update-modal/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -20,11 +22,8 @@ export interface UpdateUserFormData {
   groupID: string;
 }
 
-export interface UpdateUserFormProps {
-  defaultValues?: z.infer<typeof formSchema>;
+export interface UpdateUserFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, "onSubmit"> {
   onSubmit: (newValues: UpdateUserFormData) => void;
-  action: "update" | "create";
-
   groupList: { id: string; name: string }[];
 }
 
@@ -32,6 +31,7 @@ export function UpdateUserForm({
   defaultValues,
   onSubmit,
   action,
+  onFormStateChange,
   groupList,
 }: UpdateUserFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,8 +40,6 @@ export function UpdateUserForm({
   });
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    form.reset();
-
     onSubmit({
       name: data.name,
       avatar: data.avatar,
@@ -51,74 +49,75 @@ export function UpdateUserForm({
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+    <UpdateFormBody
+      form={form}
+      onSubmit={handleSubmit}
+      action={action}
+      onFormStateChange={onFormStateChange}
+    >
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>名稱</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <div className="flex items-center gap-4">
         <FormField
           control={form.control}
-          name="name"
+          name="avatar"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>名稱</FormLabel>
+            <FormItem className="flex-1">
+              <FormLabel>頭貼</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="頭貼 URL" />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="flex items-center gap-4">
-          <FormField
-            control={form.control}
-            name="avatar"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>頭貼</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="頭貼 URL" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <Avatar>
+          <AvatarImage src={form.watch("avatar")} />
+          <AvatarFallback>{form.watch("name")}</AvatarFallback>
+        </Avatar>
+      </div>
 
-          <Avatar>
-            <AvatarImage src={form.watch("avatar")} />
-            <AvatarFallback>{form.watch("name")}</AvatarFallback>
-          </Avatar>
-        </div>
-
-        <FormField
-          control={form.control}
-          name="groupID"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>群組</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="選擇群組" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {groupList.map((group) => (
-                      <SelectItem key={group.id} value={group.id}>
-                        {group.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-              <FormDescription>選擇這個使用者屬於的群組。</FormDescription>
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit">{action === "update" ? "編輯" : "建立"}</Button>
-      </form>
-    </Form>
+      <FormField
+        control={form.control}
+        name="groupID"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>群組</FormLabel>
+            <FormControl>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇群組" />
+                </SelectTrigger>
+                <SelectContent>
+                  {groupList.map((group) => (
+                    <SelectItem key={group.id} value={group.id}>
+                      {group.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+            <FormDescription>選擇這個使用者屬於的群組。</FormDescription>
+          </FormItem>
+        )}
+      />
+    </UpdateFormBody>
   );
 }

@@ -1,8 +1,23 @@
 import { LoginForm } from "@/components/login-form";
 import { Logo } from "@/components/logo";
+import { redirectIfAuthenticated } from "@/lib/auth.rsc";
 import Link from "next/link";
 
-export default function LoginPage() {
+interface LoginPageProps {
+  searchParams: Promise<{
+    error?: string;
+    error_description?: string;
+    message?: string;
+    redirect?: string;
+  }>;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  // Redirect if already authenticated
+  await redirectIfAuthenticated();
+
+  const params = await searchParams;
+
   return (
     <div
       className={`
@@ -26,7 +41,11 @@ export default function LoginPage() {
           </div>
           Database Playground
         </Link>
-        <LoginForm />
+        <LoginForm
+          error={params.error}
+          errorDescription={params.error_description}
+          message={params.message}
+        />
       </div>
     </div>
   );

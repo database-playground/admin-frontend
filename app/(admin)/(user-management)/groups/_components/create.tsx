@@ -1,6 +1,7 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
 import { useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -20,29 +22,62 @@ import { UpdateGroupForm, type UpdateGroupFormData } from "./update-form";
 export function CreateGroupTrigger() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
+
+  const {
+    showConfirmation,
+    handleDialogOpenChange,
+    handleConfirmClose,
+    handleCancelClose,
+  } = useDialogCloseConfirmation({
+    isDirty: isFormDirty,
+    setOpen,
+    onConfirmedClose: () => {
+      setIsFormDirty(false);
+    },
+  });
+
+  const handleFormStateChange = (isDirty: boolean) => {
+    setIsFormDirty(isDirty);
+  };
+
+  const handleCompleted = () => {
+    setIsFormDirty(false);
+    setOpen(false);
+    router.refresh();
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className={buttonVariants()}>新增群組</DialogTrigger>
-      <CreateGroupDialogContent
-        onCompleted={() => {
-          setOpen(false);
-          router.refresh();
-        }}
+    <>
+      <Dialog open={open} onOpenChange={handleDialogOpenChange}>
+        <DialogTrigger className={buttonVariants()}>新增群組</DialogTrigger>
+        <CreateGroupDialogContent
+          onCompleted={handleCompleted}
+          onFormStateChange={handleFormStateChange}
+        />
+      </Dialog>
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        onOpenChange={() => {}}
+        onConfirm={handleConfirmClose}
+        onCancel={handleCancelClose}
       />
-    </Dialog>
+    </>
   );
 }
 
 function CreateGroupDialogContent({
   onCompleted,
+  onFormStateChange,
 }: {
   onCompleted: () => void;
+  onFormStateChange: (isDirty: boolean) => void;
 }) {
   const { data: scopeSetList } = useSuspenseQuery(SCOPE_SET_LIST_QUERY);
 
   const [createGroup] = useMutation(GROUP_CREATE_MUTATION, {
-    refetchQueries: [GROUPS_TABLE_QUERY],
+    refetchQueries: [{ query: GROUPS_TABLE_QUERY }],
 
     onError(error) {
       toast.error("群組建立失敗", {
@@ -90,6 +125,7 @@ function CreateGroupDialogContent({
         }}
         onSubmit={onSubmit}
         action="create"
+        onFormStateChange={onFormStateChange}
         scopeSetList={scopeSetList.scopeSets}
       />
     </DialogContent>

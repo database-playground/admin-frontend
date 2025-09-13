@@ -1,15 +1,22 @@
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { HttpLink } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client-integration-nextjs";
 import buildUri from "./build-uri";
 
-export const apolloClient = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: new HttpLink({
+/**
+ * Create an Apollo Client instance that uses the upstream GraphQL API.
+ *
+ * You should add the token to the headers of the request.
+ */
+export function makeClient({ token }: { token?: string | null }) {
+  const httpLink = new HttpLink({
     uri: buildUri("/query"),
-    credentials: "include",
-  }),
-});
+    headers: {
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  });
 
-export const ERROR_NOT_FOUND = "NOT_FOUND";
-export const ERROR_UNAUTHORIZED = "UNAUTHORIZED";
-export const ERROR_USER_VERIFIED = "USER_VERIFIED";
-export const ERROR_NOT_IMPLEMENTED = "NOT_IMPLEMENTED";
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link: httpLink,
+  });
+}

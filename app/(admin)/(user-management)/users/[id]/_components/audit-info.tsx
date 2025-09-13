@@ -26,13 +26,13 @@ function CardMain({ id }: { id: string }) {
         <li className="flex items-center gap-2">
           <Clock className="h-4 w-4 text-muted-foreground" />
           <span>
-            建立時間：{new Date(data.user.createdAt).toLocaleString()}
+            建立時間：{new Date(data.user.createdAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}
           </span>
         </li>
         <li className="flex items-center gap-2">
           <Clock className="h-4 w-4 text-muted-foreground" />
           <span>
-            更新時間：{new Date(data.user.updatedAt).toLocaleString()}
+            更新時間：{new Date(data.user.updatedAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}
           </span>
         </li>
       </ul>

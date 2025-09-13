@@ -12,10 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import buildUri from "@/lib/build-uri";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import AppAvatar from "./avatar";
 
 export function NavUser({
@@ -28,32 +25,6 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const router = useRouter();
-  const logout = async () => {
-    const loadingToast = toast.loading("正在登出……");
-
-    try {
-      const res = await fetch(buildUri("/api/auth/logout"), {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (res.status === 205) {
-        router.push("/login");
-        return;
-      }
-
-      toast.error("登出失敗", {
-        description: res.statusText,
-      });
-    } catch (error) {
-      toast.error("登出失敗", {
-        description: error instanceof Error ? error.message : "未知錯誤",
-      });
-    } finally {
-      toast.dismiss(loadingToast);
-    }
-  };
 
   return (
     <SidebarMenu>
@@ -114,10 +85,12 @@ export function NavUser({
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout}>
-              <LogOut />
-              登出
-            </DropdownMenuItem>
+            <Link href="/api/auth/logout">
+              <DropdownMenuItem>
+                <LogOut />
+                登出
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

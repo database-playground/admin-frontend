@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import ApolloProvider from "@/providers/use-apollo";
-import { UserProvider } from "@/providers/use-user";
+import { getAuthToken } from "@/lib/auth";
+import { ApolloWrapper } from "@/providers/use-apollo";
 import { PreloadResources } from "./preload-resources";
 
 const geistSans = Geist({
@@ -21,11 +21,13 @@ export const metadata: Metadata = {
   description: "Managing your Database Playground instance.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const token = await getAuthToken();
+
   return (
     <html lang="zh-hant-tw">
       <head>
@@ -43,11 +45,9 @@ export default function RootLayout({
           font-sans antialiased
         `}
       >
-        <ApolloProvider>
-          <UserProvider>
-            {children}
-          </UserProvider>
-        </ApolloProvider>
+        <ApolloWrapper token={token}>
+          {children}
+        </ApolloWrapper>
         <Toaster />
       </body>
     </html>
