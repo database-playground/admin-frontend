@@ -53,7 +53,7 @@ export function CreateDatabaseTrigger() {
           onFormStateChange={handleFormStateChange}
         />
       </Dialog>
-      
+
       <ConfirmationDialog
         open={showConfirmation}
         onOpenChange={() => {}}

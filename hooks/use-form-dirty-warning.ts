@@ -9,7 +9,7 @@ import { useEffect } from "react";
  */
 export function useFormDirtyWarning(
   isDirty: boolean,
-  message: string = "You have unsaved changes. Are you sure you want to leave?"
+  message: string = "You have unsaved changes. Are you sure you want to leave?",
 ) {
   useEffect(() => {
     if (!isDirty) return;

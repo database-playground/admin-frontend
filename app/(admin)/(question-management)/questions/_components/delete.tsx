@@ -91,9 +91,9 @@ function DeleteQuestionAlertDialogContent({
     QUESTION_BY_ID_QUERY,
     open
       ? {
-          variables: { id },
-        }
-      : skipToken
+        variables: { id },
+      }
+      : skipToken,
   );
 
   const [deleteQuestion] = useMutation(QUESTION_DELETE_MUTATION, {

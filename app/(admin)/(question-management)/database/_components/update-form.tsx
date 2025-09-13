@@ -1,17 +1,8 @@
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { UpdateFormBody } from "@/components/update-modal/form-body";
-import type {
-  UpdateFormBaseProps,
-} from "@/components/update-modal/types";
+import type { UpdateFormBaseProps } from "@/components/update-modal/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -90,7 +81,7 @@ export function UpdateDatabaseForm({
               <Textarea
                 {...field}
                 placeholder="請輸入完整的 SQL 建表語句"
-                className="min-h-[200px] max-h-[500px] font-mono text-sm"
+                className="max-h-[500px] min-h-[200px] font-mono text-sm"
               />
             </FormControl>
             <FormDescription>
@@ -115,8 +106,7 @@ export function UpdateDatabaseForm({
               />
             </FormControl>
             <FormDescription>
-              資料庫的 ER 圖或關係圖描述，可以是 Mermaid 語法、圖片 URL
-              或文字描述。
+              資料庫的 ER 圖或關係圖描述，可以是 Mermaid 語法、圖片 URL 或文字描述。
             </FormDescription>
             <FormMessage />
           </FormItem>

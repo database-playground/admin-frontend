@@ -85,15 +85,15 @@ function UpdateGroupDialogContent({
 }) {
   const { data: scopeSetList } = useSuspenseQuery(
     SCOPE_SET_LIST_QUERY,
-    open ? {} : skipToken
+    open ? {} : skipToken,
   );
   const { data: group } = useSuspenseQuery(
     GROUP_BY_ID_QUERY,
     open
       ? {
-          variables: { id },
-        }
-      : skipToken
+        variables: { id },
+      }
+      : skipToken,
   );
 
   const [updateGroup] = useMutation(GROUP_UPDATE_MUTATION, {

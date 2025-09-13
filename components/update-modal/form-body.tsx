@@ -1,17 +1,17 @@
-import { type FieldValues, type SubmitHandler, type UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { useFormDirtyWarning } from "@/hooks/use-form-dirty-warning";
 import React, { useEffect } from "react";
+import { type FieldValues, type SubmitHandler, type UseFormReturn } from "react-hook-form";
 
 export interface UpdateFormBodyProps<T extends FieldValues> {
-    form: UseFormReturn<T>;
-    onSubmit: SubmitHandler<T>;
-    action: "update" | "create";
-    onFormStateChange?: (isDirty: boolean) => void;
+  form: UseFormReturn<T>;
+  onSubmit: SubmitHandler<T>;
+  action: "update" | "create";
+  onFormStateChange?: (isDirty: boolean) => void;
 
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export function UpdateFormBody<T extends FieldValues>({

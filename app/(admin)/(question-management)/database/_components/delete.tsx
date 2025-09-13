@@ -87,9 +87,14 @@ function DeleteDatabaseAlertDialogContent({
   open: boolean;
   onCompleted: () => void;
 }) {
-  const { data } = useSuspenseQuery(DATABASE_BY_ID_QUERY, open ? {
-    variables: { id },
-  } : skipToken);
+  const { data } = useSuspenseQuery(
+    DATABASE_BY_ID_QUERY,
+    open
+      ? {
+        variables: { id },
+      }
+      : skipToken,
+  );
 
   const [deleteDatabase] = useMutation(DATABASE_DELETE_MUTATION, {
     refetchQueries: [DATABASES_TABLE_QUERY],

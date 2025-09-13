@@ -85,15 +85,15 @@ function UpdateUserDialogContent({
 }) {
   const { data: groupList } = useSuspenseQuery(
     GROUP_LIST_QUERY,
-    open ? {} : skipToken
+    open ? {} : skipToken,
   );
   const { data: user } = useSuspenseQuery(
     USER_BY_ID_QUERY,
     open
       ? {
-          variables: { id },
-        }
-      : skipToken
+        variables: { id },
+      }
+      : skipToken,
   );
 
   const [updateUser] = useMutation(USER_UPDATE_MUTATION, {

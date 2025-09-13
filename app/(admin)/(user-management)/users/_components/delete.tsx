@@ -91,9 +91,9 @@ function DeleteUserAlertDialogContent({
     USER_BY_ID_QUERY,
     open
       ? {
-          variables: { id },
-        }
-      : skipToken
+        variables: { id },
+      }
+      : skipToken,
   );
 
   const [deleteUser] = useMutation(USER_DELETE_MUTATION, {

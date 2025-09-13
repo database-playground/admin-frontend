@@ -10,8 +10,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { QuestionDifficulty } from "@/gql/graphql";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -86,15 +86,15 @@ function UpdateQuestionDialogContent({
 }) {
   const { data: databaseList } = useSuspenseQuery(
     DATABASE_LIST_QUERY,
-    open ? {} : skipToken
+    open ? {} : skipToken,
   );
   const { data: question } = useSuspenseQuery(
     QUESTION_BY_ID_QUERY,
     open
       ? {
-          variables: { id },
-        }
-      : skipToken
+        variables: { id },
+      }
+      : skipToken,
   );
 
   const [updateQuestion] = useMutation(QUESTION_UPDATE_MUTATION, {

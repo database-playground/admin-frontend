@@ -18,9 +18,7 @@ import { Suspense, useState } from "react";
 import { toast } from "sonner";
 import { DATABASE_UPDATE_MUTATION } from "./mutation";
 import { DATABASE_BY_ID_QUERY, DATABASES_TABLE_QUERY } from "./query";
-import {
-  UpdateDatabaseForm,
-} from "./update-form";
+import { UpdateDatabaseForm } from "./update-form";
 
 export function UpdateDatabaseDropdownTrigger({ id }: { id: string }) {
   const [open, setOpen] = useState(false);
@@ -150,9 +148,9 @@ function UpdateDatabaseDialogContent({
     DATABASE_BY_ID_QUERY,
     open
       ? {
-          variables: { id },
-        }
-      : skipToken
+        variables: { id },
+      }
+      : skipToken,
   );
 
   const [updateDatabase] = useMutation(DATABASE_UPDATE_MUTATION, {
@@ -174,7 +172,10 @@ function UpdateDatabaseDialogContent({
   });
 
   return (
-    <DialogContent className="max-h-[85vh] sm:max-w-3xl overflow-y-auto">
+    <DialogContent className={`
+      max-h-[85vh] overflow-y-auto
+      sm:max-w-3xl
+    `}>
       <DialogHeader>
         <DialogTitle>編輯資料庫</DialogTitle>
         <DialogDescription>
@@ -198,7 +199,7 @@ function UpdateDatabaseDialogContent({
                 relationFigure: data.relationFigure || undefined,
                 clearDescription: data.description === "",
               },
-            }
+            },
           });
         }}
         action="update"

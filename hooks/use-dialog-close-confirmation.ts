@@ -23,13 +23,13 @@ export function useDialogCloseConfirmation({
 
       // Normal open/close behavior
       setOpen(newOpen);
-      
+
       // If closing and not dirty, call onConfirmedClose
       if (!newOpen) {
         onConfirmedClose?.();
       }
     },
-    [isDirty, setOpen, onConfirmedClose]
+    [isDirty, setOpen, onConfirmedClose],
   );
 
   const handleConfirmClose = useCallback(() => {

@@ -92,9 +92,9 @@ function DeleteScopeSetAlertDialogContent({
     SCOPE_SET_BY_ID_QUERY,
     open
       ? {
-          variables: { id },
-        }
-      : skipToken
+        variables: { id },
+      }
+      : skipToken,
   );
 
   const [deleteScopeSet] = useMutation(DELETE_SCOPE_SET_MUTATION, {

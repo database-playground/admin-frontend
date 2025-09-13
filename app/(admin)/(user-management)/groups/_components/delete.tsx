@@ -91,9 +91,9 @@ function DeleteGroupAlertDialogContent({
     GROUP_BY_ID_QUERY,
     open
       ? {
-          variables: { id },
-        }
-      : skipToken
+        variables: { id },
+      }
+      : skipToken,
   );
 
   const [deleteGroup] = useMutation(GROUP_DELETE_MUTATION, {
