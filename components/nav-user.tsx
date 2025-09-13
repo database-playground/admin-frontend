@@ -12,9 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import buildUri from "@/lib/build-uri";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import AppAvatar from "./avatar";
 
@@ -28,28 +26,36 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const router = useRouter();
   const logout = async () => {
     const loadingToast = toast.loading("正在登出……");
 
     try {
-      const res = await fetch(buildUri("/api/auth/logout"), {
+      const res = await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
 
-      if (res.status === 205) {
-        router.push("/login");
+      if (res.ok) {
+        toast.success("登出成功");
+        // Redirect to login page with success message
+        window.location.href = "/login?message=logged_out";
         return;
       }
 
+      const errorData = await res.json().catch(() => ({}));
       toast.error("登出失敗", {
-        description: res.statusText,
+        description: errorData.error_description || res.statusText,
       });
+      
+      // Even if server logout fails, redirect to clear client state
+      window.location.href = "/login?error=logout_failed";
     } catch (error) {
       toast.error("登出失敗", {
         description: error instanceof Error ? error.message : "未知錯誤",
       });
+      
+      // Redirect to clear client state
+      window.location.href = "/login?error=logout_failed";
     } finally {
       toast.dismiss(loadingToast);
     }
