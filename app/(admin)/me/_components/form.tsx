@@ -31,11 +31,10 @@ export function MeForm() {
   });
 
   useEffect(() => {
+    if (!form.formState.isDirty) return;
     const message = "您有尚未儲存的更動。確定要關閉而不儲存嗎？您的更動將會遺失。";
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (!form.formState.isDirty) return;
-
       e.preventDefault();
       e.returnValue = message;
       return message;
@@ -46,7 +45,7 @@ export function MeForm() {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [form]);
+  }, [form.formState.isDirty]);
 
   const avatar = form.watch("avatar");
 
