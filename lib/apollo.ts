@@ -1,13 +1,16 @@
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { HttpLink } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client-integration-nextjs";
 import buildUri from "./build-uri";
 
-export const apolloClient = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: new HttpLink({
-    uri: buildUri("/query"),
-    credentials: "include",
-  }),
-});
+export function makeClient() {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link: new HttpLink({
+      uri: buildUri("/query"),
+      credentials: "include",
+    }),
+  });
+}
 
 export const ERROR_NOT_FOUND = "NOT_FOUND";
 export const ERROR_UNAUTHORIZED = "UNAUTHORIZED";

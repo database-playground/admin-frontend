@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import ApolloProvider from "@/providers/use-apollo";
+import { ApolloWrapper } from "@/providers/use-apollo";
 import { UserProvider } from "@/providers/use-user";
 import { PreloadResources } from "./preload-resources";
 
@@ -43,11 +43,11 @@ export default function RootLayout({
           font-sans antialiased
         `}
       >
-        <ApolloProvider>
+        <ApolloWrapper>
           <UserProvider>
             {children}
           </UserProvider>
-        </ApolloProvider>
+        </ApolloWrapper>
         <Toaster />
       </body>
     </html>

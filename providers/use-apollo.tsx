@@ -1,12 +1,13 @@
 "use client";
 
-import { apolloClient } from "@/lib/apollo";
-import { ApolloProvider as Provider } from "@apollo/client/react";
+import { makeClient } from "@/lib/apollo";
+import { ApolloNextAppProvider } from "@apollo/client-integration-nextjs";
 
-export default function ApolloProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <Provider client={apolloClient}>{children}</Provider>;
+// you need to create a component to wrap your app in
+export function ApolloWrapper({ children }: React.PropsWithChildren) {
+  return (
+    <ApolloNextAppProvider makeClient={makeClient}>
+      {children}
+    </ApolloNextAppProvider>
+  );
 }
