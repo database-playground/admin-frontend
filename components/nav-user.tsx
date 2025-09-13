@@ -11,9 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import Link from "next/link";
-import { toast } from "sonner";
 import AppAvatar from "./avatar";
 
 export function NavUser({
@@ -26,40 +30,6 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const logout = async () => {
-    const loadingToast = toast.loading("正在登出……");
-
-    try {
-      const res = await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (res.ok) {
-        toast.success("登出成功");
-        // Redirect to login page with success message
-        window.location.href = "/login?message=logged_out";
-        return;
-      }
-
-      const errorData = await res.json().catch(() => ({}));
-      toast.error("登出失敗", {
-        description: errorData.error_description || res.statusText,
-      });
-
-      // Even if server logout fails, redirect to clear client state
-      window.location.href = "/login?error=logout_failed";
-    } catch (error) {
-      toast.error("登出失敗", {
-        description: error instanceof Error ? error.message : "未知錯誤",
-      });
-
-      // Redirect to clear client state
-      window.location.href = "/login?error=logout_failed";
-    } finally {
-      toast.dismiss(loadingToast);
-    }
-  };
 
   return (
     <SidebarMenu>
@@ -120,10 +90,12 @@ export function NavUser({
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout}>
-              <LogOut />
-              登出
-            </DropdownMenuItem>
+            <Link href="/api/auth/logout">
+              <DropdownMenuItem>
+                <LogOut />
+                登出
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
