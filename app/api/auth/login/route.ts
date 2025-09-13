@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     const callbackUri = new URL(OAUTH_CONFIG.CALLBACK_PATH, request.url).toString();
 
     // Build authorization URL with PKCE parameters
-    const authorizeUrl = buildAuthorizeUrl(callbackUri);
+    const authorizeUrl = await buildAuthorizeUrl(callbackUri, state, codeVerifier);
 
     // Redirect to authorization server
     return NextResponse.redirect(authorizeUrl);

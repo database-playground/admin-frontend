@@ -1,17 +1,17 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getIronSession } from "iron-session";
-import crypto from "crypto";
+import buildUri from "./build-uri";
 
 // Constants for OAuth 2.0 PKCE flow
 export const OAUTH_CONFIG = {
-  AUTHORIZE_URL: "/api/auth/v2/authorize/google",
-  TOKEN_URL: "/api/auth/v2/token",
-  REVOKE_URL: "/api/auth/v2/revoke",
+  AUTHORIZE_URL: buildUri("/api/auth/v2/authorize/google"),
+  TOKEN_URL: buildUri("/api/auth/v2/token"),
+  REVOKE_URL: buildUri("/api/auth/v2/revoke"),
   CALLBACK_PATH: "/api/auth/callback",
-  SESSION_COOKIE_NAME: "auth_session",
-  STATE_COOKIE_NAME: "oauth_state",
-  CODE_VERIFIER_COOKIE_NAME: "code_verifier",
+  SESSION_COOKIE_NAME: "__Host-auth_session",
+  STATE_COOKIE_NAME: "__Host-oauth_state",
+  CODE_VERIFIER_COOKIE_NAME: "__Host-code_verifier",
   COOKIE_MAX_AGE: 8 * 60 * 60, // 8 hours in seconds
 } as const;
 
@@ -40,19 +40,30 @@ export const sessionOptions = {
 };
 
 // PKCE utilities
-export function generateCodeVerifier(): string {
-  return crypto.randomBytes(32).toString("base64url");
+export function base64url(input: Uint8Array | ArrayBuffer): string {
+  const bytes = input instanceof Uint8Array ? input : new Uint8Array(input);
+  const binaryString = String.fromCharCode(...new Uint8Array(bytes));
+  return btoa(binaryString).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-export function generateCodeChallenge(codeVerifier: string): string {
-  return crypto
-    .createHash("sha256")
-    .update(codeVerifier)
-    .digest("base64url");
+export function generateCodeVerifier(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+
+  return base64url(bytes.buffer);
 }
+
+export async function generateCodeChallenge(codeVerifier: string): Promise<string> {
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(codeVerifier))
+
+  return base64url(hash);
+};
 
 export function generateState(): string {
-  return crypto.randomBytes(16).toString("base64url");
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+
+  return base64url(bytes.buffer);
 }
 
 // Session management using iron-session
@@ -98,7 +109,7 @@ export async function setOAuthState(state: string, codeVerifier: string): Promis
   
   cookieStore.set(OAUTH_CONFIG.STATE_COOKIE_NAME, state, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "lax",
     maxAge: 10 * 60, // 10 minutes
     path: "/",
@@ -106,7 +117,7 @@ export async function setOAuthState(state: string, codeVerifier: string): Promis
   
   cookieStore.set(OAUTH_CONFIG.CODE_VERIFIER_COOKIE_NAME, codeVerifier, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "lax",
     maxAge: 10 * 60, // 10 minutes
     path: "/",
@@ -129,12 +140,13 @@ export async function clearOAuthState(): Promise<void> {
 }
 
 // OAuth URL builders
-export function buildAuthorizeUrl(redirectUri: string): string {
-  const codeVerifier = generateCodeVerifier();
-  const codeChallenge = generateCodeChallenge(codeVerifier);
-  const state = generateState();
+export async function buildAuthorizeUrl(
+  redirectUri: string,
+  state: string,
+  codeVerifier: string
+): Promise<string> {
+  const codeChallenge = await generateCodeChallenge(codeVerifier);
   
-  // Store state and code verifier in cookies (this will be handled by the login route)
   const params = new URLSearchParams({
     response_type: "code",
     redirect_uri: redirectUri,
@@ -159,7 +171,7 @@ export async function exchangeCodeForToken(
     code_verifier: codeVerifier,
   });
   
-  const response = await fetch(`${process.env.API_BASE_URL}${OAUTH_CONFIG.TOKEN_URL}`, {
+  const response = await fetch(OAUTH_CONFIG.TOKEN_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -182,7 +194,7 @@ export async function revokeToken(token: string): Promise<void> {
     token_type_hint: "access_token",
   });
   
-  const response = await fetch(`${process.env.API_BASE_URL}${OAUTH_CONFIG.REVOKE_URL}`, {
+  const response = await fetch(OAUTH_CONFIG.REVOKE_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

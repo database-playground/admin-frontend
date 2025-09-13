@@ -1,36 +1,24 @@
 import { HttpLink } from "@apollo/client";
 import { ApolloClient, InMemoryCache } from "@apollo/client-integration-nextjs";
-import { SetContextLink } from "@apollo/client/link/context";
-import buildUri from "./build-uri";
-import { headers } from "next/headers";
 
+/**
+ * Creates an Apollo Client instance that uses the GraphQL proxy API.
+ * 
+ * This implementation follows the Backend for Frontend (BFF) pattern:
+ * - All GraphQL requests go through /api/graphql proxy
+ * - The proxy automatically handles authentication by adding Authorization headers
+ * - Works consistently for both SSR and CSR without exposing tokens to the client
+ * - Removes the need for client-side token management
+ */
 export function makeClient() {
   const httpLink = new HttpLink({
-    uri: buildUri("/query"),
+    // Use the GraphQL proxy API instead of direct backend access
+    uri: "/api/graphql",
     credentials: "include",
-  });
-
-  // Create auth link to add authorization header
-  const authLink = new SetContextLink(async ({ headers: contextHeaders }, _) => {
-    // Get auth token from request headers (set by middleware)
-    const headersList = await headers();
-    const token = headersList.get("x-auth-token");
-
-    return {
-      headers: {
-        ...contextHeaders,
-        ...(token && { authorization: `Bearer ${token}` }),
-      },
-    };
   });
 
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: authLink.concat(httpLink),
+    link: httpLink,
   });
 }
-
-export const ERROR_NOT_FOUND = "NOT_FOUND";
-export const ERROR_UNAUTHORIZED = "UNAUTHORIZED";
-export const ERROR_USER_VERIFIED = "USER_VERIFIED";
-export const ERROR_NOT_IMPLEMENTED = "NOT_IMPLEMENTED";

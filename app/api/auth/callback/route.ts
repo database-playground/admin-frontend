@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
 
     // Validate state parameter (CSRF protection)
     if (state !== storedState) {
-      console.error("OAuth state mismatch");
+      console.error("OAuth state mismatch", { state, storedState });
       
       const errorUrl = new URL("/login", request.url);
       errorUrl.searchParams.set("error", "invalid_request");
