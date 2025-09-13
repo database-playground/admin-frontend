@@ -22,7 +22,7 @@ export interface UpdateUserFormData {
   groupID: string;
 }
 
-export interface UpdateUserFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, 'onSubmit'> {
+export interface UpdateUserFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, "onSubmit"> {
   onSubmit: (newValues: UpdateUserFormData) => void;
   groupList: { id: string; name: string }[];
 }
@@ -55,70 +55,69 @@ export function UpdateUserForm({
       action={action}
       onFormStateChange={onFormStateChange}
     >
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>名稱</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <div className="flex items-center gap-4">
         <FormField
           control={form.control}
-          name="name"
+          name="avatar"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>名稱</FormLabel>
+            <FormItem className="flex-1">
+              <FormLabel>頭貼</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="頭貼 URL" />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="flex items-center gap-4">
-          <FormField
-            control={form.control}
-            name="avatar"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>頭貼</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="頭貼 URL" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <Avatar>
+          <AvatarImage src={form.watch("avatar")} />
+          <AvatarFallback>{form.watch("name")}</AvatarFallback>
+        </Avatar>
+      </div>
 
-          <Avatar>
-            <AvatarImage src={form.watch("avatar")} />
-            <AvatarFallback>{form.watch("name")}</AvatarFallback>
-          </Avatar>
-        </div>
-
-        <FormField
-          control={form.control}
-          name="groupID"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>群組</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="選擇群組" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {groupList.map((group) => (
-                      <SelectItem key={group.id} value={group.id}>
-                        {group.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-              <FormDescription>選擇這個使用者屬於的群組。</FormDescription>
-            </FormItem>
-          )}
-        />
-
+      <FormField
+        control={form.control}
+        name="groupID"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>群組</FormLabel>
+            <FormControl>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇群組" />
+                </SelectTrigger>
+                <SelectContent>
+                  {groupList.map((group) => (
+                    <SelectItem key={group.id} value={group.id}>
+                      {group.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+            <FormDescription>選擇這個使用者屬於的群組。</FormDescription>
+          </FormItem>
+        )}
+      />
     </UpdateFormBody>
   );
 }

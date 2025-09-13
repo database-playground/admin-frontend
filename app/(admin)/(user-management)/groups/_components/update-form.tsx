@@ -21,7 +21,7 @@ export interface UpdateGroupFormData {
   scopeSetIDs: string[];
 }
 
-export interface UpdateGroupFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, 'onSubmit'> {
+export interface UpdateGroupFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, "onSubmit"> {
   onSubmit: (newValues: UpdateGroupFormData) => void;
   scopeSetList: { id: string; slug: string }[];
 }
@@ -61,66 +61,65 @@ export function UpdateGroupForm({
       action={action}
       onFormStateChange={onFormStateChange}
     >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>群組名稱</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g. 甲班" {...field} />
-              </FormControl>
-              <FormDescription>群組名稱，用於辨識群組。</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>群組名稱</FormLabel>
+            <FormControl>
+              <Input placeholder="e.g. 甲班" {...field} />
+            </FormControl>
+            <FormDescription>群組名稱，用於辨識群組。</FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>群組描述</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="e.g. 114 學年度的甲班同學，具有普通使用者權限"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>幫助管理者理解群組的用途。</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <FormField
+        control={form.control}
+        name="description"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>群組描述</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder="e.g. 114 學年度的甲班同學，具有普通使用者權限"
+                {...field}
+              />
+            </FormControl>
+            <FormDescription>幫助管理者理解群組的用途。</FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
-        <FormField
-          control={form.control}
-          name="scopeSetSlugs"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>權限集</FormLabel>
-              <FormControl>
-                <InputTags
-                  name="scopeSetSlugs"
-                  value={field.value ?? []}
-                  onChange={field.onChange}
-                  list="scopeSetList"
-                />
-              </FormControl>
-              <FormMessage />
-              <FormDescription>
-                輸入要套用的權限集 slug，例如 <code>admin</code>。
-              </FormDescription>
-            </FormItem>
-          )}
-        />
+      <FormField
+        control={form.control}
+        name="scopeSetSlugs"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>權限集</FormLabel>
+            <FormControl>
+              <InputTags
+                name="scopeSetSlugs"
+                value={field.value ?? []}
+                onChange={field.onChange}
+                list="scopeSetList"
+              />
+            </FormControl>
+            <FormMessage />
+            <FormDescription>
+              輸入要套用的權限集 slug，例如 <code>admin</code>。
+            </FormDescription>
+          </FormItem>
+        )}
+      />
 
-        {/* scope set list */}
-        <datalist id="scopeSetList">
-          {scopeSetList.map((scopeSet) => <option key={scopeSet.id} value={scopeSet.slug} />)}
-        </datalist>
-
+      {/* scope set list */}
+      <datalist id="scopeSetList">
+        {scopeSetList.map((scopeSet) => <option key={scopeSet.id} value={scopeSet.slug} />)}
+      </datalist>
     </UpdateFormBody>
   );
 }

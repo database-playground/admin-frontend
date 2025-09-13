@@ -10,8 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
 import { QuestionDifficulty } from "@/gql/graphql";
+import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
 import { useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

@@ -172,10 +172,12 @@ function UpdateDatabaseDialogContent({
   });
 
   return (
-    <DialogContent className={`
-      max-h-[85vh] overflow-y-auto
-      sm:max-w-3xl
-    `}>
+    <DialogContent
+      className={`
+        max-h-[85vh] overflow-y-auto
+        sm:max-w-3xl
+      `}
+    >
       <DialogHeader>
         <DialogTitle>編輯資料庫</DialogTitle>
         <DialogDescription>
