@@ -1,6 +1,7 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
 import { useMutation } from "@apollo/client/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,24 +23,57 @@ import { formSchema, UpdateScopeSetForm } from "./update-form";
 export function CreateScopeSetTrigger() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
+
+  const {
+    showConfirmation,
+    handleDialogOpenChange,
+    handleConfirmClose,
+    handleCancelClose,
+  } = useDialogCloseConfirmation({
+    isDirty: isFormDirty,
+    setOpen,
+    onConfirmedClose: () => {
+      setIsFormDirty(false);
+    },
+  });
+
+  const handleFormStateChange = (isDirty: boolean) => {
+    setIsFormDirty(isDirty);
+  };
+
+  const handleCompleted = () => {
+    setIsFormDirty(false);
+    setOpen(false);
+    router.refresh();
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className={buttonVariants()}>新增權限集</DialogTrigger>
-      <CreateScopeSetDialogContent
-        onCompleted={() => {
-          setOpen(false);
-          router.refresh();
-        }}
+    <>
+      <Dialog open={open} onOpenChange={handleDialogOpenChange}>
+        <DialogTrigger className={buttonVariants()}>新增權限集</DialogTrigger>
+        <CreateScopeSetDialogContent
+          onCompleted={handleCompleted}
+          onFormStateChange={handleFormStateChange}
+        />
+      </Dialog>
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        onOpenChange={() => {}}
+        onConfirm={handleConfirmClose}
+        onCancel={handleCancelClose}
       />
-    </Dialog>
+    </>
   );
 }
 
 function CreateScopeSetDialogContent({
   onCompleted,
+  onFormStateChange,
 }: {
   onCompleted: () => void;
+  onFormStateChange: (isDirty: boolean) => void;
 }) {
   const [createScopeSet] = useMutation(CREATE_SCOPE_SET_MUTATION, {
     refetchQueries: [SCOPE_SET_TABLE_QUERY],
@@ -91,6 +126,7 @@ function CreateScopeSetDialogContent({
         }}
         onSubmit={onSubmit}
         action="create"
+        onFormStateChange={onFormStateChange}
       />
     </DialogContent>
   );

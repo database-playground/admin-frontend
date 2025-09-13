@@ -1,6 +1,7 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
 import { QuestionDifficulty } from "@/gql/graphql";
 import { useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { useRouter } from "next/navigation";
@@ -21,24 +23,57 @@ import { UpdateQuestionForm, type UpdateQuestionFormData } from "./update-form";
 export function CreateQuestionTrigger() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
+
+  const {
+    showConfirmation,
+    handleDialogOpenChange,
+    handleConfirmClose,
+    handleCancelClose,
+  } = useDialogCloseConfirmation({
+    isDirty: isFormDirty,
+    setOpen,
+    onConfirmedClose: () => {
+      setIsFormDirty(false);
+    },
+  });
+
+  const handleFormStateChange = (isDirty: boolean) => {
+    setIsFormDirty(isDirty);
+  };
+
+  const handleCompleted = () => {
+    setIsFormDirty(false);
+    setOpen(false);
+    router.refresh();
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className={buttonVariants()}>新增題目</DialogTrigger>
-      <CreateQuestionDialogContent
-        onCompleted={() => {
-          setOpen(false);
-          router.refresh();
-        }}
+    <>
+      <Dialog open={open} onOpenChange={handleDialogOpenChange}>
+        <DialogTrigger className={buttonVariants()}>新增題目</DialogTrigger>
+        <CreateQuestionDialogContent
+          onCompleted={handleCompleted}
+          onFormStateChange={handleFormStateChange}
+        />
+      </Dialog>
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        onOpenChange={() => {}}
+        onConfirm={handleConfirmClose}
+        onCancel={handleCancelClose}
       />
-    </Dialog>
+    </>
   );
 }
 
 function CreateQuestionDialogContent({
   onCompleted,
+  onFormStateChange,
 }: {
   onCompleted: () => void;
+  onFormStateChange: (isDirty: boolean) => void;
 }) {
   const { data: databaseList } = useSuspenseQuery(DATABASE_LIST_QUERY);
 
@@ -102,6 +137,7 @@ function CreateQuestionDialogContent({
         }}
         onSubmit={onSubmit}
         action="create"
+        onFormStateChange={onFormStateChange}
         databaseList={databaseList.databases}
       />
     </DialogContent>

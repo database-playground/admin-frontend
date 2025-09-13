@@ -1,9 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { InputTags } from "@/components/ui/input-tags";
 import { Textarea } from "@/components/ui/textarea";
+import { UpdateFormBody } from "@/components/update-modal/form-body";
+import type { UpdateFormBaseProps } from "@/components/update-modal/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -19,11 +21,8 @@ export interface UpdateGroupFormData {
   scopeSetIDs: string[];
 }
 
-export interface UpdateGroupFormProps {
-  defaultValues?: z.infer<typeof formSchema>;
+export interface UpdateGroupFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, 'onSubmit'> {
   onSubmit: (newValues: UpdateGroupFormData) => void;
-  action: "update" | "create";
-
   scopeSetList: { id: string; slug: string }[];
 }
 
@@ -31,6 +30,7 @@ export function UpdateGroupForm({
   defaultValues,
   onSubmit,
   action,
+  onFormStateChange,
   scopeSetList,
 }: UpdateGroupFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -39,8 +39,6 @@ export function UpdateGroupForm({
   });
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    form.reset();
-
     // map scope set slugs to scope set ids
     const scopeSetIDs = data.scopeSetSlugs?.map((slug) => {
       const scopeSet = scopeSetList.find((scopeSet) => scopeSet.slug === slug);
@@ -57,8 +55,12 @@ export function UpdateGroupForm({
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+    <UpdateFormBody
+      form={form}
+      onSubmit={handleSubmit}
+      action={action}
+      onFormStateChange={onFormStateChange}
+    >
         <FormField
           control={form.control}
           name="name"
@@ -119,8 +121,6 @@ export function UpdateGroupForm({
           {scopeSetList.map((scopeSet) => <option key={scopeSet.id} value={scopeSet.slug} />)}
         </datalist>
 
-        <Button type="submit">{action === "update" ? "編輯" : "建立"}</Button>
-      </form>
-    </Form>
+    </UpdateFormBody>
   );
 }

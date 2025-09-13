@@ -1,9 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { InputTags } from "@/components/ui/input-tags";
 import { Textarea } from "@/components/ui/textarea";
+import { UpdateFormBody } from "@/components/update-modal/form-body";
+import type { UpdateFormBaseProps } from "@/components/update-modal/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -13,45 +15,26 @@ export const formSchema = z.object({
   scopes: z.array(z.string()).optional(),
 });
 
-export interface UpdateScopeSetFormProps {
-  /**
-   * The default values of the form.
-   */
-  defaultValues?: z.infer<typeof formSchema>;
-
-  /**
-   * The function to call when the form is submitted.
-   *
-   * @param newValues - The new values of the form.
-   */
-  onSubmit: (newValues: z.infer<typeof formSchema>) => void;
-
-  /**
-   * The action to take.
-   *
-   * If action is "update", the slug will be disabled.
-   */
-  action: "update" | "create";
-}
+export type UpdateScopeSetFormProps = UpdateFormBaseProps<z.infer<typeof formSchema>>;
 
 export function UpdateScopeSetForm({
-  defaultValues: currentValues,
+  defaultValues,
   onSubmit,
   action,
+  onFormStateChange,
 }: UpdateScopeSetFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: currentValues,
+    defaultValues,
   });
 
-  const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    form.reset();
-    onSubmit(data);
-  };
-
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+    <UpdateFormBody
+      form={form}
+      onSubmit={onSubmit}
+      action={action}
+      onFormStateChange={onFormStateChange}
+    >
         <FormField
           control={form.control}
           name="slug"
@@ -100,8 +83,6 @@ export function UpdateScopeSetForm({
           )}
         />
 
-        <Button type="submit">{action === "update" ? "編輯" : "建立"}</Button>
-      </form>
-    </Form>
+    </UpdateFormBody>
   );
 }

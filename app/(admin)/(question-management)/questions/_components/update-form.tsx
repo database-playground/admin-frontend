@@ -1,11 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { UpdateFormBody } from "@/components/update-modal/form-body";
+import type { UpdateFormBaseProps } from "@/components/update-modal/types";
 import { QuestionDifficulty } from "@/gql/graphql";
-import { useFormDirtyWarning } from "@/hooks/use-form-dirty-warning";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -27,10 +28,8 @@ export interface UpdateQuestionFormData {
   databaseID?: string; // Changed to single databaseID for 1-N relationship
 }
 
-export interface UpdateQuestionFormProps {
-  defaultValues?: z.infer<typeof formSchema>;
+export interface UpdateQuestionFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, 'onSubmit'> {
   onSubmit: (newValues: UpdateQuestionFormData) => void;
-  action: "update" | "create";
   databaseList: { id: string; slug: string; description?: string | null }[];
 }
 
@@ -45,6 +44,7 @@ export function UpdateQuestionForm({
   defaultValues,
   onSubmit,
   action,
+  onFormStateChange,
   databaseList,
 }: UpdateQuestionFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,17 +52,12 @@ export function UpdateQuestionForm({
     defaultValues,
   });
 
-  // 使用 hook 来监听表单状态变化并在页面离开时警告用户
-  useFormDirtyWarning(form.formState.isDirty);
-
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     // For creation, require databaseID
     if (action === "create" && !data.databaseID) {
       form.setError("databaseID", { message: "建立題目時必須選擇一個資料庫" });
       return;
     }
-
-    form.reset();
 
     onSubmit({
       title: data.title,
@@ -75,8 +70,12 @@ export function UpdateQuestionForm({
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+    <UpdateFormBody
+      form={form}
+      onSubmit={handleSubmit}
+      action={action}
+      onFormStateChange={onFormStateChange}
+    >
         <FormField
           control={form.control}
           name="title"
@@ -201,8 +200,6 @@ export function UpdateQuestionForm({
           )}
         />
 
-        <Button type="submit">{action === "update" ? "更新" : "建立"}</Button>
-      </form>
-    </Form>
+    </UpdateFormBody>
   );
 }

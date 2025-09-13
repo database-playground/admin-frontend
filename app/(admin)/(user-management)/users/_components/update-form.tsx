@@ -1,10 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useFormDirtyWarning } from "@/hooks/use-form-dirty-warning";
+import { UpdateFormBody } from "@/components/update-modal/form-body";
+import type { UpdateFormBaseProps } from "@/components/update-modal/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -21,11 +22,8 @@ export interface UpdateUserFormData {
   groupID: string;
 }
 
-export interface UpdateUserFormProps {
-  defaultValues?: z.infer<typeof formSchema>;
+export interface UpdateUserFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, 'onSubmit'> {
   onSubmit: (newValues: UpdateUserFormData) => void;
-  action: "update" | "create";
-
   groupList: { id: string; name: string }[];
 }
 
@@ -33,6 +31,7 @@ export function UpdateUserForm({
   defaultValues,
   onSubmit,
   action,
+  onFormStateChange,
   groupList,
 }: UpdateUserFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,11 +39,7 @@ export function UpdateUserForm({
     defaultValues,
   });
 
-  useFormDirtyWarning(form.formState.isDirty);
-
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    form.reset();
-
     onSubmit({
       name: data.name,
       avatar: data.avatar,
@@ -54,8 +49,12 @@ export function UpdateUserForm({
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+    <UpdateFormBody
+      form={form}
+      onSubmit={handleSubmit}
+      action={action}
+      onFormStateChange={onFormStateChange}
+    >
         <FormField
           control={form.control}
           name="name"
@@ -120,8 +119,6 @@ export function UpdateUserForm({
           )}
         />
 
-        <Button type="submit">{action === "update" ? "編輯" : "建立"}</Button>
-      </form>
-    </Form>
+    </UpdateFormBody>
   );
 }
