@@ -19,6 +19,7 @@ import {
 import { useUser } from "@/providers/use-user";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 
 export interface NavItem {
   title: string;
@@ -148,18 +149,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUserMe />
+        <Suspense fallback={<NavUserLoading />}>
+          <NavUserMe />
+        </Suspense>
       </SidebarFooter>
     </Sidebar>
   );
 }
 
 function NavUserMe() {
-  const { user, isInitialized } = useUser();
-
-  if (!isInitialized || !user) {
-    return <NavUserLoading />;
-  }
+  const { user } = useUser();
 
   return <NavUser user={user} />;
 }

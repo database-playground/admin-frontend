@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import buildUri from "./build-uri";
-import { makeUpstreamClient } from "./apollo";
+import { makeClient } from "./apollo";
 import { BASIC_USER_INFO_QUERY, isAdmin, type BasicUserInfo } from "./user";
 import { CombinedGraphQLErrors } from "@apollo/client";
 
@@ -237,7 +237,7 @@ export async function getAuthStatus(): Promise<AuthStatus> {
   }
 
   // get user info
-  const client = makeUpstreamClient({ token });
+  const client = makeClient({ token });
 
   try {
     const { data } = await client.query({

@@ -3,8 +3,7 @@
 ## Variables
 
 ```env
-BACKEND_BASE_URL=
-APP_REDIRECT_URL=
+NEXT_PUBLIC_BACKEND_BASE_URL=
 ```
 
 ## Development

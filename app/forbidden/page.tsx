@@ -4,11 +4,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { redirectIfAuthenticated } from "@/lib/auth.rsc";
 import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
+import { UserInfo } from "./user-info";
 
-export default async function ForbiddenPage({ searchParams }: { searchParams: Promise<{ name?: string; email?: string }> }) {
+export default async function ForbiddenPage() {
   await redirectIfAuthenticated();
-
-  const { name, email } = await searchParams;
 
   return (
     <div
@@ -48,10 +47,7 @@ export default async function ForbiddenPage({ searchParams }: { searchParams: Pr
         <CardFooter
           className={`justify-center text-center text-xs text-muted-foreground`}
         >
-          <section className="flex flex-col items-center gap-1">
-            <p>您目前登入的帳號是：{name} ({email})</p>
-            <p>如果這不是您想登入的帳號，請切換 Google 帳號後重新登入</p>
-          </section>
+          <UserInfo />
         </CardFooter>
       </Card>
     </div>

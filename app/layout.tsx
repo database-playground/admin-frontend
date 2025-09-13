@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ApolloWrapper } from "@/providers/use-apollo";
-import { UserProvider } from "@/providers/use-user";
 import { PreloadResources } from "./preload-resources";
+import { getAuthToken } from "@/lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,11 +21,13 @@ export const metadata: Metadata = {
   description: "Managing your Database Playground instance.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const token = await getAuthToken();
+
   return (
     <html lang="zh-hant-tw">
       <head>
@@ -43,7 +45,7 @@ export default function RootLayout({
           font-sans antialiased
         `}
       >
-        <ApolloWrapper>
+        <ApolloWrapper token={token}>
           {children}
         </ApolloWrapper>
         <Toaster />

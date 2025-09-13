@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const { role, loggedIn, user } = await getAuthStatus();
+    const { role, loggedIn } = await getAuthStatus();
 
     if (!loggedIn) {
       // Handle unauthenticated requests
@@ -66,8 +66,6 @@ export async function middleware(request: NextRequest) {
         );
       } else {
         const loginUrl = new URL("/forbidden", request.url);
-        loginUrl.searchParams.set("name", user?.name ?? '');
-        loginUrl.searchParams.set("email", user?.email ?? '');
         return NextResponse.redirect(loginUrl);
       }
     }
