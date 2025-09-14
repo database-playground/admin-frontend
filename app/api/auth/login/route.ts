@@ -15,10 +15,10 @@ import { NextRequest, NextResponse } from "next/server";
  * 4. Redirect user to authorization server
  */
 export async function GET(request: NextRequest) {
-  try {
-    // Check if user is already authenticated
-    await redirectIfAuthenticated();
+  // Check if user is already authenticated
+  await redirectIfAuthenticated();
 
+  try {
     // Generate PKCE parameters
     const codeVerifier = generateCodeVerifier();
     const state = generateState();

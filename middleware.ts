@@ -78,13 +78,13 @@ export async function middleware(request: NextRequest) {
       return NextResponse.json(
         {
           error: "server_error",
-          error_description: "Authentication validation failed",
+          error_description: "Could not validate authentication",
         },
         { status: 500 },
       );
     } else {
       const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("error", "auth_error");
+      loginUrl.searchParams.set("error", "server_error");
       return NextResponse.redirect(loginUrl);
     }
   }
