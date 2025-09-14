@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { unstable_ViewTransition as ViewTransition } from "react";
 
 export default function AdminLayout({
   children,
@@ -15,7 +16,7 @@ export default function AdminLayout({
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        {children}
+        <ViewTransition name="inner-content">{children}</ViewTransition>
       </SidebarInset>
     </SidebarProvider>
   );
