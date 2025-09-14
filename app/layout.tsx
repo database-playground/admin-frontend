@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   description: "Managing your Database Playground instance.",
 };
 
+export const experimental_ppr = true;
+
 export default async function RootLayout({
   children,
 }: Readonly<{

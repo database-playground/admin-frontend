@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { DeleteUserButtonTrigger } from "../_components/delete";
+import { ImpersonateUserButtonTrigger } from "../_components/impersonate";
 import { LogoutUserDevicesButtonTrigger } from "../_components/logout-devices";
 import { UpdateUserButtonTrigger } from "../_components/update";
 import { AuditInfoCard } from "./_components/audit-info";
@@ -22,10 +23,11 @@ export default async function UserPage({
           md:p-8
         `}
       >
-        <div className="flex items-center justify-between space-y-2">
+        <div className="flex flex-col lg:flex-row items-center justify-between space-y-2">
           <Header id={id as string} />
 
           <div className="flex items-center gap-2">
+            <ImpersonateUserButtonTrigger userId={id as string} />
             <LogoutUserDevicesButtonTrigger id={id as string} />
             <UpdateUserButtonTrigger id={id as string} />
             <DeleteUserButtonTrigger id={id as string} />

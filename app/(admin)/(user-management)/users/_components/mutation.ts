@@ -19,3 +19,9 @@ export const USER_LOGOUT_DEVICES_MUTATION = graphql(`
     logoutUser(userID: $userID)
   }
 `);
+
+export const USER_IMPERSONATE_MUTATION = graphql(`
+  mutation ImpersonateUser($userID: ID!) {
+    impersonateUser(userID: $userID)
+  }
+`);
