@@ -1,9 +1,7 @@
-import { CombinedGraphQLErrors } from "@apollo/client";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { makeClient } from "./apollo";
+import z from "zod";
 import buildUri from "./build-uri";
-import { BASIC_USER_INFO_QUERY, type BasicUserInfo, isAdmin } from "./user";
 
 // Constants for OAuth 2.0 PKCE flow
 export const OAUTH_CONFIG = {
@@ -225,45 +223,77 @@ export interface AuthStatus {
   loggedIn: boolean;
 
   role?: "admin" | "user";
-  user?: BasicUserInfo;
+  introspectResult?: z.infer<typeof introspectSchema>;
 }
+
+export const introspectSchema = z.union([
+  z.object({
+    active: z.literal(true),
+    scope: z.string().transform((scope) => scope.split(" ")).describe("the scopes of the token"),
+    sub: z.string().describe("the subject of the token"),
+    exp: z.number().describe("the time the token expires"),
+    iat: z.number().describe("the time the token was issued"),
+    azp: z.string().describe("the machine that is authorized to use this token"),
+  }),
+  z.object({
+    active: z.literal(false),
+  }),
+]);
 
 export async function getAuthStatus(): Promise<AuthStatus> {
   const token = await getAuthToken();
   if (!token) {
     return {
       loggedIn: false,
+      introspectResult: undefined,
     };
   }
 
   // get user info
-  const client = makeClient({ token });
+  const response = await fetch(buildUri("/api/auth/v2/introspect"), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      token,
+      token_type_hint: "access_token",
+    }),
+  });
 
-  try {
-    const { data } = await client.query({
-      query: BASIC_USER_INFO_QUERY,
-    });
-    if (!data) {
-      return {
-        loggedIn: true,
-      };
-    }
-
-    return {
-      role: isAdmin(data?.me) ? "admin" : "user",
-      user: data.me,
-      loggedIn: true,
-    };
-  } catch (error) {
-    if (CombinedGraphQLErrors.is(error) && error.message === "require authentication") {
-      return {
-        loggedIn: false,
-      };
-    }
-
-    console.log("Error validating auth:", error);
+  if (!response.ok) {
+    console.error("Error validating auth:", response.status, response.statusText);
     return {
       loggedIn: false,
+      introspectResult: undefined,
     };
   }
+
+  const data = await response.json();
+  const parsedData = introspectSchema.safeParse(data);
+
+  if (!parsedData.success) {
+    console.error("Error validating auth:", parsedData.error);
+    return {
+      loggedIn: false,
+      introspectResult: undefined,
+    };
+  }
+
+  if (!parsedData.data.active) {
+    return {
+      loggedIn: false,
+      introspectResult: parsedData.data,
+    };
+  }
+
+  if (parsedData.data.scope.includes("*")) {
+    return {
+      loggedIn: true,
+      role: "admin",
+      introspectResult: parsedData.data,
+    };
+  }
+
+  return { loggedIn: true, role: "user", introspectResult: parsedData.data };
 }
