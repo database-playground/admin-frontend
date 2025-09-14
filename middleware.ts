@@ -34,9 +34,7 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const { role, loggedIn, introspectResult } = await getAuthStatus();
-
-    console.log("introspectResult", introspectResult);
+    const { role, loggedIn } = await getAuthStatus();
 
     if (!loggedIn) {
       // Handle unauthenticated requests
