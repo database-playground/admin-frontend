@@ -17,7 +17,3 @@ export const BASIC_USER_INFO_QUERY = graphql(`
     }
   }
 `);
-
-export function isAdmin(user: BasicUserInfo): boolean {
-  return user.group?.name === "admin";
-}
