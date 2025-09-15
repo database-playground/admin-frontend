@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     ],
     ppr: "incremental",
     turbopackPersistentCaching: true,
+    inlineCss: true,
   },
 };
 
