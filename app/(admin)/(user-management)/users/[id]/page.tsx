@@ -23,10 +23,12 @@ export default async function UserPage({
           md:p-8
         `}
       >
-        <div className={`
-          flex flex-col items-center justify-between space-y-2
-          lg:flex-row
-        `}>
+        <div
+          className={`
+            flex flex-col items-center justify-between space-y-2
+            lg:flex-row
+          `}
+        >
           <Header id={id as string} />
 
           <div className="flex items-center gap-2">
