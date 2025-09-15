@@ -14,7 +14,7 @@ export function PageHeaderSkeleton({ title, description }: { title?: string; des
     <div>
       {title ? <h1 className="text-2xl font-bold">{title}</h1> : (
         <Skeleton
-          className={`h-8 w-1/2`}
+          className={`h-8 w-64`}
         />
       )}
       {description ? <p className="text-muted-foreground">{description}</p> : (
