@@ -1,42 +1,17 @@
-import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import z from "zod";
 import buildUri from "./build-uri";
 
-// Constants for OAuth 2.0 PKCE flow
 export const OAUTH_CONFIG = {
   AUTHORIZE_URL: buildUri("/api/auth/v2/authorize/google"),
   TOKEN_URL: buildUri("/api/auth/v2/token"),
   REVOKE_URL: buildUri("/api/auth/v2/revoke"),
   CALLBACK_PATH: "/api/auth/callback",
-  SESSION_COOKIE_NAME: "__Host-auth_session",
+  TOKEN_COOKIE_NAME: "__Host-auth_token",
   STATE_COOKIE_NAME: "__Host-oauth_state",
   CODE_VERIFIER_COOKIE_NAME: "__Host-code_verifier",
   COOKIE_MAX_AGE: 8 * 60 * 60, // 8 hours in seconds
 } as const;
-
-// Iron Session configuration
-export interface SessionData {
-  access_token?: string;
-  token_type?: string;
-  expires_in?: number;
-}
-
-if (!process.env.AUTH_SECRET) {
-  throw new Error("AUTH_SECRET is not set");
-}
-
-export const sessionOptions = {
-  cookieName: OAUTH_CONFIG.SESSION_COOKIE_NAME,
-  password: process.env.AUTH_SECRET,
-  cookieOptions: {
-    secure: true,
-    httpOnly: true,
-    maxAge: OAUTH_CONFIG.COOKIE_MAX_AGE,
-    sameSite: "strict",
-    path: "/",
-  },
-};
 
 // PKCE utilities
 export function base64url(input: Uint8Array | ArrayBuffer): string {
@@ -65,40 +40,37 @@ export function generateState(): string {
   return base64url(bytes.buffer);
 }
 
-// Session management using iron-session
-export async function getSession() {
-  const cookieStore = await cookies();
-  return getIronSession<SessionData>(cookieStore, sessionOptions);
-}
-
 // Auth token management
 export async function setAuthToken(
   token: string,
-  tokenType: string = "Bearer",
   expiresIn: number = OAUTH_CONFIG.COOKIE_MAX_AGE,
 ): Promise<void> {
-  const session = await getSession();
+  const cookieStore = await cookies();
 
-  session.access_token = token;
-  session.token_type = tokenType;
-  session.expires_in = expiresIn;
-
-  await session.save();
+  cookieStore.set(OAUTH_CONFIG.TOKEN_COOKIE_NAME, token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    maxAge: expiresIn,
+    path: "/",
+  });
 }
 
 export async function getAuthToken(): Promise<string | null> {
-  const session = await getSession();
+  const cookieStore = await cookies();
 
-  if (!session.access_token) {
-    return null;
-  }
-
-  return session.access_token;
+  return cookieStore.get(OAUTH_CONFIG.TOKEN_COOKIE_NAME)?.value ?? null;
 }
 
 export async function clearAuthToken(): Promise<void> {
-  const session = await getSession();
-  session.destroy();
+  const cookieStore = await cookies();
+  cookieStore.delete({
+    name: OAUTH_CONFIG.TOKEN_COOKIE_NAME,
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    path: "/",
+  });
 }
 
 // OAuth state management
