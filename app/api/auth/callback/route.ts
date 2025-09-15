@@ -73,10 +73,9 @@ export async function GET(request: NextRequest) {
     const redirectUri = new URL(OAUTH_CONFIG.CALLBACK_PATH, request.url).toString();
     const tokenResponse = await exchangeCodeForToken(code, redirectUri, codeVerifier);
 
-    // Store the access token in encrypted session
+    // Store the access token in cookies
     await setAuthToken(
       tokenResponse.access_token,
-      tokenResponse.token_type,
       tokenResponse.expires_in,
     );
 
