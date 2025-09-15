@@ -5,6 +5,7 @@ import { Header } from "./_components/header";
 import { RelationCard } from "./_components/relation-card";
 import { SchemaCard } from "./_components/schema-card";
 import { DescriptionCard } from "./_components/description-card";
+import { Suspense } from "react";
 
 export default async function DatabasePage({
   params,
@@ -36,9 +37,11 @@ export default async function DatabasePage({
             lg:grid-cols-2
           `}
         >
-          <DescriptionCard id={id as string} />
-          <RelationCard id={id as string} />
-          <SchemaCard id={id as string} />
+          <Suspense>
+            <DescriptionCard id={id as string} />
+            <RelationCard id={id as string} />
+            <SchemaCard id={id as string} />
+          </Suspense>
         </div>
       </main>
     </>

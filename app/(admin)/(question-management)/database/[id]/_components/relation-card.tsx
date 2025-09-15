@@ -3,15 +3,11 @@
 import { CardLayout } from "@/components/card-layout";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { DATABASE_DETAIL_QUERY } from "./query";
-import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export function RelationCard({ id }: { id: string }) {
   return (
     <CardLayout title="關係圖" description="資料庫表格關係圖">
-      <Suspense fallback={<RelationFigureSkeleton />}>
-        <RelationFigure id={id} />
-      </Suspense>
+      <RelationFigure id={id} />
     </CardLayout>
   );
 }
@@ -54,8 +50,4 @@ function RelationFigure({ id }: { id: string }) {
       </pre>
     </div>
   );
-}
-
-function RelationFigureSkeleton() {
-  return <Skeleton className="h-40 w-full" />;
 }

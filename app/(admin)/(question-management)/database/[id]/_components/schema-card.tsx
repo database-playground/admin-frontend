@@ -3,17 +3,13 @@
 import { CardLayout } from "@/components/card-layout";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { DATABASE_DETAIL_QUERY } from "./query";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Suspense } from "react";
 
 export function SchemaCard({ id }: { id: string }) {
   return (
     <CardLayout title="資料結構" description="SQL DDL 建表語句">
       <div className="space-y-4">
         <div>
-          <Suspense fallback={<SchemaSkeleton />}>
-            <Schema id={id} />
-          </Suspense>
+          <Schema id={id} />
         </div>
 
         <div className="border-t pt-2">
@@ -42,11 +38,5 @@ function Schema({ id }: { id: string }) {
     >
       {database.schema}
     </pre>
-  )
-}
-
-function SchemaSkeleton() {
-  return (
-    <Skeleton className="h-96 w-full" />
   )
 }
