@@ -109,7 +109,6 @@ export const columns: ColumnDef<User>[] = [
             <DropdownMenuSeparator />
             <ImpersonateUserDropdownTrigger
               userId={row.original.id}
-              userName={row.original.name}
             />
             <LogoutUserDevicesDropdownTrigger id={row.original.id} />
           </DropdownMenuContent>

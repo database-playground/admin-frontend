@@ -21,10 +21,8 @@ import { USER_IMPERSONATE_MUTATION } from "./mutation";
 
 export function ImpersonateUserDropdownTrigger({
   userId,
-  userName,
 }: {
   userId: string;
-  userName?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -43,7 +41,6 @@ export function ImpersonateUserDropdownTrigger({
 
       <ImpersonateUserDialogContent
         userId={userId}
-        userName={userName}
         onCompleted={() => setOpen(false)}
       />
     </Dialog>
@@ -52,10 +49,8 @@ export function ImpersonateUserDropdownTrigger({
 
 export function ImpersonateUserButtonTrigger({
   userId,
-  userName,
 }: {
   userId: string;
-  userName?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -68,7 +63,6 @@ export function ImpersonateUserButtonTrigger({
 
       <ImpersonateUserDialogContent
         userId={userId}
-        userName={userName}
         onCompleted={() => setOpen(false)}
       />
     </Dialog>
@@ -77,11 +71,9 @@ export function ImpersonateUserButtonTrigger({
 
 function ImpersonateUserDialogContent({
   userId,
-  userName,
   onCompleted,
 }: {
   userId: string;
-  userName?: string;
   onCompleted: () => void;
 }) {
   const [token, setToken] = useState<string | null>(null);
