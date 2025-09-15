@@ -3,8 +3,20 @@
 import { CardLayout } from "@/components/card-layout";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { DATABASE_DETAIL_QUERY } from "./query";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function RelationCard({ id }: { id: string }) {
+  return (
+    <CardLayout title="關係圖" description="資料庫表格關係圖">
+      <Suspense fallback={<RelationFigureSkeleton />}>
+        <RelationFigure id={id} />
+      </Suspense>
+    </CardLayout>
+  );
+}
+
+function RelationFigure({ id }: { id: string }) {
   const { data } = useSuspenseQuery(DATABASE_DETAIL_QUERY, {
     variables: { id },
   });
@@ -12,48 +24,38 @@ export function RelationCard({ id }: { id: string }) {
   const database = data.database;
 
   // Check if the relation figure looks like a URL (basic check)
-  const isUrl = database.relationFigure.startsWith("http://") || database.relationFigure.startsWith("https://");
+  const isUrl =
+    database.relationFigure.startsWith("http://") ||
+    database.relationFigure.startsWith("https://");
+
+  if (isUrl) {
+    return (
+      <a href={database.relationFigure} aria-label="打開資料庫關係圖" target="_blank" rel="noopener noreferrer">
+        <picture>
+          <img
+            src={database.relationFigure}
+            alt="資料庫關係圖"
+            className="h-auto max-h-80 w-full object-contain rounded"
+          />
+        </picture>
+      </a>
+    );
+  }
 
   return (
-    <CardLayout title="關係圖" description="資料庫表格關係圖">
-      <div className="space-y-4">
-        {isUrl
-          ? (
-            <div>
-              <div className="overflow-hidden rounded-lg border">
-                <picture>
-                  <img
-                    src={database.relationFigure}
-                    alt="資料庫關係圖"
-                    className="h-auto max-h-96 w-full object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                      e.currentTarget.nextElementSibling?.classList.remove("hidden");
-                    }}
-                  />
-                </picture>
-              </div>
-            </div>
-          )
-          : (
-            <div>
-              <pre
-                className={`
-                  max-h-80 overflow-x-auto rounded-lg border bg-muted p-4
-                  font-mono text-sm whitespace-pre-wrap
-                `}
-              >
-              {database.relationFigure}
-              </pre>
-            </div>
-          )}
-
-        <div className="border-t pt-2">
-          <p className="text-xs text-muted-foreground">
-            關係圖顯示了資料庫中各表格之間的關聯性和主外鍵約束。
-          </p>
-        </div>
-      </div>
-    </CardLayout>
+    <div>
+      <pre
+        className={`
+          max-h-80 overflow-x-auto rounded-lg border bg-muted p-4
+          font-mono text-sm whitespace-pre-wrap
+        `}
+      >
+        {database.relationFigure}
+      </pre>
+    </div>
   );
+}
+
+function RelationFigureSkeleton() {
+  return <Skeleton className="h-40 w-full" />;
 }

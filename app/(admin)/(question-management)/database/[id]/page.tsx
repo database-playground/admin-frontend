@@ -4,6 +4,7 @@ import { UpdateDatabaseButtonTrigger } from "../_components/update";
 import { Header } from "./_components/header";
 import { RelationCard } from "./_components/relation-card";
 import { SchemaCard } from "./_components/schema-card";
+import { DescriptionCard } from "./_components/description-card";
 
 export default async function DatabasePage({
   params,
@@ -35,8 +36,9 @@ export default async function DatabasePage({
             lg:grid-cols-2
           `}
         >
-          <SchemaCard id={id as string} />
+          <DescriptionCard id={id as string} />
           <RelationCard id={id as string} />
+          <SchemaCard id={id as string} />
         </div>
       </main>
     </>
