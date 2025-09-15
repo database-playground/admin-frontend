@@ -2,7 +2,6 @@
 
 import { CardLayout } from "@/components/card-layout";
 import { useSuspenseQuery } from "@apollo/client/react";
-import Image from "next/image";
 import { DATABASE_DETAIL_QUERY } from "./query";
 
 export function RelationCard({ id }: { id: string }) {
@@ -22,19 +21,17 @@ export function RelationCard({ id }: { id: string }) {
           ? (
             <div>
               <div className="overflow-hidden rounded-lg border">
-                <Image
-                  unoptimized
-                  src={database.relationFigure}
-                  alt="資料庫關係圖"
-                  className="h-auto max-h-96 w-full object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                    e.currentTarget.nextElementSibling?.classList.remove("hidden");
-                  }}
-                />
-                <div className="hidden p-4 text-center text-muted-foreground">
-                  無法載入圖片
-                </div>
+                <picture>
+                  <img
+                    src={database.relationFigure}
+                    alt="資料庫關係圖"
+                    className="h-auto max-h-96 w-full object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                      e.currentTarget.nextElementSibling?.classList.remove("hidden");
+                    }}
+                  />
+                </picture>
               </div>
             </div>
           )
