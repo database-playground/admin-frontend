@@ -3,6 +3,7 @@ import { DeleteQuestionButtonTrigger } from "../_components/delete";
 import { UpdateQuestionButtonTrigger } from "../_components/update";
 import { AnswerCard } from "./_components/answer-card";
 import { DatabaseCard } from "./_components/database-card";
+import { DescriptionCard } from "./_components/description-card";
 import { Header } from "./_components/header";
 
 export default async function QuestionPage({
@@ -35,6 +36,7 @@ export default async function QuestionPage({
             lg:grid-cols-2
           `}
         >
+          <DescriptionCard id={id as string} />
           <DatabaseCard id={id as string} />
           <AnswerCard id={id as string} />
         </div>
