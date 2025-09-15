@@ -20,9 +20,8 @@ function RelationFigure({ id }: { id: string }) {
   const database = data.database;
 
   // Check if the relation figure looks like a URL (basic check)
-  const isUrl =
-    database.relationFigure.startsWith("http://") ||
-    database.relationFigure.startsWith("https://");
+  const isUrl = database.relationFigure.startsWith("http://")
+    || database.relationFigure.startsWith("https://");
 
   if (isUrl) {
     return (
@@ -31,7 +30,7 @@ function RelationFigure({ id }: { id: string }) {
           <img
             src={database.relationFigure}
             alt="資料庫關係圖"
-            className="h-auto max-h-80 w-full object-contain rounded"
+            className="h-auto max-h-80 w-full rounded object-contain"
           />
         </picture>
       </a>
@@ -42,8 +41,8 @@ function RelationFigure({ id }: { id: string }) {
     <div>
       <pre
         className={`
-          max-h-80 overflow-x-auto rounded-lg border bg-muted p-4
-          font-mono text-sm whitespace-pre-wrap
+          max-h-80 overflow-x-auto rounded-lg border bg-muted p-4 font-mono
+          text-sm whitespace-pre-wrap
         `}
       >
         {database.relationFigure}

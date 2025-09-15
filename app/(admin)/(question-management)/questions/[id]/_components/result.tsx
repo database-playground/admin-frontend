@@ -12,9 +12,12 @@ export function ReferenceAnswerResult({ id }: { id: string }) {
 
   return (
     <div className="space-y-4">
-      <details className="group overflow-hidden rounded-lg border border-border" onToggle={(e) => {
-        setIsOpen(e.currentTarget.open);
-      }}>
+      <details
+        className="group overflow-hidden rounded-lg border border-border"
+        onToggle={(e) => {
+          setIsOpen(e.currentTarget.open);
+        }}
+      >
         <summary
           className={`
             flex cursor-pointer items-center justify-between bg-muted/50 px-4
@@ -38,7 +41,7 @@ export function ReferenceAnswerResult({ id }: { id: string }) {
   );
 }
 
-function ReferenceAnswerResultContent({ id, open }: { id: string, open: boolean }) {
+function ReferenceAnswerResultContent({ id, open }: { id: string; open: boolean }) {
   const { data, loading, error } = useQuery(QUESTION_REFERENCE_ANSWER_RESULT_QUERY, {
     variables: { id },
     skip: !open,

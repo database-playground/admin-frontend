@@ -2,13 +2,18 @@
 
 import { CardLayout } from "@/components/card-layout";
 import { useSuspenseQuery } from "@apollo/client/react";
-import { DATABASE_DETAIL_QUERY } from "./query";
 import { Remark } from "react-remark";
+import { DATABASE_DETAIL_QUERY } from "./query";
 
 export function DescriptionCard({ id }: { id: string }) {
   return (
     <CardLayout title="資料表描述" description="這個資料表的簡單介紹。">
-      <article className="prose dark:prose-invert">
+      <article
+        className={`
+          prose
+          dark:prose-invert
+        `}
+      >
         <Description id={id} />
       </article>
     </CardLayout>

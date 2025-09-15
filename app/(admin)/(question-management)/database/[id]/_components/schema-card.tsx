@@ -38,5 +38,5 @@ function Schema({ id }: { id: string }) {
     >
       {database.schema}
     </pre>
-  )
+  );
 }
