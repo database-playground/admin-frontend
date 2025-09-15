@@ -14,13 +14,15 @@ export function DatabaseCard({ id }: { id: string }) {
 
   return (
     <CardLayout title="所屬資料庫" description="這個題目要操作的資料庫。">
-      <p>{database.slug}</p>
-      <p className="text-sm text-muted-foreground">
-        {database.description}{" "}
-        <StyledLink href={`/database/${database.id}`}>
-          schema 等資訊 →
-        </StyledLink>
-      </p>
+      <div>
+        <p>{database.slug}</p>
+        <p className="text-sm text-muted-foreground">
+          {database.description}{" "}
+          <StyledLink href={`/database/${database.id}`}>
+            schema 等資訊 →
+          </StyledLink>
+        </p>
+      </div>
     </CardLayout>
   );
 }

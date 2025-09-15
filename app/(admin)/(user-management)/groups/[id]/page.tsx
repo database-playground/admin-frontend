@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/site-header";
+import { Suspense } from "react";
 import { DeleteGroupButtonTrigger } from "../_components/delete";
 import { UpdateGroupButtonTrigger } from "../_components/update";
 import { AuditInfoCard } from "./_components/audit-info-card";
@@ -36,9 +37,11 @@ export default async function GroupPage({
             lg:grid-cols-2
           `}
         >
-          <ScopeCard id={id as string} />
-          <MembersCard id={id as string} />
-          <AuditInfoCard id={id as string} />
+          <Suspense>
+            <ScopeCard id={id as string} />
+            <MembersCard id={id as string} />
+            <AuditInfoCard id={id as string} />
+          </Suspense>
         </div>
       </main>
     </>

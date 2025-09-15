@@ -20,11 +20,14 @@ function HeaderMain({ id }: { id: string }) {
 
   const database = data.database;
 
+  // 只擷取第一段 description
+  const description = database.description?.split("\n")[0] || "此資料庫沒有描述";
+
   return (
     <div className="flex items-start gap-4">
       <PageHeader
         title={`資料庫「${database.slug}」`}
-        description={database.description || "此資料庫沒有描述"}
+        description={description}
       />
     </div>
   );

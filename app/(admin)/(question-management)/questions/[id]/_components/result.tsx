@@ -4,22 +4,20 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@apollo/client/react";
 import { AlertTriangle, ChevronDown, Database, Table } from "lucide-react";
-import React from "react";
 import { useState } from "react";
 import { QUESTION_REFERENCE_ANSWER_RESULT_QUERY } from "./query";
 
 export function ReferenceAnswerResult({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleToggle = () => {
-    if (!isOpen) {
-      setIsOpen(true);
-    }
-  };
-
   return (
     <div className="space-y-4">
-      <details className="group overflow-hidden rounded-lg border border-border" open={isOpen}>
+      <details
+        className="group overflow-hidden rounded-lg border border-border"
+        onToggle={(e) => {
+          setIsOpen(e.currentTarget.open);
+        }}
+      >
         <summary
           className={`
             flex cursor-pointer items-center justify-between bg-muted/50 px-4
@@ -28,7 +26,6 @@ export function ReferenceAnswerResult({ id }: { id: string }) {
             [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-200
             group-open:[&_svg]:rotate-180
           `}
-          onClick={handleToggle}
         >
           <span className="flex items-center gap-2 text-sm">
             <Table className="h-4 w-4 text-muted-foreground" />
@@ -37,33 +34,21 @@ export function ReferenceAnswerResult({ id }: { id: string }) {
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </summary>
         <div className="border-t border-border bg-background p-4">
-          <ReferenceAnswerResultContent id={id} />
+          <ReferenceAnswerResultContent id={id} open={isOpen} />
         </div>
       </details>
     </div>
   );
 }
 
-function ReferenceAnswerResultContent({ id }: { id: string }) {
+function ReferenceAnswerResultContent({ id, open }: { id: string; open: boolean }) {
   const { data, loading, error } = useQuery(QUESTION_REFERENCE_ANSWER_RESULT_QUERY, {
     variables: { id },
+    skip: !open,
   });
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="flex items-center gap-3 text-muted-foreground">
-          <div
-            className={`
-              h-5 w-5 animate-spin rounded-full border-2
-              border-muted-foreground/20 border-t-muted-foreground
-            `}
-          >
-          </div>
-          <span className="text-sm">載入執行結果中...</span>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   if (error) {

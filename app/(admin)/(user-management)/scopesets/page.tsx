@@ -1,6 +1,4 @@
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
-import { Suspense } from "react";
 import { CreateScopeSetTrigger } from "./_components/create";
 import { ScopeSetDataTable } from "./_components/data-table";
 
@@ -22,9 +20,7 @@ export default function ScopesetPage() {
           <CreateScopeSetTrigger />
         </div>
         <div>
-          <Suspense fallback={<DataTableSkeleton />}>
-            <ScopeSetDataTable />
-          </Suspense>
+          <ScopeSetDataTable />
         </div>
       </main>
     </>

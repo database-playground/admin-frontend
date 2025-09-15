@@ -1,6 +1,8 @@
 import { SiteHeader } from "@/components/site-header";
+import { Suspense } from "react";
 import { DeleteDatabaseButtonTrigger } from "../_components/delete";
 import { UpdateDatabaseButtonTrigger } from "../_components/update";
+import { DescriptionCard } from "./_components/description-card";
 import { Header } from "./_components/header";
 import { RelationCard } from "./_components/relation-card";
 import { SchemaCard } from "./_components/schema-card";
@@ -35,8 +37,11 @@ export default async function DatabasePage({
             lg:grid-cols-2
           `}
         >
-          <SchemaCard id={id as string} />
-          <RelationCard id={id as string} />
+          <Suspense>
+            <DescriptionCard id={id as string} />
+            <RelationCard id={id as string} />
+            <SchemaCard id={id as string} />
+          </Suspense>
         </div>
       </main>
     </>

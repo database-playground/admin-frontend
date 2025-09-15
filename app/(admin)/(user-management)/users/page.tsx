@@ -1,6 +1,4 @@
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
-import { Suspense } from "react";
 import { UsersDataTable } from "./_components/data-table";
 
 export default function Page() {
@@ -20,9 +18,7 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <Suspense fallback={<DataTableSkeleton />}>
-            <UsersDataTable />
-          </Suspense>
+          <UsersDataTable />
         </div>
       </main>
     </>

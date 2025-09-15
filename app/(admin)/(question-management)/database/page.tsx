@@ -1,6 +1,4 @@
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
-import { Suspense } from "react";
 import { CreateDatabaseTrigger } from "./_components/create";
 import { DatabaseDataTable } from "./_components/data-table";
 
@@ -22,9 +20,7 @@ export default function Page() {
           <CreateDatabaseTrigger />
         </div>
         <div>
-          <Suspense fallback={<DataTableSkeleton />}>
-            <DatabaseDataTable />
-          </Suspense>
+          <DatabaseDataTable />
         </div>
       </main>
     </>

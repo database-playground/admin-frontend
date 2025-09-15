@@ -28,6 +28,8 @@ function HeaderMain({ id }: { id: string }) {
   const question = data.question;
   const difficultyInfo = difficultyMap[question.difficulty as keyof typeof difficultyMap];
 
+  const description = question.description?.split("\n")[0] || "此題目沒有描述";
+
   return (
     <div>
       <div className="flex items-center gap-2">
@@ -35,7 +37,7 @@ function HeaderMain({ id }: { id: string }) {
         <Badge variant="outline">{question.category}</Badge>
         <Badge variant={difficultyInfo.variant}>{difficultyInfo.label}</Badge>
       </div>
-      <p className="text-muted-foreground">{question.description}</p>
+      <p className="text-muted-foreground">{description}</p>
     </div>
   );
 }
