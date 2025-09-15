@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       ["@swc-contrib/plugin-graphql-codegen-client-preset", { artifactDirectory: "./gql", gqlTagName: "graphql" }],
     ],
     ppr: "incremental",
+    turbopackPersistentCaching: true,
   },
 };
 
