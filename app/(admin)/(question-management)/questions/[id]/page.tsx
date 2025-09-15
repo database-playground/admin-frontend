@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/site-header";
+import { Suspense } from "react";
 import { DeleteQuestionButtonTrigger } from "../_components/delete";
 import { UpdateQuestionButtonTrigger } from "../_components/update";
 import { AnswerCard } from "./_components/answer-card";
@@ -36,9 +37,11 @@ export default async function QuestionPage({
             lg:grid-cols-2
           `}
         >
-          <DescriptionCard id={id as string} />
-          <DatabaseCard id={id as string} />
-          <AnswerCard id={id as string} />
+          <Suspense>
+            <DescriptionCard id={id as string} />
+            <DatabaseCard id={id as string} />
+            <AnswerCard id={id as string} />
+          </Suspense>
         </div>
       </main>
     </>

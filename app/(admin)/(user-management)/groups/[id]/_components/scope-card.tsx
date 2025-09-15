@@ -2,21 +2,11 @@
 
 import { CardLayout } from "@/components/card-layout";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSuspenseQuery } from "@apollo/client/react";
-import { Suspense } from "react";
 import { GROUP_SCOPES_QUERY } from "./query";
 
 export function ScopeCard({ id }: { id: string }) {
-  return (
-    <Suspense fallback={<CardSkeleton />}>
-      <CardMain id={id} />
-    </Suspense>
-  );
-}
-
-function CardMain({ id }: { id: string }) {
   const { data } = useSuspenseQuery(GROUP_SCOPES_QUERY, {
     variables: { id },
   });
@@ -51,14 +41,6 @@ function CardMain({ id }: { id: string }) {
           </Tooltip>
         ))}
       </div>
-    </CardLayout>
-  );
-}
-
-function CardSkeleton() {
-  return (
-    <CardLayout title="權限列表" description="這個群組擁有的權限。">
-      <Skeleton className="h-5 w-1/2" />
     </CardLayout>
   );
 }

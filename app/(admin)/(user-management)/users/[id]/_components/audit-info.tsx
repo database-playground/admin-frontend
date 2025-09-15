@@ -1,21 +1,11 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { Clock } from "lucide-react";
-import { Suspense } from "react";
 import { USER_AUDIT_INFO_QUERY } from "./query";
 
 export function AuditInfoCard({ id }: { id: string }) {
-  return (
-    <Suspense fallback={<CardSkeleton />}>
-      <CardMain id={id} />
-    </Suspense>
-  );
-}
-
-function CardMain({ id }: { id: string }) {
   const { data } = useSuspenseQuery(USER_AUDIT_INFO_QUERY, {
     variables: { id },
   });
@@ -36,14 +26,6 @@ function CardMain({ id }: { id: string }) {
           </span>
         </li>
       </ul>
-    </CardLayout>
-  );
-}
-
-function CardSkeleton() {
-  return (
-    <CardLayout title="稽核資訊" description="這個使用者的建立與更新時間。">
-      <Skeleton className="h-8 w-1/2" />
     </CardLayout>
   );
 }

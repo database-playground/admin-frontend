@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/site-header";
+import { Suspense } from "react";
 import { DeleteUserButtonTrigger } from "../_components/delete";
 import { ImpersonateUserButtonTrigger } from "../_components/impersonate";
 import { LogoutUserDevicesButtonTrigger } from "../_components/logout-devices";
@@ -44,8 +45,10 @@ export default async function UserPage({
             lg:grid-cols-2
           `}
         >
-          <GroupsCard id={id as string} />
-          <AuditInfoCard id={id as string} />
+          <Suspense>
+            <GroupsCard id={id as string} />
+            <AuditInfoCard id={id as string} />
+          </Suspense>
         </div>
       </main>
     </>
