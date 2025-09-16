@@ -1,4 +1,4 @@
-import { getAuthStatus } from "@/lib/auth";
+import { getAuthStatus, getAuthToken } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 // Define public routes that don't require authentication
@@ -33,61 +33,83 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  const token = await getAuthToken();
+  if (!token) {
+    return unauthorized(request);
+  }
+
   try {
-    const { role, loggedIn } = await getAuthStatus();
+    const { role, loggedIn } = await getAuthStatus(token);
 
     if (!loggedIn) {
-      // Handle unauthenticated requests
-      if (isApiRoute(pathname)) {
-        // Return JSON error for API routes
-        return NextResponse.json(
-          {
-            error: "unauthorized",
-            error_description: "Authentication required",
-          },
-          { status: 401 },
-        );
-      } else {
-        // Redirect to login for web routes
-        const loginUrl = new URL("/login", request.url);
-        loginUrl.searchParams.set("redirect", pathname);
-        return NextResponse.redirect(loginUrl);
-      }
+      return unauthorized(request);
     }
 
     if (role !== "admin") {
-      if (isApiRoute(pathname)) {
-        return NextResponse.json(
-          {
-            error: "forbidden",
-            error_description: "You must be an admin to access this resource",
-          },
-          { status: 403 },
-        );
-      } else {
-        const loginUrl = new URL("/forbidden", request.url);
-        return NextResponse.redirect(loginUrl);
-      }
+      return forbidden(request);
     }
   } catch (error) {
     console.error("Middleware authentication error:", error);
-
-    if (isApiRoute(pathname)) {
-      return NextResponse.json(
-        {
-          error: "server_error",
-          error_description: "Could not validate authentication",
-        },
-        { status: 500 },
-      );
-    } else {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("error", "server_error");
-      return NextResponse.redirect(loginUrl);
-    }
+    return serverError(request);
   }
 
   return NextResponse.next();
+}
+
+function unauthorized(request: NextRequest): NextResponse {
+  const { pathname } = request.nextUrl;
+
+  // Handle unauthenticated requests
+  if (isApiRoute(pathname)) {
+    // Return JSON error for API routes
+    return NextResponse.json(
+      {
+        error: "unauthorized",
+        error_description: "Authentication required",
+      },
+      { status: 401 },
+    );
+  }
+
+  // Redirect to login for web routes
+  const loginUrl = new URL("/login", request.url);
+  loginUrl.searchParams.set("redirect", pathname);
+  return NextResponse.redirect(loginUrl);
+}
+
+function forbidden(request: NextRequest): NextResponse {
+  const { pathname } = request.nextUrl;
+
+  if (isApiRoute(pathname)) {
+    return NextResponse.json(
+      {
+        error: "forbidden",
+        error_description: "You must be an admin to access this resource",
+      },
+      { status: 403 },
+    );
+  }
+
+  const loginUrl = new URL("/forbidden", request.url);
+  return NextResponse.redirect(loginUrl);
+}
+
+function serverError(request: NextRequest): NextResponse {
+  const { pathname } = request.nextUrl;
+
+  if (isApiRoute(pathname)) {
+    return NextResponse.json(
+      {
+        error: "server_error",
+        error_description: "Could not validate authentication",
+      },
+      { status: 500 },
+    );
+  }
+
+  const loginUrl = new URL("/login", request.url);
+  loginUrl.searchParams.set("error", "server_error");
+  return NextResponse.redirect(loginUrl);
 }
 
 // Configure which routes the middleware should run on

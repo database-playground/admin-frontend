@@ -212,15 +212,7 @@ export const introspectSchema = z.union([
   }),
 ]);
 
-export async function getAuthStatus(): Promise<AuthStatus> {
-  const token = await getAuthToken();
-  if (!token) {
-    return {
-      loggedIn: false,
-      introspectResult: undefined,
-    };
-  }
-
+export async function getAuthStatus(token: string): Promise<AuthStatus> {
   // get user info
   const response = await fetch(buildUri("/api/auth/v2/introspect"), {
     method: "POST",
