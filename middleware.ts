@@ -1,4 +1,4 @@
-import { getAuthStatus, getAuthToken } from "@/lib/auth";
+import { getAuthStatus, OAUTH_CONFIG } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 // Define public routes that don't require authentication
@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = await getAuthToken();
+  const token = request.cookies.get(OAUTH_CONFIG.TOKEN_COOKIE_NAME)?.value ?? null;
   if (!token) {
     return unauthorized(request);
   }
