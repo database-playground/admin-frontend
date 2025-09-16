@@ -69,8 +69,6 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(loginUrl);
       }
     }
-
-    return NextResponse.next();
   } catch (error) {
     console.error("Middleware authentication error:", error);
 
@@ -88,6 +86,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
   }
+
+  return NextResponse.next();
 }
 
 // Configure which routes the middleware should run on
