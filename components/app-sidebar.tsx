@@ -1,6 +1,6 @@
 "use client";
 
-import { Book, Code, LibrarySquare, type LucideIcon, SquareUser } from "lucide-react";
+import { Activity, Book, Code, Coins, LibrarySquare, type LucideIcon, Send, SquareUser } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
@@ -50,48 +50,76 @@ const isUserManagement = (pathname: string) =>
 const buildNavbar = (
   pathname: string,
 ): {
-  navMain: NavItem[];
+  navMain: { group: string; items: NavItem[] }[];
   navSecondary: NavItem[];
 } => ({
   navMain: [
     {
-      title: "使用者管理",
-      url: "/users",
-      icon: SquareUser,
-      isActive: isUserManagement(pathname),
+      group: "資料管理",
       items: [
         {
-          title: "使用者",
+          title: "使用者管理",
           url: "/users",
-          isActive: pathname.startsWith("/users"),
+          icon: SquareUser,
+          isActive: isUserManagement(pathname),
+          items: [
+            {
+              title: "使用者",
+              url: "/users",
+              isActive: pathname.startsWith("/users"),
+            },
+            {
+              title: "群組",
+              url: "/groups",
+              isActive: pathname.startsWith("/groups"),
+            },
+            {
+              title: "權限集",
+              url: "/scopesets",
+              isActive: pathname.startsWith("/scopesets"),
+            },
+          ],
         },
         {
-          title: "群組",
-          url: "/groups",
-          isActive: pathname.startsWith("/groups"),
-        },
-        {
-          title: "權限集",
-          url: "/scopesets",
-          isActive: pathname.startsWith("/scopesets"),
+          title: "題庫管理",
+          url: "/questions",
+          icon: LibrarySquare,
+          isActive: pathname.startsWith("/questions") || pathname.startsWith("/database"),
+          items: [
+            {
+              title: "題庫",
+              url: "/questions",
+              isActive: pathname.startsWith("/questions"),
+            },
+            {
+              title: "資料庫",
+              url: "/database",
+              isActive: pathname.startsWith("/database"),
+            },
+          ],
         },
       ],
     },
     {
-      title: "題庫管理",
-      url: "/questions",
-      icon: LibrarySquare,
-      isActive: pathname.startsWith("/questions") || pathname.startsWith("/database"),
+      group: "系統操作動態",
       items: [
         {
-          title: "題庫",
-          url: "/questions",
-          isActive: pathname.startsWith("/questions"),
+          title: "提交記錄",
+          url: "/submissions",
+          icon: Send,
+          isActive: pathname.startsWith("/submissions"),
         },
         {
-          title: "資料庫",
-          url: "/database",
-          isActive: pathname.startsWith("/database"),
+          title: "事件記錄",
+          url: "/events",
+          icon: Activity,
+          isActive: pathname.startsWith("/events"),
+        },
+        {
+          title: "積分記錄",
+          url: "/points",
+          icon: Coins,
+          isActive: pathname.startsWith("/points"),
         },
       ],
     },
@@ -139,7 +167,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        {data.navMain.map((group) => <NavMain key={group.group} items={group.items} groupLabel={group.group} />)}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
