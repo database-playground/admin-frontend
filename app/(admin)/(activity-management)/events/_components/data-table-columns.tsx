@@ -20,14 +20,6 @@ export interface Event {
   triggeredAt: string;
 }
 
-const eventTypeMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
-  LOGIN: { label: "登入", variant: "default" },
-  LOGOUT: { label: "登出", variant: "secondary" },
-  SUBMISSION: { label: "提交", variant: "outline" },
-  SCORE: { label: "計分", variant: "default" },
-  ERROR: { label: "錯誤", variant: "destructive" },
-};
-
 export const columns: ColumnDef<Event>[] = [
   {
     accessorKey: "id",
@@ -60,8 +52,7 @@ export const columns: ColumnDef<Event>[] = [
     header: "事件類型",
     cell: ({ row }) => {
       const type = row.original.type;
-      const typeInfo = eventTypeMap[type] || { label: type, variant: "outline" as const };
-      return <Badge variant={typeInfo.variant}>{typeInfo.label}</Badge>;
+      return <Badge variant="outline">{type}</Badge>;
     },
   },
   {

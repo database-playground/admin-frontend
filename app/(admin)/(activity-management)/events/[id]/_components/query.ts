@@ -13,4 +13,4 @@ export const EVENT_BY_ID_QUERY = graphql(`
         triggeredAt
       }
     }
-  `);
+`);

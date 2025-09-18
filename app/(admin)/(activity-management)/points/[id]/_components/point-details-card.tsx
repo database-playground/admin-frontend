@@ -13,21 +13,7 @@ export function PointDetailsCard({ id }: PointDetailsCardProps) {
     variables: { id },
   });
 
-  const point = data?.pointGrant;
-
-  if (!point) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>積分詳情</CardTitle>
-          <CardDescription>查看積分獲得的詳細資訊</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">找不到積分記錄</p>
-        </CardContent>
-      </Card>
-    );
-  }
+  const point = data.pointGrant;
 
   const isPositive = point.points >= 0;
 

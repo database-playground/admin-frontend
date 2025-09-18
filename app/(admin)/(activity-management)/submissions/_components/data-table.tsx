@@ -33,6 +33,10 @@ export function SubmissionsDataTable() {
           id: submission.user.id,
           name: submission.user.name,
         },
+        question: {
+          id: submission.question.id,
+          title: submission.question.title,
+        },
       } satisfies Submission;
     })
     .filter((submission) => submission !== null) ?? [];

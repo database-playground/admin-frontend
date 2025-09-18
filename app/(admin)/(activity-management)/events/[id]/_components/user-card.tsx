@@ -14,21 +14,7 @@ export function UserCard({ id }: UserCardProps) {
     variables: { id },
   });
 
-  const event = data?.event;
-
-  if (!event) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>使用者資訊</CardTitle>
-          <CardDescription>查看觸發此事件的使用者</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">找不到使用者資訊</p>
-        </CardContent>
-      </Card>
-    );
-  }
+  const event = data.event;
 
   return (
     <Card>

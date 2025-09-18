@@ -14,21 +14,7 @@ export function UserCard({ id }: UserCardProps) {
     variables: { id },
   });
 
-  const point = data?.pointGrant;
-
-  if (!point) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>使用者資訊</CardTitle>
-          <CardDescription>查看獲得此積分的使用者</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">找不到使用者資訊</p>
-        </CardContent>
-      </Card>
-    );
-  }
+  const point = data.pointGrant;
 
   return (
     <Card>

@@ -17,6 +17,10 @@ export const SUBMISSIONS_TABLE_QUERY = graphql(`
             id
             name
           }
+          question {
+            id
+            title
+          }
         }
       }
       totalCount

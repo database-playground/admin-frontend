@@ -18,7 +18,14 @@ export interface Submission {
   id: string;
   submittedCode: string;
   status: SubmissionStatus;
-  user: { id: string; name: string };
+  user: {
+    id: string;
+    name: string;
+  };
+  question: {
+    id: string;
+    title: string;
+  };
 }
 
 const statusMap: Record<
@@ -57,6 +64,14 @@ export const columns: ColumnDef<Submission>[] = [
     },
   },
   {
+    accessorKey: "question.title",
+    header: "題目",
+    cell: ({ row }) => {
+      const question = row.original.question;
+      return <StyledLink href={`/questions/${question.id}`}>{question.title}</StyledLink>;
+    },
+  },
+  {
     accessorKey: "status",
     header: "狀態",
     cell: ({ row }) => {
@@ -71,17 +86,8 @@ export const columns: ColumnDef<Submission>[] = [
     cell: ({ row }) => {
       const code = row.original.submittedCode;
       return (
-        <div className="max-w-[400px]">
-          <code
-            className={`
-              relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono
-              text-sm font-semibold text-muted-foreground
-            `}
-          >
-            <div className="truncate">
-              {code}
-            </div>
-          </code>
+        <div className="max-w-[250px] truncate font-mono">
+          {code}
         </div>
       );
     },
@@ -105,6 +111,9 @@ export const columns: ColumnDef<Submission>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href={`/users/${row.original.user.id}`}>檢視使用者</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/questions/${row.original.question.id}`}>檢視題目</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
