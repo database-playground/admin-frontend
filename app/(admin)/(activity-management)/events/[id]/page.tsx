@@ -3,6 +3,11 @@ import { Suspense } from "react";
 import { EventDetailsCard } from "./_components/event-details-card";
 import { Header } from "./_components/header";
 import { UserCard } from "./_components/user-card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "事件詳情",
+};
 
 export default async function EventPage({
   params,

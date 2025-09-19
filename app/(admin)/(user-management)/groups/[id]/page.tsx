@@ -6,6 +6,11 @@ import { AuditInfoCard } from "./_components/audit-info-card";
 import { Header } from "./_components/header";
 import { MembersCard } from "./_components/members-card";
 import { ScopeCard } from "./_components/scope-card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "群組資訊",
+};
 
 export default async function GroupPage({
   params,

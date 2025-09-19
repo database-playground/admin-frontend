@@ -1,6 +1,11 @@
 import { SiteHeader } from "@/components/site-header";
 import { CreateScopeSetTrigger } from "./_components/create";
 import { ScopeSetDataTable } from "./_components/data-table";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "權限集",
+};
 
 export default function ScopesetPage() {
   return (

@@ -7,6 +7,11 @@ import { UpdateUserButtonTrigger } from "../_components/update";
 import { AuditInfoCard } from "./_components/audit-info";
 import { GroupsCard } from "./_components/groups";
 import { Header } from "./_components/header";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "使用者資訊",
+};
 
 export default async function UserPage({
   params,

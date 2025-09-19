@@ -4,6 +4,11 @@ import { Header } from "./_components/header";
 import { ResultCard } from "./_components/result-card";
 import { SubmissionDetailsCard } from "./_components/submission-details-card";
 import { UserCard } from "./_components/user-card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "提交記錄詳情",
+};
 
 export default async function SubmissionPage({
   params,

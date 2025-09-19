@@ -3,6 +3,11 @@ import { Suspense } from "react";
 import { Header } from "./_components/header";
 import { PointDetailsCard } from "./_components/point-details-card";
 import { UserCard } from "./_components/user-card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "積分記錄詳情",
+};
 
 export default async function PointPage({
   params,

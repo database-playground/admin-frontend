@@ -6,6 +6,11 @@ import { DescriptionCard } from "./_components/description-card";
 import { Header } from "./_components/header";
 import { RelationCard } from "./_components/relation-card";
 import { SchemaCard } from "./_components/schema-card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "資料庫資訊",
+};
 
 export default async function DatabasePage({
   params,

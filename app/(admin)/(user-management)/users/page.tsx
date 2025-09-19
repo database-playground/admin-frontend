@@ -1,5 +1,10 @@
 import { SiteHeader } from "@/components/site-header";
 import { UsersDataTable } from "./_components/data-table";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "使用者",
+};
 
 export default function Page() {
   return (

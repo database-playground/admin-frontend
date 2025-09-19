@@ -6,6 +6,11 @@ import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { UserInfo } from "./user-info";
 
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "權限不足",
+};
+
 export default async function ForbiddenPage() {
   await redirectIfAuthenticated();
 

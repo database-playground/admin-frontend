@@ -1,5 +1,10 @@
 import { SiteHeader } from "@/components/site-header";
 import { PointsDataTable } from "./_components/data-table";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "積分管理",
+};
 
 export default function Page() {
   return (

@@ -6,6 +6,11 @@ import { AnswerCard } from "./_components/answer-card";
 import { DatabaseCard } from "./_components/database-card";
 import { DescriptionCard } from "./_components/description-card";
 import { Header } from "./_components/header";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "題目資訊",
+};
 
 export default async function QuestionPage({
   params,
