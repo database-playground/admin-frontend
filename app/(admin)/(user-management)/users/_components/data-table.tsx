@@ -9,13 +9,11 @@ import { USERS_TABLE_QUERY } from "./query";
 
 export function UsersDataTable() {
   const PAGE_SIZE = 5;
-  const [after, setAfter] = useState<string | null>(null);
-  const [before, setBefore] = useState<string | null>(null);
-  const [direction, setDirection] = useState<Direction>("backward");
+  const [cursors, setCursors] = useState<(string | null)[]>([null]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const variables = direction === "backward"
-    ? { first: PAGE_SIZE, after, last: undefined, before: undefined }
-    : { last: PAGE_SIZE, before, first: undefined, after: undefined };
+  const after = cursors[currentIndex];
+  const variables = { first: PAGE_SIZE, after };
 
   const { data } = useSuspenseQuery(USERS_TABLE_QUERY, {
     variables,
@@ -45,13 +43,15 @@ export function UsersDataTable() {
   const handlePageChange = (direction: Direction) => {
     if (!pageInfo) return;
     if (direction === "forward" && pageInfo.hasNextPage) {
-      setAfter(pageInfo.endCursor ?? null);
-      setBefore(null);
-      setDirection("forward");
-    } else if (direction === "backward" && pageInfo.hasPreviousPage) {
-      setBefore(pageInfo.startCursor ?? null);
-      setAfter(null);
-      setDirection("backward");
+      const nextCursor = pageInfo.endCursor ?? null;
+      setCursors(prev => {
+        const newCursors = prev.slice(0, currentIndex + 1);
+        newCursors.push(nextCursor);
+        return newCursors;
+      });
+      setCurrentIndex(currentIndex + 1);
+    } else if (direction === "backward" && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
     }
   };
 
@@ -61,7 +61,7 @@ export function UsersDataTable() {
       data={userList}
       totalCount={data?.users.totalCount ?? 0}
       hasNextPage={!!pageInfo?.hasNextPage}
-      hasPreviousPage={!!pageInfo?.hasPreviousPage}
+      hasPreviousPage={currentIndex > 0}
       onPageChange={handlePageChange}
     />
   );
