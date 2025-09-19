@@ -8,6 +8,8 @@ export interface DataTableProps<TData, TValue> {
 }
 
 export function DataTableMain<TData, TValue>({ table, columns }: DataTableProps<TData, TValue>) {
+  "use no memo";
+
   return (
     <div className="rounded-md border">
       <Table>
