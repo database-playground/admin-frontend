@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DeleteQuestionButtonTrigger } from "../_components/delete";
 import { UpdateQuestionButtonTrigger } from "../_components/update";
@@ -6,7 +7,6 @@ import { AnswerCard } from "./_components/answer-card";
 import { DatabaseCard } from "./_components/database-card";
 import { DescriptionCard } from "./_components/description-card";
 import { Header } from "./_components/header";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "題目資訊",

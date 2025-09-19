@@ -1,6 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
-import { PointsDataTable } from "./_components/data-table";
 import type { Metadata } from "next";
+import { PointsDataTable } from "./_components/data-table";
 
 export const metadata: Metadata = {
   title: "積分管理",

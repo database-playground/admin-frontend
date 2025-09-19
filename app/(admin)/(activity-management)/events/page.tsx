@@ -1,6 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
-import { EventsDataTable } from "./_components/data-table";
 import type { Metadata } from "next";
+import { EventsDataTable } from "./_components/data-table";
 
 export const metadata: Metadata = {
   title: "事件管理",

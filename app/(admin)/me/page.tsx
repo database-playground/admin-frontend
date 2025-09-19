@@ -1,8 +1,8 @@
 import { SiteHeader } from "@/components/site-header";
 import { Separator } from "@/components/ui/separator";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { MeForm } from "./_components/form";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "個人資訊",

@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { CreateQuestionTrigger } from "./_components/create";
 import { QuestionsDataTable } from "./_components/data-table";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "題庫",

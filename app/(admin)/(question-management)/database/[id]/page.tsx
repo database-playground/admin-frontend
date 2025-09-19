@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DeleteDatabaseButtonTrigger } from "../_components/delete";
 import { UpdateDatabaseButtonTrigger } from "../_components/update";
@@ -6,7 +7,6 @@ import { DescriptionCard } from "./_components/description-card";
 import { Header } from "./_components/header";
 import { RelationCard } from "./_components/relation-card";
 import { SchemaCard } from "./_components/schema-card";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "資料庫資訊",

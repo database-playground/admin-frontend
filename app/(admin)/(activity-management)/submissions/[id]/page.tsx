@@ -1,10 +1,10 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Header } from "./_components/header";
 import { ResultCard } from "./_components/result-card";
 import { SubmissionDetailsCard } from "./_components/submission-details-card";
 import { UserCard } from "./_components/user-card";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "提交記錄詳情",

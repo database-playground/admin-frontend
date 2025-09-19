@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DeleteGroupButtonTrigger } from "../_components/delete";
 import { UpdateGroupButtonTrigger } from "../_components/update";
@@ -6,7 +7,6 @@ import { AuditInfoCard } from "./_components/audit-info-card";
 import { Header } from "./_components/header";
 import { MembersCard } from "./_components/members-card";
 import { ScopeCard } from "./_components/scope-card";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "群組資訊",
