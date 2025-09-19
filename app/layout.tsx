@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { getAuthToken } from "@/lib/auth";
 import { ApolloWrapper } from "@/providers/use-apollo";
 import { PreloadResources } from "./preload-resources";
+import { ProgressProvider } from "@/providers/use-progress-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,7 +49,7 @@ export default async function RootLayout({
         `}
       >
         <ApolloWrapper token={token}>
-          {children}
+          <ProgressProvider>{children}</ProgressProvider>
         </ApolloWrapper>
         <Toaster />
       </body>

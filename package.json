@@ -16,6 +16,7 @@
   "dependencies": {
     "@apollo/client": "4.0.5",
     "@apollo/client-integration-nextjs": "^0.13.1",
+    "@bprogress/next": "^3.2.12",
     "@graphql-codegen/client-preset": "^5.0.1",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.15",
