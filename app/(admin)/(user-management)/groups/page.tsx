@@ -1,6 +1,11 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { CreateGroupTrigger } from "./_components/create";
 import { GroupDataTable } from "./_components/data-table";
+
+export const metadata: Metadata = {
+  title: "群組",
+};
 
 export default function GroupsPage() {
   return (

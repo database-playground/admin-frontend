@@ -1,5 +1,10 @@
 import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "概覽",
+};
 
 export default function Home() {
   return (

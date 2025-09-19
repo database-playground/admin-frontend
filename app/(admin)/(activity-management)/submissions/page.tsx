@@ -1,5 +1,10 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { SubmissionsDataTable } from "./_components/data-table";
+
+export const metadata: Metadata = {
+  title: "提交記錄",
+};
 
 export default function Page() {
   return (

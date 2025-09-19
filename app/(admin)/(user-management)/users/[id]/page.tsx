@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DeleteUserButtonTrigger } from "../_components/delete";
 import { ImpersonateUserButtonTrigger } from "../_components/impersonate";
@@ -7,6 +8,10 @@ import { UpdateUserButtonTrigger } from "../_components/update";
 import { AuditInfoCard } from "./_components/audit-info";
 import { GroupsCard } from "./_components/groups";
 import { Header } from "./_components/header";
+
+export const metadata: Metadata = {
+  title: "使用者資訊",
+};
 
 export default async function UserPage({
   params,

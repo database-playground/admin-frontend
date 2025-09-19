@@ -1,10 +1,15 @@
 import { SiteHeader } from "@/components/site-header";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DeleteScopeSetButtonTrigger } from "../_components/delete";
 import { UpdateScopeSetButtonTrigger } from "../_components/update";
 import { GroupsCard } from "./_components/groups";
 import { Header } from "./_components/header";
 import { ScopesCard } from "./_components/scopes";
+
+export const metadata: Metadata = {
+  title: "權限集資訊",
+};
 
 export default async function ScopeSetPage({
   params,
