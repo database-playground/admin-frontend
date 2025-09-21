@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { template: "%s | 管理介面 | 資料庫練功坊", default: "預設頁面" },
+  title: { template: "%s | 管理介面 | 資料庫練功坊", default: "管理介面 | 資料庫練功坊" },
   description: "管理資料庫練功坊的題目、使用者、做題記錄等。",
 };
 
