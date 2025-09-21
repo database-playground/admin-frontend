@@ -49,7 +49,7 @@ export default async function RootLayout({
         `}
       >
         <ApolloWrapper token={token}>
-          <ProgressProvider>{children}</ProgressProvider>
+          <ProgressProvider delay={500}>{children}</ProgressProvider>
         </ApolloWrapper>
         <Toaster />
       </body>
