@@ -16,7 +16,11 @@ export default function AdminLayout({
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <ViewTransition name="inner-content">{children}</ViewTransition>
+        <ViewTransition>
+          <div suppressHydrationWarning>
+            {children}
+          </div>
+        </ViewTransition>
       </SidebarInset>
     </SidebarProvider>
   );
