@@ -1,0 +1,29 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+deleted file mode 100644
+index 38eb0a30adc11115065227c1f65d361996d50c18..0000000000000000000000000000000000000000
+diff --git a/lib/index.js b/lib/index.js
+index 54a1f96bc76d6f128958a053d791158974485ff8..6f130cc65e48ff2638d2d987a0ee67940a72bc2b 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -2,7 +2,7 @@ import { __assign } from "tslib";
+ import { parse } from 'graphql';
+ var docCache = new Map();
+ var fragmentSourceMap = new Map();
+-var printFragmentWarnings = true;
++var printFragmentWarnings = false;
+ var experimentalFragmentVariables = false;
+ function normalize(string) {
+     return string.replace(/[\s,]+/g, ' ').trim();
+diff --git a/src/index.ts b/src/index.ts
+index 90ba15be21b5390e0a9acf70986af15060ff3cdf..38c4535325cc1bdc24d354ce243a539215e15084 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -12,7 +12,7 @@ const docCache = new Map<string, DocumentNode>();
+ // A map fragmentName -> [normalized source]
+ const fragmentSourceMap = new Map<string, Set<string>>();
+ 
+-let printFragmentWarnings = true;
++let printFragmentWarnings = false;
+ let experimentalFragmentVariables = false;
+ 
+ // Strip insignificant whitespace

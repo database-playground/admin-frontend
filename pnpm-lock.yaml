@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  graphql-tag:
+    hash: 9a6bd7cb9fe71bdf106a46dcdfaf3de02c93cd57cd6281dd88628758e4170db8
+    path: patches/graphql-tag.patch
+
 importers:
 
   .:
@@ -4354,7 +4359,7 @@ snapshots:
       '@wry/equality': 0.5.7
       '@wry/trie': 0.5.0
       graphql: 16.11.0
-      graphql-tag: 2.12.6(graphql@16.11.0)
+      graphql-tag: 2.12.6(patch_hash=9a6bd7cb9fe71bdf106a46dcdfaf3de02c93cd57cd6281dd88628758e4170db8)(graphql@16.11.0)
       optimism: 0.18.1
       rxjs: 7.8.2
       tslib: 2.8.1
@@ -4799,7 +4804,7 @@ snapshots:
       change-case-all: 1.0.15
       dependency-graph: 1.0.0
       graphql: 16.11.0
-      graphql-tag: 2.12.6(graphql@16.11.0)
+      graphql-tag: 2.12.6(patch_hash=9a6bd7cb9fe71bdf106a46dcdfaf3de02c93cd57cd6281dd88628758e4170db8)(graphql@16.11.0)
       parse-filepath: 1.0.2
       tslib: 2.6.3
     transitivePeerDependencies:
@@ -7199,7 +7204,7 @@ snapshots:
       - uWebSockets.js
       - utf-8-validate
 
-  graphql-tag@2.12.6(graphql@16.11.0):
+  graphql-tag@2.12.6(patch_hash=9a6bd7cb9fe71bdf106a46dcdfaf3de02c93cd57cd6281dd88628758e4170db8)(graphql@16.11.0):
     dependencies:
       graphql: 16.11.0
       tslib: 2.8.1

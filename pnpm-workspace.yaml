@@ -6,3 +6,6 @@ onlyBuiltDependencies:
   - dprint
   - sharp
   - unrs-resolver
+
+patchedDependencies:
+  graphql-tag: patches/graphql-tag.patch
