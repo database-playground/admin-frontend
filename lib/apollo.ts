@@ -1,8 +1,8 @@
 import { HttpLink } from "@apollo/client";
 import { ApolloClient, InMemoryCache } from "@apollo/client-integration-nextjs";
 import { PersistedQueryLink } from "@apollo/client/link/persisted-queries";
-import { sha256 } from "crypto-hash";
 import buildUri from "./build-uri";
+import { sha256 } from "./sha256";
 
 /**
  * Create an Apollo Client instance that uses the upstream GraphQL API.
