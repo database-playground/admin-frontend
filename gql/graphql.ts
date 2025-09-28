@@ -103,6 +103,18 @@ export type Database = Node & {
   /** SQL schema */
   schema: Scalars['String']['output'];
   slug: Scalars['String']['output'];
+  structure: DatabaseStructure;
+};
+
+export type DatabaseStructure = {
+  __typename?: 'DatabaseStructure';
+  tables: Array<DatabaseTable>;
+};
+
+export type DatabaseTable = {
+  __typename?: 'DatabaseTable';
+  columns: Array<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
 };
 
 /**
@@ -796,6 +808,8 @@ export type QueryUsersArgs = {
 
 export type Question = Node & {
   __typename?: 'Question';
+  /** Have you tried to solve the question? */
+  attempted: Scalars['Boolean']['output'];
   /** Question category, e.g. 'query' */
   category: Scalars['String']['output'];
   database: Database;
@@ -804,12 +818,28 @@ export type Question = Node & {
   /** Question difficulty, e.g. 'easy' */
   difficulty: QuestionDifficulty;
   id: Scalars['ID']['output'];
+  /** Get the last submission for this question. */
+  lastSubmission?: Maybe<Submission>;
   /** Reference answer */
   referenceAnswer: Scalars['String']['output'];
   referenceAnswerResult: SqlExecutionResult;
-  submissions?: Maybe<Array<Submission>>;
+  /** Have you solved the question? */
+  solved: Scalars['Boolean']['output'];
+  submissions: SubmissionConnection;
   /** Question title */
   title: Scalars['String']['output'];
+  /** List of your submissions for this question, ordered by submitted at descending. */
+  userSubmissions: Array<Submission>;
+};
+
+
+export type QuestionSubmissionsArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<SubmissionOrder>;
+  where?: InputMaybe<SubmissionWhereInput>;
 };
 
 /** A connection to a list of items. */
@@ -1019,6 +1049,12 @@ export type ScopeSetWhereInput = {
   slugNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type SolvedQuestionByDifficulty = {
+  __typename?: 'SolvedQuestionByDifficulty';
+  difficulty: QuestionDifficulty;
+  solvedQuestions: Scalars['Int']['output'];
+};
+
 export type Submission = Node & {
   __typename?: 'Submission';
   error?: Maybe<Scalars['String']['output']>;
@@ -1068,6 +1104,14 @@ export type SubmissionResult = {
   __typename?: 'SubmissionResult';
   error?: Maybe<Scalars['String']['output']>;
   result?: Maybe<UserSqlExecutionResult>;
+};
+
+export type SubmissionStatistics = {
+  __typename?: 'SubmissionStatistics';
+  attemptedQuestions: Scalars['Int']['output'];
+  solvedQuestionByDifficulty: Array<SolvedQuestionByDifficulty>;
+  solvedQuestions: Scalars['Int']['output'];
+  totalQuestions: Scalars['Int']['output'];
 };
 
 /** SubmissionStatus is enum for the field status */
@@ -1144,10 +1188,6 @@ export type SubmissionWhereInput = {
   submittedCodeLTE?: InputMaybe<Scalars['String']['input']>;
   submittedCodeNEQ?: InputMaybe<Scalars['String']['input']>;
   submittedCodeNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
-export type SubmissionsOfQuestionWhereInput = {
-  status?: InputMaybe<SubmissionStatus>;
 };
 
 /**
@@ -1245,9 +1285,8 @@ export type User = Node & {
   impersonatedBy?: Maybe<User>;
   name: Scalars['String']['output'];
   points: PointConnection;
+  submissionStatistics: SubmissionStatistics;
   submissions: SubmissionConnection;
-  /** Get all submissions of a question. */
-  submissionsOfQuestion: SubmissionConnection;
   /** The total points of the user. */
   totalPoints: Scalars['Int']['output'];
   updatedAt: Scalars['Time']['output'];
@@ -1281,17 +1320,6 @@ export type UserSubmissionsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<SubmissionOrder>;
   where?: InputMaybe<SubmissionWhereInput>;
-};
-
-
-export type UserSubmissionsOfQuestionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>;
-  before?: InputMaybe<Scalars['Cursor']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SubmissionOrder>;
-  questionID: Scalars['ID']['input'];
-  where?: InputMaybe<SubmissionsOfQuestionWhereInput>;
 };
 
 /** A connection to a list of items. */
