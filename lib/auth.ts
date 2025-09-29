@@ -50,7 +50,7 @@ export async function setAuthToken(
   cookieStore.set(OAUTH_CONFIG.TOKEN_COOKIE_NAME, token, {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "lax",
     maxAge: expiresIn,
     path: "/",
   });
@@ -68,7 +68,7 @@ export async function clearAuthToken(): Promise<void> {
     name: OAUTH_CONFIG.TOKEN_COOKIE_NAME,
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "lax",
     path: "/",
   });
 }
