@@ -38,7 +38,7 @@
     "clsx": "^2.1.1",
     "graphql": "^16.11.0",
     "lucide-react": "^0.544.0",
-    "next": "15.6.0-canary.32",
+    "next": "15.6.0-canary.34",
     "next-themes": "^0.4.6",
     "react": "19.2.0-canary-df38ac9a-20250926",
     "react-dom": "19.2.0-canary-df38ac9a-20250926",
