@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { cn } from "@/lib/utils";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
-interface LoginFormProps extends React.ComponentProps<"div"> {
+export interface LoginFormProps extends React.ComponentProps<"div"> {
   error?: string;
   errorDescription?: string;
   message?: string;

@@ -1,19 +1,11 @@
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { redirectIfAuthenticated } from "@/lib/auth.rsc";
 import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { UserInfo } from "./user-info";
 
-import type { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "權限不足",
-};
-
-export default async function ForbiddenPage() {
-  await redirectIfAuthenticated();
-
+export default async function ForbiddenLayout() {
   return (
     <div
       className={`
