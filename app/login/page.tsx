@@ -1,28 +1,13 @@
 import { LoginForm } from "@/components/login-form";
 import { Logo } from "@/components/logo";
-import { redirectIfAuthenticated } from "@/lib/auth.rsc";
 import type { Metadata } from "next";
 import Link from "next/link";
-
-interface LoginPageProps {
-  searchParams: Promise<{
-    error?: string;
-    error_description?: string;
-    message?: string;
-    redirect?: string;
-  }>;
-}
 
 export const metadata: Metadata = {
   title: "登入",
 };
 
-export default async function LoginPage({ searchParams }: LoginPageProps) {
-  // Redirect if already authenticated
-  await redirectIfAuthenticated();
-
-  const params = await searchParams;
-
+export default function LoginPage() {
   return (
     <div
       className={`
@@ -46,11 +31,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           </div>
           Database Playground
         </Link>
-        <LoginForm
-          error={params.error}
-          errorDescription={params.error_description}
-          message={params.message}
-        />
+        <LoginForm />
       </div>
     </div>
   );

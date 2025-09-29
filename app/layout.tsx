@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { getAuthToken } from "@/lib/auth";
-import { ApolloWrapper } from "@/providers/use-apollo";
 import { ProgressProvider } from "@/providers/use-progress-provider";
 import { PreloadResources } from "./preload-resources";
 
@@ -18,7 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { template: "%s | 管理介面 | 資料庫練功坊", default: "管理介面 | 資料庫練功坊" },
+  title: {
+    template: "%s | 管理介面 | 資料庫練功坊",
+    default: "管理介面 | 資料庫練功坊",
+  },
   description: "管理資料庫練功坊的題目、使用者、做題記錄等。",
 };
 
@@ -29,8 +30,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const token = await getAuthToken();
-
   return (
     <html lang="zh-hant-tw">
       <head>
@@ -48,9 +47,7 @@ export default async function RootLayout({
           font-sans antialiased
         `}
       >
-        <ApolloWrapper token={token}>
-          <ProgressProvider delay={500}>{children}</ProgressProvider>
-        </ApolloWrapper>
+        <ProgressProvider delay={500}>{children}</ProgressProvider>
         <Toaster />
       </body>
     </html>

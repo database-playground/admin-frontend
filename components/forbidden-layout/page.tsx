@@ -1,8 +1,10 @@
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import AuthorizedApolloWrapper from "@/providers/use-apollo.rsc";
 import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { UserInfo } from "./user-info";
 
 export default async function ForbiddenLayout() {
@@ -44,7 +46,11 @@ export default async function ForbiddenLayout() {
         <CardFooter
           className={`justify-center text-center text-xs text-muted-foreground`}
         >
-          <UserInfo />
+          <Suspense>
+            <AuthorizedApolloWrapper>
+              <UserInfo />
+            </AuthorizedApolloWrapper>
+          </Suspense>
         </CardFooter>
       </Card>
     </div>
