@@ -84,7 +84,8 @@ const buildNavbar = (
           title: "題庫管理",
           url: "/questions",
           icon: LibrarySquare,
-          isActive: pathname.startsWith("/questions") || pathname.startsWith("/database"),
+          isActive: pathname.startsWith("/questions")
+            || pathname.startsWith("/database"),
           items: [
             {
               title: "題庫",
@@ -167,7 +168,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {data.navMain.map((group) => <NavMain key={group.group} items={group.items} groupLabel={group.group} />)}
+        {data.navMain.map((group) => (
+          <NavMain
+            key={group.group}
+            items={group.items}
+            groupLabel={group.group}
+          />
+        ))}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

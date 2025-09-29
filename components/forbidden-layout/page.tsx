@@ -1,19 +1,13 @@
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { redirectIfAuthenticated } from "@/lib/auth.rsc";
+import AuthorizedApolloWrapper from "@/providers/use-apollo.rsc";
 import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { UserInfo } from "./user-info";
 
-import type { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "權限不足",
-};
-
-export default async function ForbiddenPage() {
-  await redirectIfAuthenticated();
-
+export default async function ForbiddenLayout() {
   return (
     <div
       className={`
@@ -52,7 +46,11 @@ export default async function ForbiddenPage() {
         <CardFooter
           className={`justify-center text-center text-xs text-muted-foreground`}
         >
-          <UserInfo />
+          <Suspense>
+            <AuthorizedApolloWrapper>
+              <UserInfo />
+            </AuthorizedApolloWrapper>
+          </Suspense>
         </CardFooter>
       </Card>
     </div>
