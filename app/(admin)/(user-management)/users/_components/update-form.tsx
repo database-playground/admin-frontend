@@ -6,7 +6,7 @@ import { UpdateFormBody } from "@/components/update-modal/form-body";
 import type { UpdateFormBaseProps } from "@/components/update-modal/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 export const formSchema = z.object({
@@ -38,6 +38,9 @@ export function UpdateUserForm({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  const avatar = useWatch({ control: form.control, name: "avatar" });
+  const name = useWatch({ control: form.control, name: "name" });
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     onSubmit({
@@ -85,8 +88,8 @@ export function UpdateUserForm({
         />
 
         <Avatar>
-          <AvatarImage src={form.watch("avatar")} />
-          <AvatarFallback>{form.watch("name")}</AvatarFallback>
+          <AvatarImage src={avatar} />
+          <AvatarFallback>{name}</AvatarFallback>
         </Avatar>
       </div>
 

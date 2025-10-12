@@ -9,7 +9,7 @@ import { useUser } from "@/providers/use-user";
 import { useMutation } from "@apollo/client/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { ME_UPDATE_MUTATION } from "./mutation";
@@ -30,6 +30,8 @@ export function MeForm() {
     },
   });
 
+  const avatar = useWatch({ control: form.control, name: "avatar" });
+
   useEffect(() => {
     if (!form.formState.isDirty) return;
     const message = "您有尚未儲存的更動。確定要關閉而不儲存嗎？您的更動將會遺失。";
@@ -46,8 +48,6 @@ export function MeForm() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [form.formState.isDirty]);
-
-  const avatar = form.watch("avatar");
 
   const [updateMe] = useMutation(ME_UPDATE_MUTATION, {
     refetchQueries: [BASIC_USER_INFO_QUERY],
