@@ -12,6 +12,8 @@ export function GeneralDataTable<TData, TValue>({
   columns,
   data,
 }: GeneralDataTableProps<TData, TValue>) {
+  "use no memo";
+
   const table = useReactTable({
     data,
     columns,
