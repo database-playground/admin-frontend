@@ -1,21 +1,14 @@
-import { FlatCompat } from "@eslint/eslintrc";
 import eslintParserTypeScript from "@typescript-eslint/parser";
+import coreWebVitals from "eslint-config-next/core-web-vitals";
+import typescript from "eslint-config-next/typescript";
 import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 const eslintConfig = [
   {
     ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...coreWebVitals,
+  ...typescript,
   {
     files: ["**/*.{ts,tsx,cts,mts}"],
     languageOptions: {
