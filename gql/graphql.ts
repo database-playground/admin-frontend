@@ -427,8 +427,6 @@ export type Mutation = {
   updateScopeSet?: Maybe<ScopeSet>;
   /** Update the information of a user. */
   updateUser?: Maybe<User>;
-  /** Verify the registration of this user. */
-  verifyRegistration: Scalars['Boolean']['output'];
 };
 
 
@@ -690,6 +688,8 @@ export type Query = {
   /** Get a question by ID. */
   question: Question;
   questions: QuestionConnection;
+  /** Get the ranking. */
+  ranking: RankingConnection;
   /** Get a scope set by ID or slug. */
   scopeSet: ScopeSet;
   scopeSets: Array<ScopeSet>;
@@ -769,6 +769,13 @@ export type QueryQuestionsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<QuestionOrder>;
   where?: InputMaybe<QuestionWhereInput>;
+};
+
+
+export type QueryRankingArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  filter: RankingFilter;
+  first?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -969,6 +976,41 @@ export type QuestionWhereInput = {
   titleNEQ?: InputMaybe<Scalars['String']['input']>;
   titleNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
 };
+
+export enum RankingBy {
+  CompletedQuestions = 'COMPLETED_QUESTIONS',
+  Points = 'POINTS'
+}
+
+export type RankingConnection = {
+  __typename?: 'RankingConnection';
+  edges: Array<RankingEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type RankingEdge = {
+  __typename?: 'RankingEdge';
+  cursor: Scalars['Cursor']['output'];
+  node: User;
+  score: Scalars['Int']['output'];
+};
+
+export type RankingFilter = {
+  by: RankingBy;
+  order: RankingOrder;
+  period: RankingPeriod;
+};
+
+export enum RankingOrder {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
+export enum RankingPeriod {
+  Daily = 'DAILY',
+  Weekly = 'WEEKLY'
+}
 
 export type SqlExecutionResult = {
   __typename?: 'SQLExecutionResult';
@@ -1225,6 +1267,8 @@ export type UpdateGroupInput = {
  */
 export type UpdateQuestionInput = {
   addSubmissionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Question category, e.g. 'query' */
+  category?: InputMaybe<Scalars['String']['input']>;
   clearSubmissions?: InputMaybe<Scalars['Boolean']['input']>;
   databaseID?: InputMaybe<Scalars['ID']['input']>;
   /** Question stem */
