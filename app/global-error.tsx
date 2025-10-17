@@ -4,98 +4,87 @@ import { Logo } from "@/components/logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ERROR_NOT_FOUND, ERROR_NOT_IMPLEMENTED, ERROR_UNAUTHORIZED, ERROR_USER_VERIFIED } from "@/lib/apollo-errors";
+import {
+  ERROR_FORBIDDEN,
+  ERROR_INVALID_INPUT,
+  ERROR_NOT_FOUND,
+  ERROR_NOT_IMPLEMENTED,
+  ERROR_UNAUTHORIZED,
+} from "@/lib/apollo-errors";
 import { CombinedGraphQLErrors, CombinedProtocolErrors } from "@apollo/client";
-import { AlertCircle, Code, Home, Lock, RefreshCw, Search, Shield, WifiOff } from "lucide-react";
+import { AlertCircle, Bug, Code, Home, Lock, type LucideIcon, Search, Shield } from "lucide-react";
 import Link from "next/link";
-import { useEffect } from "react";
 
 interface GlobalErrorProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
-function getErrorInfo(error: Error) {
-  if (CombinedProtocolErrors.is(error)) {
-    // Network errors
-    if (error && "statusCode" in error) {
-      switch (error.statusCode) {
-        case 401:
+type ErrorCommonInfo = {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+};
+
+type ErrorActionInfo = {
+  actionName: string;
+  actionHref: string;
+};
+
+type ErrorInfo = ErrorCommonInfo & (ErrorActionInfo | { actionName?: undefined; actionHref?: undefined });
+
+function getErrorInfo(error: Error): ErrorInfo {
+  // GraphQL errors with codes
+  if (CombinedGraphQLErrors.is(error)) {
+    const graphQLErrors = error.errors;
+
+    if (graphQLErrors && graphQLErrors.length > 0) {
+      const firstError = graphQLErrors[0];
+      const errorCode = firstError.extensions?.code as string;
+
+      switch (errorCode) {
+        case ERROR_NOT_FOUND:
           return {
-            title: "未經授權",
-            description: "您的登入狀態已過期，請重新登入。",
-            icon: Lock,
-            actionHref: "/login",
-          };
-        case 403:
-          return {
-            title: "權限不足",
-            description: "您沒有權限執行此操作。",
-            icon: Shield,
-          };
-        case 404:
-          return {
-            title: "找不到資源",
-            description: "請求的資源不存在或已被移除。",
+            title: "找不到資料",
+            description: "請求的資料不存在或已被刪除。",
             icon: Search,
           };
-        case 500:
+        case ERROR_UNAUTHORIZED:
           return {
-            title: "伺服器錯誤",
-            description: "伺服器發生內部錯誤，請稍後再試。",
-            icon: AlertCircle,
+            title: "未經授權",
+            description: "請登入後再試，或您的權限不足。",
+            icon: Lock,
+            actionName: "重新登入",
+            actionHref: "/login",
+          };
+        case ERROR_FORBIDDEN:
+          const missingScopes = firstError.message.replace(/^no sufficient scope: /, "");
+          return {
+            title: "權限不足",
+            description: "您的帳號缺少權限，請聯絡管理員開通權限後重新登入：" + missingScopes,
+            icon: Shield,
+            actionName: "重新登入",
+            actionHref: "/login",
+          };
+        case ERROR_NOT_IMPLEMENTED:
+          return {
+            title: "功能未實作",
+            description: "此功能目前尚未實作，請稍後再試。",
+            icon: Code,
+          };
+        case ERROR_INVALID_INPUT:
+          return {
+            title: "輸入無效",
+            description: "請聯絡開發者檢查 API 的輸入資料。",
+            icon: Bug,
           };
       }
 
       return {
-        title: "網路連線錯誤",
-        description: "無法連接到伺服器，請檢查網路連線。",
-        icon: WifiOff,
+        title: "GraphQL 查詢錯誤",
+        description: firstError.message || "GraphQL 查詢發生錯誤。",
+        icon: AlertCircle,
       };
-    }
-
-    // GraphQL errors with codes
-    if (CombinedGraphQLErrors.is(error)) {
-      const graphQLErrors = error.errors;
-
-      if (graphQLErrors && graphQLErrors.length > 0) {
-        const firstError = graphQLErrors[0];
-        const errorCode = firstError.extensions?.code as string;
-
-        switch (errorCode) {
-          case ERROR_NOT_FOUND:
-            return {
-              title: "找不到資料",
-              description: "請求的資料不存在或已被刪除。",
-              icon: Search,
-            };
-          case ERROR_UNAUTHORIZED:
-            return {
-              title: "未經授權",
-              description: "請登入後再試，或您的權限不足。",
-              icon: Lock,
-              actionHref: "/login",
-            };
-          case ERROR_USER_VERIFIED:
-            return {
-              title: "帳號已驗證",
-              description: "此帳號已經完成驗證程序。",
-              icon: Shield,
-            };
-          case ERROR_NOT_IMPLEMENTED:
-            return {
-              title: "功能未實作",
-              description: "此功能目前尚未實作，請稍後再試。",
-              icon: Code,
-            };
-        }
-
-        return {
-          title: "GraphQL 查詢錯誤",
-          description: firstError.message || "GraphQL 查詢發生錯誤。",
-          icon: AlertCircle,
-        };
-      }
     }
   }
 
@@ -107,13 +96,8 @@ function getErrorInfo(error: Error) {
   };
 }
 
-export default function GlobalError({ error, reset }: GlobalErrorProps) {
+export default function GlobalError({ error }: GlobalErrorProps) {
   const errorInfo = getErrorInfo(error);
-
-  useEffect(() => {
-    // Log error to monitoring service
-    console.error("Global error:", error);
-  }, [error]);
 
   return (
     <html>
@@ -223,15 +207,6 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
                   sm:flex-row
                 `}
               >
-                <Button
-                  onClick={reset}
-                  variant="default"
-                  className={`flex items-center gap-2`}
-                >
-                  <RefreshCw className="size-4" />
-                  重試
-                </Button>
-
                 {errorInfo.actionHref
                   ? (
                     <Button
@@ -239,7 +214,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
                       variant="outline"
                       className={`flex items-center gap-2`}
                     >
-                      <Link href={errorInfo.actionHref}>前往處理</Link>
+                      <Link href={errorInfo.actionHref}>{errorInfo.actionName}</Link>
                     </Button>
                   )
                   : (
@@ -270,11 +245,6 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
                     timeZone: "Asia/Taipei",
                   })}
                 </p>
-                {error.digest && (
-                  <p className="text-red-600">
-                    錯誤 ID：{error.digest}
-                  </p>
-                )}
               </section>
             </CardFooter>
           </Card>
