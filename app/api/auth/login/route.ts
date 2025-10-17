@@ -1,5 +1,4 @@
 import { buildAuthorizeUrl, generateCodeVerifier, generateState, OAUTH_CONFIG, setOAuthState } from "@/lib/auth";
-import { redirectIfAuthenticated } from "@/lib/auth.rsc";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -15,9 +14,6 @@ import { NextRequest, NextResponse } from "next/server";
  * 4. Redirect user to authorization server
  */
 export async function GET(request: NextRequest) {
-  // Check if user is already authenticated
-  await redirectIfAuthenticated();
-
   try {
     // Generate PKCE parameters
     const codeVerifier = generateCodeVerifier();
