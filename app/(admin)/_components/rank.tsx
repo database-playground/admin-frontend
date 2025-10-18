@@ -270,7 +270,7 @@ function ScoreCell(
 
   return (
     <span className="font-semibold">
-      {components[rankingBy] ?? <span className="text-red-800">發現未定義的排序依據 {rankingBy}</span>}
+      {components[rankingBy]}
       {" | "}
       <ScoreDiff userFragment={user} />
     </span>

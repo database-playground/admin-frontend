@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { graphql } from "@/gql";
-import { type SubmissionWhereInput } from "@/gql/graphql";
+import { type EventWhereInput } from "@/gql/graphql";
 import { useLazyQuery } from "@apollo/client/react";
 import { useEffect, useState } from "react";
 
@@ -32,12 +32,12 @@ export default function LoginTotalCount() {
   useEffect(() => {
     const now = new Date();
 
-    const timeRangeWhere: Record<TimeRange, SubmissionWhereInput> = {
+    const timeRangeWhere: Record<TimeRange, EventWhereInput> = {
       daily: {
-        submittedAtGTE: new Date(now.setDate(now.getDate() - 1)).toISOString(),
+        triggeredAtGTE: new Date(now.setDate(now.getDate() - 1)).toISOString(),
       },
       weekly: {
-        submittedAtGTE: new Date(now.setDate(now.getDate() - 7)).toISOString(),
+        triggeredAtGTE: new Date(now.setDate(now.getDate() - 7)).toISOString(),
       },
       all: {},
     };
