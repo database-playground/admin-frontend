@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { CreateDatabaseTrigger } from "./_components/create";
-import { DatabaseDataTable } from "./_components/data-table";
+import FilterableDataTable from "./_components/filterable-data-table";
 
 export const metadata: Metadata = {
   title: "資料庫",
@@ -25,7 +25,7 @@ export default function Page() {
           <CreateDatabaseTrigger />
         </div>
         <div>
-          <DatabaseDataTable />
+          <FilterableDataTable />
         </div>
       </main>
     </>

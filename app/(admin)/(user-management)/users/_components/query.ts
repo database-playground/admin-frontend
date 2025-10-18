@@ -32,8 +32,9 @@ export const USERS_TABLE_QUERY = graphql(`
     $after: Cursor
     $last: Int
     $before: Cursor
+    $where: UserWhereInput
   ) {
-    users(first: $first, after: $after, last: $last, before: $before) {
+    users(first: $first, after: $after, last: $last, before: $before, where: $where) {
       edges {
         node {
           id

@@ -3,17 +3,23 @@
 import { CursorDataTable } from "@/components/data-table/cursor";
 import type { Direction } from "@/components/data-table/pagination";
 import { useSuspenseQuery } from "@apollo/client/react";
+import type { VariablesOf } from "@graphql-typed-document-node/core";
 import { useState } from "react";
 import { columns, type Event } from "./data-table-columns";
 import { EVENTS_TABLE_QUERY } from "./query";
 
-export function EventsDataTable() {
-  const PAGE_SIZE = 10;
+export function EventsDataTable({ query }: { query?: string }) {
+  const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const after = cursors[currentIndex];
-  const variables = { first: PAGE_SIZE, after };
+
+  const variables = {
+    first: PAGE_SIZE,
+    after,
+    where: query ? { typeContains: query } : undefined,
+  } satisfies VariablesOf<typeof EVENTS_TABLE_QUERY>;
 
   const { data } = useSuspenseQuery(EVENTS_TABLE_QUERY, {
     variables,

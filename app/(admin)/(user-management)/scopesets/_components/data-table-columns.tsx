@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { StyledLink } from "@/components/ui/link";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
@@ -49,7 +50,27 @@ export const columns: ColumnDef<ScopeSet>[] = [
     cell: ({ row }) => {
       const scopes = row.original.scopes;
 
-      return <code>{scopes.join(", ")}</code>;
+      return (
+        <div
+          className={`
+            max-w-24 truncate overflow-hidden
+            sm:max-w-36
+            md:max-w-48
+            lg:max-w-84
+            xl:max-w-96
+          `}
+        >
+          <Tooltip>
+            <TooltipTrigger>
+              <code>{scopes.join(", ")}</code>
+            </TooltipTrigger>
+
+            <TooltipContent side="left">
+              總共 {scopes.length} 個權限
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      );
     },
   },
   {

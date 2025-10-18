@@ -1,6 +1,11 @@
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { Header } from "./_components/header";
+import LoginTotalCount from "./_components/login-count";
+import OverviewRanking from "./_components/rank";
+import SubmissionsTotalCount from "./_components/submit-count";
 
 export const metadata: Metadata = {
   title: "概覽",
@@ -16,7 +21,19 @@ export default function Home() {
           md:p-8
         `}
       >
-        <DataTableSkeleton />
+        <Header />
+        <div
+          className={`
+            grid grid-cols-1 gap-4
+            md:grid-cols-2
+          `}
+        >
+          <SubmissionsTotalCount />
+          <LoginTotalCount />
+        </div>
+        <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+          <OverviewRanking />
+        </Suspense>
       </main>
     </>
   );

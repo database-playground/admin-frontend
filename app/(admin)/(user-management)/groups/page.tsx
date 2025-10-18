@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { CreateGroupTrigger } from "./_components/create";
-import { GroupDataTable } from "./_components/data-table";
+import FilterableDataTable from "./_components/filterable-data-table";
 
 export const metadata: Metadata = {
   title: "群組",
@@ -25,7 +25,7 @@ export default function GroupsPage() {
           <CreateGroupTrigger />
         </div>
         <div>
-          <GroupDataTable />
+          <FilterableDataTable />
         </div>
       </main>
     </>

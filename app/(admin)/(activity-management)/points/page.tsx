@@ -1,6 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
-import { PointsDataTable } from "./_components/data-table";
+import FilterableDataTable from "./_components/filterable-data-table";
 
 export const metadata: Metadata = {
   title: "積分管理",
@@ -23,7 +23,7 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <PointsDataTable />
+          <FilterableDataTable />
         </div>
       </main>
     </>

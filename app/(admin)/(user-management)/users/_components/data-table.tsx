@@ -3,17 +3,30 @@
 import { CursorDataTable } from "@/components/data-table/cursor";
 import type { Direction } from "@/components/data-table/pagination";
 import { useSuspenseQuery } from "@apollo/client/react";
+import type { VariablesOf } from "@graphql-typed-document-node/core";
 import { useState } from "react";
 import { columns, type User } from "./data-table-columns";
 import { USERS_TABLE_QUERY } from "./query";
 
-export function UsersDataTable() {
-  const PAGE_SIZE = 5;
+export function UsersDataTable({ query }: { query?: string }) {
+  const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const after = cursors[currentIndex];
-  const variables = { first: PAGE_SIZE, after };
+
+  const variables = {
+    first: PAGE_SIZE,
+    after,
+    where: query
+      ? {
+        or: [
+          { nameContains: query },
+          { emailContains: query },
+        ],
+      }
+      : undefined,
+  } satisfies VariablesOf<typeof USERS_TABLE_QUERY>;
 
   const { data } = useSuspenseQuery(USERS_TABLE_QUERY, {
     variables,

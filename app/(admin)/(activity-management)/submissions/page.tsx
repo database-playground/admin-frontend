@@ -1,5 +1,7 @@
+import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SubmissionsDataTable } from "./_components/data-table";
 
 export const metadata: Metadata = {
@@ -23,7 +25,9 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <SubmissionsDataTable />
+          <Suspense fallback={<DataTableSkeleton />}>
+            <SubmissionsDataTable />
+          </Suspense>
         </div>
       </main>
     </>

@@ -32,9 +32,24 @@ export const QUESTIONS_TABLE_QUERY = graphql(`
     $first: Int
     $after: Cursor
     $last: Int
-    $before: Cursor
+    $before: Cursor,
+    $query: String,
+    $difficulty: QuestionDifficulty
   ) {
-    questions(first: $first, after: $after, last: $last, before: $before) {
+    questions(
+      first: $first,
+      after: $after,
+      last: $last,
+      before: $before,
+      where: {
+        or: [
+          { titleContains: $query },
+          { categoryContains: $query },
+          { descriptionContains: $query },
+        ],
+        difficulty: $difficulty,
+      },
+    ) {
       edges {
         node {
           id
