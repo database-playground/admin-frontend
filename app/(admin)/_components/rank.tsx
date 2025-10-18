@@ -23,7 +23,7 @@ import {
 import DataTablePagination from "@/components/data-table/pagination";
 import { Badge } from "@/components/ui/badge";
 
-const OVERVIEW_RANKING = graphql(`
+const OVERVIEW_RANKING_QUERY = graphql(`
   query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {
     ranking(filter: $filter, first: $first, after: $after) {
       edges {
@@ -88,7 +88,7 @@ const RANKING_PERIOD_LABELS: Record<RankingPeriod, string> = {
   [RankingPeriod.Weekly]: "本週",
 };
 
-export function OverviewRanking() {
+export default function OverviewRanking() {
   const PAGE_SIZE = 20;
 
   const [rankingBy, setRankingBy] = useState<RankingBy>(RankingBy.Points);
@@ -100,7 +100,7 @@ export function OverviewRanking() {
   );
   const [cursors, setCursors] = useState<string[]>([]);
 
-  const { data } = useSuspenseQuery(OVERVIEW_RANKING, {
+  const { data } = useSuspenseQuery(OVERVIEW_RANKING_QUERY, {
     variables: {
       filter: { by: rankingBy, order: rankingOrder, period: rankingPeriod },
       first: PAGE_SIZE,
