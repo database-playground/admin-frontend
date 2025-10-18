@@ -1,27 +1,14 @@
 "use client";
 
-import { graphql, useFragment, type FragmentType } from "@/gql";
+import DataTablePagination from "@/components/data-table/pagination";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 import { RankingBy, RankingOrder, RankingPeriod } from "@/gql/graphql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import DataTablePagination from "@/components/data-table/pagination";
-import { Badge } from "@/components/ui/badge";
 
 const OVERVIEW_RANKING_QUERY = graphql(`
   query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {
@@ -93,10 +80,10 @@ export default function OverviewRanking() {
 
   const [rankingBy, setRankingBy] = useState<RankingBy>(RankingBy.Points);
   const [rankingOrder, setRankingOrder] = useState<RankingOrder>(
-    RankingOrder.Desc
+    RankingOrder.Desc,
   );
   const [rankingPeriod, setRankingPeriod] = useState<RankingPeriod>(
-    RankingPeriod.Daily
+    RankingPeriod.Daily,
   );
   const [cursors, setCursors] = useState<string[]>([]);
 
@@ -170,7 +157,7 @@ export default function OverviewRanking() {
                       <SelectItem key={value} value={value}>
                         {label}
                       </SelectItem>
-                    )
+                    ),
                   )}
                 </SelectContent>
               </Select>
@@ -194,7 +181,7 @@ export default function OverviewRanking() {
                       <SelectItem key={value} value={value}>
                         {label}
                       </SelectItem>
-                    )
+                    ),
                   )}
                 </SelectContent>
               </Select>
@@ -213,48 +200,48 @@ export default function OverviewRanking() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.ranking.edges.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className={`text-center text-muted-foreground`}
-                  >
-                    無資料
-                  </TableCell>
-                </TableRow>
-              ) : (
-                data.ranking.edges.map((edge, index) => {
-                  const rank = index + 1 + cursors.length * PAGE_SIZE;
-                  return (
-                    <TableRow key={edge.node.id}>
-                      <TableCell>
-                        {rank <= 3 ? (
-                          <Badge
-                            variant={
-                              rank === 1
-                                ? "default"
-                                : rank === 2
-                                ? "secondary"
-                                : "outline"
-                            }
-                            className="font-bold"
-                          >
-                            #{rank}
-                          </Badge>
-                        ) : (
-                          <span className="text-muted-foreground">#{rank}</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {edge.node.name}
-                      </TableCell>
-                      <TableCell className="text-right font-semibold">
-                        <ScoreCell userFragment={edge} rankingBy={rankingBy} />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
+              {data.ranking.edges.length === 0
+                ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={3}
+                      className={`text-center text-muted-foreground`}
+                    >
+                      無資料
+                    </TableCell>
+                  </TableRow>
+                )
+                : (
+                  data.ranking.edges.map((edge, index) => {
+                    const rank = index + 1 + cursors.length * PAGE_SIZE;
+                    return (
+                      <TableRow key={edge.node.id}>
+                        <TableCell>
+                          {rank <= 3
+                            ? (
+                              <Badge
+                                variant={rank === 1
+                                  ? "default"
+                                  : rank === 2
+                                  ? "secondary"
+                                  : "outline"}
+                                className="font-bold"
+                              >
+                                #{rank}
+                              </Badge>
+                            )
+                            : <span className="text-muted-foreground">#{rank}</span>}
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {edge.node.name}
+                        </TableCell>
+                        <TableCell className="text-right font-semibold">
+                          <ScoreCell userFragment={edge} rankingBy={rankingBy} />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
             </TableBody>
           </Table>
 
@@ -271,17 +258,20 @@ export default function OverviewRanking() {
   );
 }
 
-function ScoreCell({ userFragment, rankingBy }: { userFragment: FragmentType<typeof SCORE_CELL_FRAGMENT>, rankingBy: RankingBy }) {
+function ScoreCell(
+  { userFragment, rankingBy }: { userFragment: FragmentType<typeof SCORE_CELL_FRAGMENT>; rankingBy: RankingBy },
+) {
   const user = useFragment(SCORE_CELL_FRAGMENT, userFragment);
 
   const components = {
     [RankingBy.Points]: <TotalPoints userFragment={user} />,
     [RankingBy.CompletedQuestions]: <CompletedQuestion userFragment={user} />,
-  }
+  };
 
   return (
     <span className="font-semibold">
-      {components[rankingBy] ?? <span className="text-red-800">發現未定義的排序依據 {rankingBy}</span>}{' | '}
+      {components[rankingBy] ?? <span className="text-red-800">發現未定義的排序依據 {rankingBy}</span>}
+      {" | "}
       <ScoreDiff userFragment={user} />
     </span>
   );

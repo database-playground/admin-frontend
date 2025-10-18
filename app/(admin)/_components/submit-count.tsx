@@ -1,14 +1,14 @@
 "use client";
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { graphql } from "@/gql";
 import { SubmissionStatus, type SubmissionWhereInput } from "@/gql/graphql";
 import { useLazyQuery } from "@apollo/client/react";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const SUBMISSIONS_TOTAL_COUNT_QUERY = graphql(`
   query SubmissionsTotalCount($where: SubmissionWhereInput!) {
@@ -44,12 +44,12 @@ export default function SubmissionsTotalCount() {
       },
       all: {},
     };
-  
+
     const where: SubmissionWhereInput = showSuccessOnly
       ? {
-          ...timeRangeWhere[timeRange],
-          status: SubmissionStatus.Success,
-        }
+        ...timeRangeWhere[timeRange],
+        status: SubmissionStatus.Success,
+      }
       : timeRangeWhere[timeRange];
 
     getSubmissionsTotalCount({ variables: { where } });
@@ -74,7 +74,7 @@ export default function SubmissionsTotalCount() {
           </TabsList>
           <TabsContent value={timeRange} className="mt-4">
             <div className="flex items-end gap-2 text-3xl font-bold">
-              {!loading && (data?.submissions.totalCount?.toLocaleString('zh-TW') ?? 0)}
+              {!loading && (data?.submissions.totalCount?.toLocaleString("zh-TW") ?? 0)}
               {loading && <Skeleton className="h-8 w-24" />}
             </div>
             <p className="mt-1 text-sm text-muted-foreground">

@@ -1,14 +1,12 @@
 "use client";
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { graphql } from "@/gql";
-import { SubmissionStatus, type SubmissionWhereInput } from "@/gql/graphql";
+import { type SubmissionWhereInput } from "@/gql/graphql";
 import { useLazyQuery } from "@apollo/client/react";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const LOGIN_TOTAL_COUNT_QUERY = graphql(`
   query LoginTotalCount($where: EventWhereInput!) {
@@ -43,11 +41,11 @@ export default function LoginTotalCount() {
       },
       all: {},
     };
-  
+
     const where = {
       ...timeRangeWhere[timeRange],
       type: "login",
-    }
+    };
 
     getLoginTotalCount({ variables: { where } });
   }, [timeRange, getLoginTotalCount]);
@@ -71,7 +69,7 @@ export default function LoginTotalCount() {
           </TabsList>
           <TabsContent value={timeRange} className="mt-4">
             <div className="flex items-end gap-2 text-3xl font-bold">
-              {!loading && (data?.events.totalCount?.toLocaleString('zh-TW') ?? 0)}
+              {!loading && (data?.events.totalCount?.toLocaleString("zh-TW") ?? 0)}
               {loading && <Skeleton className="h-8 w-24" />}
             </div>
             <p className="mt-1 text-sm text-muted-foreground">

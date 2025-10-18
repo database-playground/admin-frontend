@@ -1,8 +1,8 @@
+import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
-import { UsersDataTable } from "./_components/data-table";
 import { Suspense } from "react";
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
+import { UsersDataTable } from "./_components/data-table";
 
 export const metadata: Metadata = {
   title: "使用者",

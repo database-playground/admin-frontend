@@ -1,9 +1,9 @@
+import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { CreateDatabaseTrigger } from "./_components/create";
 import { DatabaseDataTable } from "./_components/data-table";
-import { Suspense } from "react";
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 
 export const metadata: Metadata = {
   title: "資料庫",

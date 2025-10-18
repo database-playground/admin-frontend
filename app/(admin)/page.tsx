@@ -1,11 +1,11 @@
 import { SiteHeader } from "@/components/site-header";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import OverviewRanking from "./_components/rank";
-import { Skeleton } from "@/components/ui/skeleton";
-import SubmissionsTotalCount from "./_components/submit-count";
-import LoginTotalCount from "./_components/login-count";
 import { Header } from "./_components/header";
+import LoginTotalCount from "./_components/login-count";
+import OverviewRanking from "./_components/rank";
+import SubmissionsTotalCount from "./_components/submit-count";
 
 export const metadata: Metadata = {
   title: "概覽",
@@ -22,10 +22,12 @@ export default function Home() {
         `}
       >
         <Header />
-        <div className={`
-          grid grid-cols-1 gap-4
-          md:grid-cols-2
-        `}>
+        <div
+          className={`
+            grid grid-cols-1 gap-4
+            md:grid-cols-2
+          `}
+        >
           <SubmissionsTotalCount />
           <LoginTotalCount />
         </div>
