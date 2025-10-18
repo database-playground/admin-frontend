@@ -20,7 +20,7 @@ export default function FilterableDataTable() {
     <div className="flex flex-col">
       <div className="mb-4 flex items-center gap-4">
         <Input
-          placeholder="搜尋題目"
+          placeholder="搜尋題目的標題、分類和描述……"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />

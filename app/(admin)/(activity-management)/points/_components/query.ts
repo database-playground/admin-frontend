@@ -6,8 +6,9 @@ export const POINTS_TABLE_QUERY = graphql(`
     $after: Cursor
     $last: Int
     $before: Cursor
+    $where: PointWhereInput
   ) {
-    points(first: $first, after: $after, last: $last, before: $before, orderBy: { field: GRANTED_AT, direction: DESC }) {
+    points(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: GRANTED_AT, direction: DESC }) {
       edges {
         node {
           id

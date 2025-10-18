@@ -6,8 +6,9 @@ export const EVENTS_TABLE_QUERY = graphql(`
     $after: Cursor
     $last: Int
     $before: Cursor
+    $where: EventWhereInput
   ) {
-    events(first: $first, after: $after, last: $last, before: $before, orderBy: { field: TRIGGERED_AT, direction: DESC }) {
+    events(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: TRIGGERED_AT, direction: DESC }) {
       edges {
         node {
           id

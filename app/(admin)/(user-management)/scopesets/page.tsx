@@ -1,9 +1,7 @@
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { CreateScopeSetTrigger } from "./_components/create";
-import { ScopeSetDataTable } from "./_components/data-table";
+import FilterableDataTable from "./_components/filterable-data-table";
 
 export const metadata: Metadata = {
   title: "權限集",
@@ -27,9 +25,7 @@ export default function ScopesetPage() {
           <CreateScopeSetTrigger />
         </div>
         <div>
-          <Suspense fallback={<DataTableSkeleton />}>
-            <ScopeSetDataTable />
-          </Suspense>
+          <FilterableDataTable />
         </div>
       </main>
     </>

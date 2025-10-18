@@ -1,8 +1,6 @@
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { UsersDataTable } from "./_components/data-table";
+import FilterableDataTable from "./_components/filterable-data-table";
 
 export const metadata: Metadata = {
   title: "使用者",
@@ -25,9 +23,7 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <Suspense fallback={<DataTableSkeleton />}>
-            <UsersDataTable />
-          </Suspense>
+          <FilterableDataTable />
         </div>
       </main>
     </>
