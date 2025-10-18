@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { graphql } from "@/gql";
 import { type EventWhereInput } from "@/gql/graphql";
 import { useLazyQuery } from "@apollo/client/react";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
 const LOGIN_TOTAL_COUNT_QUERY = graphql(`
@@ -30,14 +31,12 @@ export default function LoginTotalCount() {
   const [getLoginTotalCount, { data, loading }] = useLazyQuery(LOGIN_TOTAL_COUNT_QUERY);
 
   useEffect(() => {
-    const now = new Date();
-
     const timeRangeWhere: Record<TimeRange, EventWhereInput> = {
       daily: {
-        triggeredAtGTE: new Date(now.setDate(now.getDate() - 1)).toISOString(),
+        triggeredAtGTE: dayjs().startOf("day").toISOString(),
       },
       weekly: {
-        triggeredAtGTE: new Date(now.setDate(now.getDate() - 7)).toISOString(),
+        triggeredAtGTE: dayjs().startOf("week").toISOString(),
       },
       all: {},
     };

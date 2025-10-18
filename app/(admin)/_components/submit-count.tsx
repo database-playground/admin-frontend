@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { graphql } from "@/gql";
 import { SubmissionStatus, type SubmissionWhereInput } from "@/gql/graphql";
 import { useLazyQuery } from "@apollo/client/react";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
 const SUBMISSIONS_TOTAL_COUNT_QUERY = graphql(`
@@ -33,14 +34,12 @@ export default function SubmissionsTotalCount() {
   const [getSubmissionsTotalCount, { data, loading }] = useLazyQuery(SUBMISSIONS_TOTAL_COUNT_QUERY);
 
   useEffect(() => {
-    const now = new Date();
-
     const timeRangeWhere: Record<TimeRange, SubmissionWhereInput> = {
       daily: {
-        submittedAtGTE: new Date(now.setDate(now.getDate() - 1)).toISOString(),
+        submittedAtGTE: dayjs().startOf("day").toISOString(),
       },
       weekly: {
-        submittedAtGTE: new Date(now.setDate(now.getDate() - 7)).toISOString(),
+        submittedAtGTE: dayjs().startOf("week").toISOString(),
       },
       all: {},
     };
