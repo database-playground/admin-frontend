@@ -62,6 +62,11 @@ type Documents = {
     "\n  query UserById($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n      avatar\n      createdAt\n      updatedAt\n      group {\n        id\n        name\n      }\n    }\n  }\n": typeof types.UserByIdDocument,
     "\n  query GroupList {\n    groups {\n      id\n      name\n    }\n  }\n": typeof types.GroupListDocument,
     "\n  query UsersTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n  ) {\n    users(first: $first, after: $after, last: $last, before: $before) {\n      edges {\n        node {\n          id\n          name\n          email\n          avatar\n          createdAt\n          updatedAt\n          group {\n            id\n            name\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": typeof types.UsersTableDocument,
+    "\n  query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {\n    ranking(filter: $filter, first: $first, after: $after) {\n      edges {\n        node {\n          id\n          name\n        }\n        ...ScoreCell\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n": typeof types.OverviewRankingDocument,
+    "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...RankingFragment\n  }\n": typeof types.ScoreCellFragmentDoc,
+    "\n  fragment UserCompletedQuestions on RankingEdge {\n    node {\n        submissionStatistics {\n          solvedQuestions\n        }\n    }\n  }\n": typeof types.UserCompletedQuestionsFragmentDoc,
+    "\n  fragment UserTotalPoints on RankingEdge {\n    node {\n      totalPoints\n    }\n  }\n": typeof types.UserTotalPointsFragmentDoc,
+    "\n  fragment RankingFragment on RankingEdge {\n    score\n  }\n": typeof types.RankingFragmentFragmentDoc,
     "\n  mutation MeUpdateUserInfo($input: UpdateUserInput!) {\n    updateMe(input: $input) {\n      id\n    }\n  }\n": typeof types.MeUpdateUserInfoDocument,
     "\n  query MeUserInfo {\n    me {\n      id\n      name\n      avatar\n    }\n  }\n": typeof types.MeUserInfoDocument,
     "\n  query BasicUserInfo {\n    me {\n      id\n      name\n      email\n      avatar\n\n      group {\n        name\n      }\n    }\n  }\n": typeof types.BasicUserInfoDocument,
@@ -115,6 +120,11 @@ const documents: Documents = {
     "\n  query UserById($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n      avatar\n      createdAt\n      updatedAt\n      group {\n        id\n        name\n      }\n    }\n  }\n": types.UserByIdDocument,
     "\n  query GroupList {\n    groups {\n      id\n      name\n    }\n  }\n": types.GroupListDocument,
     "\n  query UsersTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n  ) {\n    users(first: $first, after: $after, last: $last, before: $before) {\n      edges {\n        node {\n          id\n          name\n          email\n          avatar\n          createdAt\n          updatedAt\n          group {\n            id\n            name\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": types.UsersTableDocument,
+    "\n  query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {\n    ranking(filter: $filter, first: $first, after: $after) {\n      edges {\n        node {\n          id\n          name\n        }\n        ...ScoreCell\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n": types.OverviewRankingDocument,
+    "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...RankingFragment\n  }\n": types.ScoreCellFragmentDoc,
+    "\n  fragment UserCompletedQuestions on RankingEdge {\n    node {\n        submissionStatistics {\n          solvedQuestions\n        }\n    }\n  }\n": types.UserCompletedQuestionsFragmentDoc,
+    "\n  fragment UserTotalPoints on RankingEdge {\n    node {\n      totalPoints\n    }\n  }\n": types.UserTotalPointsFragmentDoc,
+    "\n  fragment RankingFragment on RankingEdge {\n    score\n  }\n": types.RankingFragmentFragmentDoc,
     "\n  mutation MeUpdateUserInfo($input: UpdateUserInput!) {\n    updateMe(input: $input) {\n      id\n    }\n  }\n": types.MeUpdateUserInfoDocument,
     "\n  query MeUserInfo {\n    me {\n      id\n      name\n      avatar\n    }\n  }\n": types.MeUserInfoDocument,
     "\n  query BasicUserInfo {\n    me {\n      id\n      name\n      email\n      avatar\n\n      group {\n        name\n      }\n    }\n  }\n": types.BasicUserInfoDocument,
@@ -326,6 +336,26 @@ export function graphql(source: "\n  query GroupList {\n    groups {\n      id\n
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query UsersTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n  ) {\n    users(first: $first, after: $after, last: $last, before: $before) {\n      edges {\n        node {\n          id\n          name\n          email\n          avatar\n          createdAt\n          updatedAt\n          group {\n            id\n            name\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n"): (typeof documents)["\n  query UsersTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n  ) {\n    users(first: $first, after: $after, last: $last, before: $before) {\n      edges {\n        node {\n          id\n          name\n          email\n          avatar\n          createdAt\n          updatedAt\n          group {\n            id\n            name\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {\n    ranking(filter: $filter, first: $first, after: $after) {\n      edges {\n        node {\n          id\n          name\n        }\n        ...ScoreCell\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n"): (typeof documents)["\n  query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {\n    ranking(filter: $filter, first: $first, after: $after) {\n      edges {\n        node {\n          id\n          name\n        }\n        ...ScoreCell\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...RankingFragment\n  }\n"): (typeof documents)["\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...RankingFragment\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment UserCompletedQuestions on RankingEdge {\n    node {\n        submissionStatistics {\n          solvedQuestions\n        }\n    }\n  }\n"): (typeof documents)["\n  fragment UserCompletedQuestions on RankingEdge {\n    node {\n        submissionStatistics {\n          solvedQuestions\n        }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment UserTotalPoints on RankingEdge {\n    node {\n      totalPoints\n    }\n  }\n"): (typeof documents)["\n  fragment UserTotalPoints on RankingEdge {\n    node {\n      totalPoints\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment RankingFragment on RankingEdge {\n    score\n  }\n"): (typeof documents)["\n  fragment RankingFragment on RankingEdge {\n    score\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

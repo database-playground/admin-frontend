@@ -1,6 +1,8 @@
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { OverviewRanking } from "./_components/rank";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = {
   title: "概覽",
@@ -16,7 +18,9 @@ export default function Home() {
           md:p-8
         `}
       >
-        <DataTableSkeleton />
+        <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+          <OverviewRanking />
+        </Suspense>
       </main>
     </>
   );
