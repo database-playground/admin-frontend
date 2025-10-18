@@ -2,6 +2,8 @@ import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { CreateQuestionTrigger } from "./_components/create";
 import { QuestionsDataTable } from "./_components/data-table";
+import { Suspense } from "react";
+import { DataTableSkeleton } from "@/components/data-table/skeleton";
 
 export const metadata: Metadata = {
   title: "題庫",
@@ -25,7 +27,9 @@ export default function Page() {
           <CreateQuestionTrigger />
         </div>
         <div>
-          <QuestionsDataTable />
+          <Suspense fallback={<DataTableSkeleton />}>
+            <QuestionsDataTable />
+          </Suspense>
         </div>
       </main>
     </>

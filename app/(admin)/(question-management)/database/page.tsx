@@ -2,6 +2,8 @@ import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { CreateDatabaseTrigger } from "./_components/create";
 import { DatabaseDataTable } from "./_components/data-table";
+import { Suspense } from "react";
+import { DataTableSkeleton } from "@/components/data-table/skeleton";
 
 export const metadata: Metadata = {
   title: "資料庫",
@@ -25,7 +27,9 @@ export default function Page() {
           <CreateDatabaseTrigger />
         </div>
         <div>
-          <DatabaseDataTable />
+          <Suspense fallback={<DataTableSkeleton />}>
+            <DatabaseDataTable />
+          </Suspense>
         </div>
       </main>
     </>

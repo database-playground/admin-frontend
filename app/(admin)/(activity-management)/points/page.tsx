@@ -1,6 +1,8 @@
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { PointsDataTable } from "./_components/data-table";
+import { Suspense } from "react";
+import { DataTableSkeleton } from "@/components/data-table/skeleton";
 
 export const metadata: Metadata = {
   title: "積分管理",
@@ -23,7 +25,9 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <PointsDataTable />
+          <Suspense fallback={<DataTableSkeleton />}>
+            <PointsDataTable />
+          </Suspense>
         </div>
       </main>
     </>

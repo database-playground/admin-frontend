@@ -1,6 +1,8 @@
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { SubmissionsDataTable } from "./_components/data-table";
+import { Suspense } from "react";
+import { DataTableSkeleton } from "@/components/data-table/skeleton";
 
 export const metadata: Metadata = {
   title: "提交記錄",
@@ -23,7 +25,9 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <SubmissionsDataTable />
+          <Suspense fallback={<DataTableSkeleton />}>
+            <SubmissionsDataTable />
+          </Suspense>
         </div>
       </main>
     </>
