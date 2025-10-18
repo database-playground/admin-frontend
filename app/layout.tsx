@@ -23,8 +23,6 @@ export const metadata: Metadata = {
   description: "管理資料庫練功坊的題目、使用者、做題記錄等。",
 };
 
-export const experimental_ppr = true;
-
 export default async function RootLayout({
   children,
 }: Readonly<{
