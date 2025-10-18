@@ -8,7 +8,7 @@ import { columns, type Question } from "./data-table-columns";
 import { QUESTIONS_TABLE_QUERY } from "./query";
 
 export function QuestionsDataTable() {
-  const PAGE_SIZE = 5;
+  const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
 

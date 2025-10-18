@@ -8,7 +8,7 @@ import { columns, type Point } from "./data-table-columns";
 import { POINTS_TABLE_QUERY } from "./query";
 
 export function PointsDataTable() {
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
 

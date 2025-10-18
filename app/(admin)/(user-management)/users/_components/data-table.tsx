@@ -8,7 +8,7 @@ import { columns, type User } from "./data-table-columns";
 import { USERS_TABLE_QUERY } from "./query";
 
 export function UsersDataTable() {
-  const PAGE_SIZE = 5;
+  const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
 

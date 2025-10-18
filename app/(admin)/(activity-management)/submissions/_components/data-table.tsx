@@ -8,7 +8,7 @@ import { columns, type Submission } from "./data-table-columns";
 import { SUBMISSIONS_TABLE_QUERY } from "./query";
 
 export function SubmissionsDataTable() {
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
