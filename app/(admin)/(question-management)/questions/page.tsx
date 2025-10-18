@@ -1,9 +1,7 @@
-import { DataTableSkeleton } from "@/components/data-table/skeleton";
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { CreateQuestionTrigger } from "./_components/create";
-import { QuestionsDataTable } from "./_components/data-table";
+import FilterableDataTable from "./_components/filterable-data-table";
 
 export const metadata: Metadata = {
   title: "題庫",
@@ -22,14 +20,14 @@ export default function Page() {
         <div className="flex items-center justify-between space-y-2">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">題庫管理</h2>
-            <p className="text-muted-foreground">管理 SQL 練習題目，設定難度與分類。</p>
+            <p className="text-muted-foreground">
+              管理 SQL 練習題目，設定難度與分類。
+            </p>
           </div>
           <CreateQuestionTrigger />
         </div>
         <div>
-          <Suspense fallback={<DataTableSkeleton />}>
-            <QuestionsDataTable />
-          </Suspense>
+          <FilterableDataTable />
         </div>
       </main>
     </>

@@ -2,18 +2,27 @@
 
 import { CursorDataTable } from "@/components/data-table/cursor";
 import type { Direction } from "@/components/data-table/pagination";
+import { QuestionDifficulty } from "@/gql/graphql";
 import { useSuspenseQuery } from "@apollo/client/react";
+import type { VariablesOf } from "@graphql-typed-document-node/core";
 import { useState } from "react";
 import { columns, type Question } from "./data-table-columns";
 import { QUESTIONS_TABLE_QUERY } from "./query";
 
-export function QuestionsDataTable() {
+export type DifficultyFilter = "all" | QuestionDifficulty;
+
+export function QuestionsDataTable({ query, difficulty }: { query?: string; difficulty: DifficultyFilter }) {
   const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const after = cursors[currentIndex];
-  const variables = { first: PAGE_SIZE, after };
+  const variables = {
+    first: PAGE_SIZE,
+    after,
+    query,
+    difficulty: difficulty === "all" ? undefined : difficulty,
+  } satisfies VariablesOf<typeof QUESTIONS_TABLE_QUERY>;
 
   const { data } = useSuspenseQuery(QUESTIONS_TABLE_QUERY, {
     variables,
@@ -53,13 +62,15 @@ export function QuestionsDataTable() {
   };
 
   return (
-    <CursorDataTable
-      columns={columns}
-      data={questionList}
-      totalCount={data?.questions.totalCount ?? 0}
-      hasNextPage={!!pageInfo?.hasNextPage}
-      hasPreviousPage={currentIndex > 0}
-      onPageChange={handlePageChange}
-    />
+    <>
+      <CursorDataTable
+        columns={columns}
+        data={questionList}
+        totalCount={data?.questions.totalCount ?? 0}
+        hasNextPage={!!pageInfo?.hasNextPage}
+        hasPreviousPage={currentIndex > 0}
+        onPageChange={handlePageChange}
+      />
+    </>
   );
 }
