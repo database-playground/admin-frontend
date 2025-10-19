@@ -22,7 +22,7 @@ export default function AdminLayout({
             <AppSidebar variant="inset" />
             <SidebarInset>
               <ViewTransition>
-                <div suppressHydrationWarning>
+                <div>
                   {children}
                 </div>
               </ViewTransition>
