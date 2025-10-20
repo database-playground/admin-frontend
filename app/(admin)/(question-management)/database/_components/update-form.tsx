@@ -1,3 +1,4 @@
+import SQLEditor from "@/components/sql-editor";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -78,10 +79,9 @@ export function UpdateDatabaseForm({
           <FormItem>
             <FormLabel>資料結構</FormLabel>
             <FormControl>
-              <Textarea
+              <SQLEditor
                 {...field}
                 placeholder="請輸入完整的 SQL 建表語句"
-                className="max-h-[500px] min-h-[200px] font-mono text-sm"
               />
             </FormControl>
             <FormDescription>

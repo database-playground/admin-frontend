@@ -1,3 +1,4 @@
+import SQLEditor from "@/components/sql-editor";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -159,10 +160,9 @@ export function UpdateQuestionForm({
           <FormItem>
             <FormLabel>參考答案</FormLabel>
             <FormControl>
-              <Textarea
+              <SQLEditor
                 {...field}
                 placeholder="請輸入 SQL 參考答案"
-                className="min-h-[120px] font-mono"
               />
             </FormControl>
             <FormDescription>提供標準的 SQL 解答。</FormDescription>
