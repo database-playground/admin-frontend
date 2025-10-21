@@ -38,9 +38,9 @@ function HeaderMain({ id }: { id: string }) {
         <Badge variant="outline">{question.category}</Badge>
         <Badge variant={difficultyInfo.variant}>{difficultyInfo.label}</Badge>
       </div>
-      <p className="text-muted-foreground">
+      <div className="text-muted-foreground">
         <Remark>{description}</Remark>
-      </p>
+      </div>
     </div>
   );
 }
