@@ -28,12 +28,15 @@ type Documents = {
     "\n  query DatabasesTable {\n    databases {\n      id\n      slug\n      description\n      schema\n      relationFigure\n    }\n  }\n": typeof types.DatabasesTableDocument,
     "\n  query QuestionDetail($id: ID!) {\n    question(id: $id) {\n      id\n      title\n      description\n      category\n      difficulty\n      referenceAnswer\n      database {\n        id\n        slug\n        description\n      }\n    }\n  }\n": typeof types.QuestionDetailDocument,
     "\n  query QuestionReferenceAnswerResult($id: ID!) {\n    question(id: $id) {\n      referenceAnswerResult {\n        columns\n        rows\n      }\n    }\n  }\n": typeof types.QuestionReferenceAnswerResultDocument,
+    "\n  query CreateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n": typeof types.CreateQuestionDialogContentDocument,
     "\n  mutation CreateQuestion($input: CreateQuestionInput!) {\n    createQuestion(input: $input) {\n      id\n    }\n  }\n": typeof types.CreateQuestionDocument,
     "\n  mutation UpdateQuestion($id: ID!, $input: UpdateQuestionInput!) {\n    updateQuestion(id: $id, input: $input) {\n      id\n    }\n  }\n": typeof types.UpdateQuestionDocument,
     "\n  mutation DeleteQuestion($id: ID!) {\n    deleteQuestion(id: $id)\n  }\n": typeof types.DeleteQuestionDocument,
     "\n  query QuestionById($id: ID!) {\n    question(id: $id) {\n      id\n      title\n      description\n      category\n      difficulty\n      referenceAnswer\n      database {\n        id\n        slug\n      }\n    }\n  }\n": typeof types.QuestionByIdDocument,
     "\n  query DatabaseList {\n    databases {\n      id\n      slug\n      description\n    }\n  }\n": typeof types.DatabaseListDocument,
     "\n  query QuestionsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor,\n    $query: String,\n    $difficulty: QuestionDifficulty\n  ) {\n    questions(\n      first: $first,\n      after: $after,\n      last: $last,\n      before: $before,\n      where: {\n        or: [\n          { titleContains: $query },\n          { categoryContains: $query },\n          { descriptionContains: $query },\n        ],\n        difficulty: $difficulty,\n      },\n    ) {\n      edges {\n        node {\n          id\n          title\n          description\n          category\n          difficulty\n          referenceAnswer\n          database {\n            id\n            slug\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": typeof types.QuestionsTableDocument,
+    "\n  fragment QuestionUpdateForm on Query {\n    databases {\n      id\n      slug\n    }\n\n    questionCategories\n  }\n": typeof types.QuestionUpdateFormFragmentDoc,
+    "\n  query UpdateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n": typeof types.UpdateQuestionDialogContentDocument,
     "\n  query GroupAuditInfo($id: ID!) {\n    group(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GroupAuditInfoDocument,
     "\n  query GroupHeader($id: ID!) {\n    group(id: $id) {\n      id\n      name\n      description\n    }\n  }\n": typeof types.GroupHeaderDocument,
     "\n  query GroupMembers($id: ID!) {\n    users(where: { hasGroupWith: { id: $id } }) {\n      totalCount\n    }\n  }\n": typeof types.GroupMembersDocument,
@@ -88,12 +91,15 @@ const documents: Documents = {
     "\n  query DatabasesTable {\n    databases {\n      id\n      slug\n      description\n      schema\n      relationFigure\n    }\n  }\n": types.DatabasesTableDocument,
     "\n  query QuestionDetail($id: ID!) {\n    question(id: $id) {\n      id\n      title\n      description\n      category\n      difficulty\n      referenceAnswer\n      database {\n        id\n        slug\n        description\n      }\n    }\n  }\n": types.QuestionDetailDocument,
     "\n  query QuestionReferenceAnswerResult($id: ID!) {\n    question(id: $id) {\n      referenceAnswerResult {\n        columns\n        rows\n      }\n    }\n  }\n": types.QuestionReferenceAnswerResultDocument,
+    "\n  query CreateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n": types.CreateQuestionDialogContentDocument,
     "\n  mutation CreateQuestion($input: CreateQuestionInput!) {\n    createQuestion(input: $input) {\n      id\n    }\n  }\n": types.CreateQuestionDocument,
     "\n  mutation UpdateQuestion($id: ID!, $input: UpdateQuestionInput!) {\n    updateQuestion(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateQuestionDocument,
     "\n  mutation DeleteQuestion($id: ID!) {\n    deleteQuestion(id: $id)\n  }\n": types.DeleteQuestionDocument,
     "\n  query QuestionById($id: ID!) {\n    question(id: $id) {\n      id\n      title\n      description\n      category\n      difficulty\n      referenceAnswer\n      database {\n        id\n        slug\n      }\n    }\n  }\n": types.QuestionByIdDocument,
     "\n  query DatabaseList {\n    databases {\n      id\n      slug\n      description\n    }\n  }\n": types.DatabaseListDocument,
     "\n  query QuestionsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor,\n    $query: String,\n    $difficulty: QuestionDifficulty\n  ) {\n    questions(\n      first: $first,\n      after: $after,\n      last: $last,\n      before: $before,\n      where: {\n        or: [\n          { titleContains: $query },\n          { categoryContains: $query },\n          { descriptionContains: $query },\n        ],\n        difficulty: $difficulty,\n      },\n    ) {\n      edges {\n        node {\n          id\n          title\n          description\n          category\n          difficulty\n          referenceAnswer\n          database {\n            id\n            slug\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": types.QuestionsTableDocument,
+    "\n  fragment QuestionUpdateForm on Query {\n    databases {\n      id\n      slug\n    }\n\n    questionCategories\n  }\n": types.QuestionUpdateFormFragmentDoc,
+    "\n  query UpdateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n": types.UpdateQuestionDialogContentDocument,
     "\n  query GroupAuditInfo($id: ID!) {\n    group(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n": types.GroupAuditInfoDocument,
     "\n  query GroupHeader($id: ID!) {\n    group(id: $id) {\n      id\n      name\n      description\n    }\n  }\n": types.GroupHeaderDocument,
     "\n  query GroupMembers($id: ID!) {\n    users(where: { hasGroupWith: { id: $id } }) {\n      totalCount\n    }\n  }\n": types.GroupMembersDocument,
@@ -207,6 +213,10 @@ export function graphql(source: "\n  query QuestionReferenceAnswerResult($id: ID
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  query CreateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n"): (typeof documents)["\n  query CreateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  mutation CreateQuestion($input: CreateQuestionInput!) {\n    createQuestion(input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateQuestion($input: CreateQuestionInput!) {\n    createQuestion(input: $input) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -228,6 +238,14 @@ export function graphql(source: "\n  query DatabaseList {\n    databases {\n    
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query QuestionsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor,\n    $query: String,\n    $difficulty: QuestionDifficulty\n  ) {\n    questions(\n      first: $first,\n      after: $after,\n      last: $last,\n      before: $before,\n      where: {\n        or: [\n          { titleContains: $query },\n          { categoryContains: $query },\n          { descriptionContains: $query },\n        ],\n        difficulty: $difficulty,\n      },\n    ) {\n      edges {\n        node {\n          id\n          title\n          description\n          category\n          difficulty\n          referenceAnswer\n          database {\n            id\n            slug\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n"): (typeof documents)["\n  query QuestionsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor,\n    $query: String,\n    $difficulty: QuestionDifficulty\n  ) {\n    questions(\n      first: $first,\n      after: $after,\n      last: $last,\n      before: $before,\n      where: {\n        or: [\n          { titleContains: $query },\n          { categoryContains: $query },\n          { descriptionContains: $query },\n        ],\n        difficulty: $difficulty,\n      },\n    ) {\n      edges {\n        node {\n          id\n          title\n          description\n          category\n          difficulty\n          referenceAnswer\n          database {\n            id\n            slug\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment QuestionUpdateForm on Query {\n    databases {\n      id\n      slug\n    }\n\n    questionCategories\n  }\n"): (typeof documents)["\n  fragment QuestionUpdateForm on Query {\n    databases {\n      id\n      slug\n    }\n\n    questionCategories\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query UpdateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n"): (typeof documents)["\n  query UpdateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

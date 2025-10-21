@@ -105,7 +105,7 @@ export function UpdateGroupForm({
                 name="scopeSetSlugs"
                 value={field.value ?? []}
                 onChange={field.onChange}
-                list="scopeSetList"
+                list="scope-set-list"
               />
             </FormControl>
             <FormMessage />
@@ -117,7 +117,7 @@ export function UpdateGroupForm({
       />
 
       {/* scope set list */}
-      <datalist id="scopeSetList">
+      <datalist id="scope-set-list">
         {scopeSetList.map((scopeSet) => <option key={scopeSet.id} value={scopeSet.slug} />)}
       </datalist>
     </UpdateFormBody>

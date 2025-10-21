@@ -619,6 +619,8 @@ type Query {
   ): PointConnection!
   """Get a question by ID."""
   question(id: ID!): Question!
+  """Get the list of question categories."""
+  questionCategories: [String!]!
   questions(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor

@@ -17,8 +17,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { QUESTION_CREATE_MUTATION } from "./mutation";
-import { DATABASE_LIST_QUERY, QUESTIONS_TABLE_QUERY } from "./query";
+import { QUESTIONS_TABLE_QUERY } from "./query";
 import { UpdateQuestionForm, type UpdateQuestionFormData } from "./update-form";
+import { graphql } from "@/gql";
 
 export function CreateQuestionTrigger() {
   const router = useRouter();
@@ -68,6 +69,12 @@ export function CreateQuestionTrigger() {
   );
 }
 
+const CREATE_QUESTION_DIALOG_CONTENT_QUERY = graphql(`
+  query CreateQuestionDialogContent {
+    ...QuestionUpdateForm
+  }
+`);
+
 function CreateQuestionDialogContent({
   onCompleted,
   onFormStateChange,
@@ -75,7 +82,7 @@ function CreateQuestionDialogContent({
   onCompleted: () => void;
   onFormStateChange: (isDirty: boolean) => void;
 }) {
-  const { data: databaseList } = useSuspenseQuery(DATABASE_LIST_QUERY);
+  const { data } = useSuspenseQuery(CREATE_QUESTION_DIALOG_CONTENT_QUERY);
 
   const [createQuestion] = useMutation(QUESTION_CREATE_MUTATION, {
     refetchQueries: [{ query: QUESTIONS_TABLE_QUERY }],
@@ -138,7 +145,7 @@ function CreateQuestionDialogContent({
         onSubmit={onSubmit}
         action="create"
         onFormStateChange={onFormStateChange}
-        databaseList={databaseList.databases}
+        fragment={data}
       />
     </DialogContent>
   );
