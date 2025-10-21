@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { graphql } from "@/gql";
 import { QuestionDifficulty } from "@/gql/graphql";
 import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
 import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
@@ -21,7 +22,6 @@ import { toast } from "sonner";
 import { QUESTION_UPDATE_MUTATION } from "./mutation";
 import { QUESTION_BY_ID_QUERY, QUESTIONS_TABLE_QUERY } from "./query";
 import { UpdateQuestionForm, type UpdateQuestionFormData } from "./update-form";
-import { graphql } from "@/gql";
 
 export function UpdateQuestionDropdownTrigger({ id }: { id: string }) {
   const router = useRouter();

@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { UpdateFormBody } from "@/components/update-modal/form-body";
 import type { UpdateFormBaseProps } from "@/components/update-modal/types";
-import { graphql, useFragment, type FragmentType } from "@/gql";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 import { QuestionDifficulty } from "@/gql/graphql";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
