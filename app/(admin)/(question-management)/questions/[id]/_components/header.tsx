@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { Suspense } from "react";
+import { Remark } from "react-remark";
 import { QUESTION_DETAIL_QUERY } from "./query";
 
 export function Header({ id }: { id: string }) {
@@ -37,7 +38,9 @@ function HeaderMain({ id }: { id: string }) {
         <Badge variant="outline">{question.category}</Badge>
         <Badge variant={difficultyInfo.variant}>{difficultyInfo.label}</Badge>
       </div>
-      <p className="text-muted-foreground">{description}</p>
+      <div className="text-muted-foreground">
+        <Remark>{description}</Remark>
+      </div>
     </div>
   );
 }

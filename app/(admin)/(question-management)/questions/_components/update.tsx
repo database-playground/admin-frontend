@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { graphql } from "@/gql";
 import { QuestionDifficulty } from "@/gql/graphql";
 import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
 import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
@@ -19,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
 import { QUESTION_UPDATE_MUTATION } from "./mutation";
-import { DATABASE_LIST_QUERY, QUESTION_BY_ID_QUERY, QUESTIONS_TABLE_QUERY } from "./query";
+import { QUESTION_BY_ID_QUERY, QUESTIONS_TABLE_QUERY } from "./query";
 import { UpdateQuestionForm, type UpdateQuestionFormData } from "./update-form";
 
 export function UpdateQuestionDropdownTrigger({ id }: { id: string }) {
@@ -139,6 +140,12 @@ export function UpdateQuestionButtonTrigger({ id }: { id: string }) {
   );
 }
 
+const UPDATE_QUESTION_DIALOG_CONTENT_QUERY = graphql(`
+  query UpdateQuestionDialogContent {
+    ...QuestionUpdateForm
+  }
+`);
+
 function UpdateQuestionDialogContent({
   id,
   open,
@@ -150,10 +157,7 @@ function UpdateQuestionDialogContent({
   onCompleted: () => void;
   onFormStateChange: (isDirty: boolean) => void;
 }) {
-  const { data: databaseList } = useSuspenseQuery(
-    DATABASE_LIST_QUERY,
-    open ? {} : skipToken,
-  );
+  const { data: dialogData } = useSuspenseQuery(UPDATE_QUESTION_DIALOG_CONTENT_QUERY, open ? {} : skipToken);
   const { data: question } = useSuspenseQuery(
     QUESTION_BY_ID_QUERY,
     open
@@ -216,7 +220,7 @@ function UpdateQuestionDialogContent({
         onSubmit={onSubmit}
         action="update"
         onFormStateChange={onFormStateChange}
-        databaseList={databaseList?.databases || []}
+        fragment={dialogData ?? {}}
       />
     </DialogContent>
   );

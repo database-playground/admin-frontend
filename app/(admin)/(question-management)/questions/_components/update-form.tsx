@@ -1,12 +1,13 @@
+import SQLEditor from "@/components/sql-editor";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { UpdateFormBody } from "@/components/update-modal/form-body";
 import type { UpdateFormBaseProps } from "@/components/update-modal/types";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 import { QuestionDifficulty } from "@/gql/graphql";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -28,9 +29,20 @@ export interface UpdateQuestionFormData {
   databaseID?: string; // Changed to single databaseID for 1-N relationship
 }
 
+const QUESTION_UPDATE_FORM_FRAGEMENT = graphql(`
+  fragment QuestionUpdateForm on Query {
+    databases {
+      id
+      slug
+    }
+
+    questionCategories
+  }
+`);
+
 export interface UpdateQuestionFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, "onSubmit"> {
   onSubmit: (newValues: UpdateQuestionFormData) => void;
-  databaseList: { id: string; slug: string; description?: string | null }[];
+  fragment: FragmentType<typeof QUESTION_UPDATE_FORM_FRAGEMENT>;
 }
 
 const difficultyOptions = [
@@ -45,8 +57,10 @@ export function UpdateQuestionForm({
   onSubmit,
   action,
   onFormStateChange,
-  databaseList,
+  fragment,
 }: UpdateQuestionFormProps) {
+  const { databases, questionCategories } = useFragment(QUESTION_UPDATE_FORM_FRAGEMENT, fragment);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues,
@@ -116,7 +130,7 @@ export function UpdateQuestionForm({
           <FormItem>
             <FormLabel>分類</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="例如：query, join, aggregation" />
+              <Input {...field} placeholder="例如：query, join, aggregation" list="question-categories" />
             </FormControl>
             <FormDescription>題目的分類標籤。</FormDescription>
             <FormMessage />
@@ -159,10 +173,9 @@ export function UpdateQuestionForm({
           <FormItem>
             <FormLabel>參考答案</FormLabel>
             <FormControl>
-              <Textarea
+              <SQLEditor
                 {...field}
                 placeholder="請輸入 SQL 參考答案"
-                className="min-h-[120px] font-mono"
               />
             </FormControl>
             <FormDescription>提供標準的 SQL 解答。</FormDescription>
@@ -186,7 +199,7 @@ export function UpdateQuestionForm({
                   <SelectValue placeholder="選擇資料庫" />
                 </SelectTrigger>
                 <SelectContent>
-                  {databaseList.map((database) => (
+                  {databases.map((database) => (
                     <SelectItem key={database.id} value={database.id}>
                       {database.slug}
                     </SelectItem>
@@ -199,6 +212,10 @@ export function UpdateQuestionForm({
           </FormItem>
         )}
       />
+
+      <datalist id="question-categories">
+        {questionCategories.map((category) => <option key={category} value={category} />)}
+      </datalist>
     </UpdateFormBody>
   );
 }
