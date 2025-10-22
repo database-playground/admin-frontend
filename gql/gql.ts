@@ -41,7 +41,8 @@ type Documents = {
     "\n  fragment QuestionDatabaseCard on Question {\n    database {\n      id\n      slug\n      description\n    }\n  }\n": typeof types.QuestionDatabaseCardFragmentDoc,
     "\n  fragment QuestionDescriptionCard on Question {\n    description\n  }\n": typeof types.QuestionDescriptionCardFragmentDoc,
     "\n  query QuestionHeader($id: ID!) {\n    question(id: $id) {\n      id\n      title\n      description\n      category\n      difficulty\n    }\n  }\n": typeof types.QuestionHeaderDocument,
-    "\n  query QuestionCards($id: ID!) {\n    question(id: $id) {\n      id\n      ...QuestionDescriptionCard\n      ...QuestionDatabaseCard\n      ...QuestionAnswerCard\n    }\n  }\n": typeof types.QuestionCardsDocument,
+    "\n  fragment QuestionPassRateCard on Question {\n    statistics {\n      passedUsers\n      attemptedUsers\n      submissionCount\n      correctSubmissionCount\n    }\n  }\n": typeof types.QuestionPassRateCardFragmentDoc,
+    "\n  query QuestionCards($id: ID!) {\n    question(id: $id) {\n      id\n      ...QuestionDescriptionCard\n      ...QuestionDatabaseCard\n      ...QuestionAnswerCard\n      ...QuestionPassRateCard\n    }\n  }\n": typeof types.QuestionCardsDocument,
     "\n  query QuestionReferenceAnswerResult($id: ID!) {\n    question(id: $id) {\n      id\n      referenceAnswerResult {\n        columns\n        rows\n      }\n    }\n  }\n": typeof types.QuestionReferenceAnswerResultDocument,
     "\n  query CreateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n": typeof types.CreateQuestionDialogContentDocument,
     "\n  mutation CreateQuestion($input: CreateQuestionInput!) {\n    createQuestion(input: $input) {\n      id\n    }\n  }\n": typeof types.CreateQuestionDocument,
@@ -122,7 +123,8 @@ const documents: Documents = {
     "\n  fragment QuestionDatabaseCard on Question {\n    database {\n      id\n      slug\n      description\n    }\n  }\n": types.QuestionDatabaseCardFragmentDoc,
     "\n  fragment QuestionDescriptionCard on Question {\n    description\n  }\n": types.QuestionDescriptionCardFragmentDoc,
     "\n  query QuestionHeader($id: ID!) {\n    question(id: $id) {\n      id\n      title\n      description\n      category\n      difficulty\n    }\n  }\n": types.QuestionHeaderDocument,
-    "\n  query QuestionCards($id: ID!) {\n    question(id: $id) {\n      id\n      ...QuestionDescriptionCard\n      ...QuestionDatabaseCard\n      ...QuestionAnswerCard\n    }\n  }\n": types.QuestionCardsDocument,
+    "\n  fragment QuestionPassRateCard on Question {\n    statistics {\n      passedUsers\n      attemptedUsers\n      submissionCount\n      correctSubmissionCount\n    }\n  }\n": types.QuestionPassRateCardFragmentDoc,
+    "\n  query QuestionCards($id: ID!) {\n    question(id: $id) {\n      id\n      ...QuestionDescriptionCard\n      ...QuestionDatabaseCard\n      ...QuestionAnswerCard\n      ...QuestionPassRateCard\n    }\n  }\n": types.QuestionCardsDocument,
     "\n  query QuestionReferenceAnswerResult($id: ID!) {\n    question(id: $id) {\n      id\n      referenceAnswerResult {\n        columns\n        rows\n      }\n    }\n  }\n": types.QuestionReferenceAnswerResultDocument,
     "\n  query CreateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n": types.CreateQuestionDialogContentDocument,
     "\n  mutation CreateQuestion($input: CreateQuestionInput!) {\n    createQuestion(input: $input) {\n      id\n    }\n  }\n": types.CreateQuestionDocument,
@@ -301,7 +303,11 @@ export function graphql(source: "\n  query QuestionHeader($id: ID!) {\n    quest
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query QuestionCards($id: ID!) {\n    question(id: $id) {\n      id\n      ...QuestionDescriptionCard\n      ...QuestionDatabaseCard\n      ...QuestionAnswerCard\n    }\n  }\n"): (typeof documents)["\n  query QuestionCards($id: ID!) {\n    question(id: $id) {\n      id\n      ...QuestionDescriptionCard\n      ...QuestionDatabaseCard\n      ...QuestionAnswerCard\n    }\n  }\n"];
+export function graphql(source: "\n  fragment QuestionPassRateCard on Question {\n    statistics {\n      passedUsers\n      attemptedUsers\n      submissionCount\n      correctSubmissionCount\n    }\n  }\n"): (typeof documents)["\n  fragment QuestionPassRateCard on Question {\n    statistics {\n      passedUsers\n      attemptedUsers\n      submissionCount\n      correctSubmissionCount\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query QuestionCards($id: ID!) {\n    question(id: $id) {\n      id\n      ...QuestionDescriptionCard\n      ...QuestionDatabaseCard\n      ...QuestionAnswerCard\n      ...QuestionPassRateCard\n    }\n  }\n"): (typeof documents)["\n  query QuestionCards($id: ID!) {\n    question(id: $id) {\n      id\n      ...QuestionDescriptionCard\n      ...QuestionDatabaseCard\n      ...QuestionAnswerCard\n      ...QuestionPassRateCard\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

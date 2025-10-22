@@ -5,6 +5,7 @@ import { useSuspenseQuery } from "@apollo/client/react";
 import { AnswerCard } from "./answer-card";
 import { DatabaseCard } from "./database-card";
 import { DescriptionCard } from "./description-card";
+import { PassRateCard } from "./pass-rate";
 
 const QUESTION_CARDS_QUERY = graphql(`
   query QuestionCards($id: ID!) {
@@ -13,6 +14,7 @@ const QUESTION_CARDS_QUERY = graphql(`
       ...QuestionDescriptionCard
       ...QuestionDatabaseCard
       ...QuestionAnswerCard
+      ...QuestionPassRateCard
     }
   }
 `);
@@ -34,6 +36,7 @@ export function QuestionCards({ id }: { id: string }) {
       <DescriptionCard fragment={fragment} />
       <DatabaseCard fragment={fragment} />
       <AnswerCard fragment={fragment} />
+      <PassRateCard fragment={fragment} />
     </div>
   );
 }
