@@ -1,16 +1,17 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
-import { useSuspenseQuery } from "@apollo/client/react";
 import { Remark } from "react-remark";
-import { QUESTION_DETAIL_QUERY } from "./query";
+import { graphql, useFragment, type FragmentType } from "@/gql";
 
-export function DescriptionCard({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(QUESTION_DETAIL_QUERY, {
-    variables: { id },
-  });
+const QUESTION_DESCRIPTION_CARD_FRAGMENT = graphql(`
+  fragment QuestionDescriptionCard on Question {
+    description
+  }
+`);
 
-  const question = data.question;
+export function DescriptionCard({ fragment }: { fragment: FragmentType<typeof QUESTION_DESCRIPTION_CARD_FRAGMENT> }) {
+  const { description } = useFragment(QUESTION_DESCRIPTION_CARD_FRAGMENT, fragment);
 
   return (
     <CardLayout title="題幹描述" description="這道題目的詳細說明。">
@@ -20,9 +21,9 @@ export function DescriptionCard({ id }: { id: string }) {
           dark:prose-invert
         `}
       >
-        {!question.description
+        {!description
           ? <p className="text-muted-foreground">無描述</p>
-          : <Remark>{question.description}</Remark>}
+          : <Remark>{description}</Remark>}
       </article>
     </CardLayout>
   );

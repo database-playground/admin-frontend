@@ -703,6 +703,8 @@ type Question implements Node {
   referenceAnswerResult: SQLExecutionResult!
   """Have you solved the question?"""
   solved: Boolean!
+  """The statistics of the question, e.g. pass rate."""
+  statistics: QuestionStatistics!
   submissions(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -765,6 +767,17 @@ input QuestionOrder {
 enum QuestionOrderField {
   CATEGORY
   DIFFICULTY
+}
+
+type QuestionStatistics {
+  """Number of users who attempted"""
+  attemptedUsers: Int!
+  """Number of correct submissions"""
+  correctSubmissionCount: Int!
+  """Number of users who passed"""
+  passedUsers: Int!
+  """Total number of submissions"""
+  submissionCount: Int!
 }
 
 """

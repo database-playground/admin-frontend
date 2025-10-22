@@ -3,10 +3,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DeleteQuestionButtonTrigger } from "../_components/delete";
 import { UpdateQuestionButtonTrigger } from "../_components/update";
-import { AnswerCard } from "./_components/answer-card";
-import { DatabaseCard } from "./_components/database-card";
-import { DescriptionCard } from "./_components/description-card";
 import { Header } from "./_components/header";
+import { QuestionCards } from "./_components/question-cards";
 
 export const metadata: Metadata = {
   title: "題目資訊",
@@ -36,18 +34,9 @@ export default async function QuestionPage({
             <DeleteQuestionButtonTrigger id={id as string} />
           </div>
         </div>
-        <div
-          className={`
-            grid grid-cols-1 gap-4
-            lg:grid-cols-2
-          `}
-        >
-          <Suspense>
-            <DescriptionCard id={id as string} />
-            <DatabaseCard id={id as string} />
-            <AnswerCard id={id as string} />
-          </Suspense>
-        </div>
+        <Suspense>
+          <QuestionCards id={id as string} />
+        </Suspense>
       </main>
     </>
   );

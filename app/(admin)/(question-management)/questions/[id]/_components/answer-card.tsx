@@ -1,16 +1,18 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { QUESTION_DETAIL_QUERY } from "./query";
 import { ReferenceAnswerResult } from "./result";
+import { graphql, useFragment, type FragmentType } from "@/gql";
 
-export function AnswerCard({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(QUESTION_DETAIL_QUERY, {
-    variables: { id },
-  });
+const QUESTION_ANSWER_CARD_FRAGMENT = graphql(`
+  fragment QuestionAnswerCard on Question {
+    id
+    referenceAnswer
+  }
+`);
 
-  const question = data.question;
+export function AnswerCard({ fragment }: { fragment: FragmentType<typeof QUESTION_ANSWER_CARD_FRAGMENT> }) {
+  const { id, referenceAnswer } = useFragment(QUESTION_ANSWER_CARD_FRAGMENT, fragment);
 
   return (
     <CardLayout title="參考答案" description="此題目的標準解答">
@@ -21,7 +23,7 @@ export function AnswerCard({ id }: { id: string }) {
             whitespace-pre-wrap
           `}
         >
-          {question.referenceAnswer}
+          {referenceAnswer}
         </pre>
 
         <ReferenceAnswerResult id={id} />

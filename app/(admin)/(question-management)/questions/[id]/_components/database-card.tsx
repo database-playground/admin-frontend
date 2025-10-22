@@ -2,15 +2,20 @@
 
 import { CardLayout } from "@/components/card-layout";
 import { StyledLink } from "@/components/ui/link";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { QUESTION_DETAIL_QUERY } from "./query";
+import { graphql, useFragment, type FragmentType } from "@/gql";
 
-export function DatabaseCard({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(QUESTION_DETAIL_QUERY, {
-    variables: { id },
-  });
+const QUESTION_DATABASE_CARD_FRAGMENT = graphql(`
+  fragment QuestionDatabaseCard on Question {
+    database {
+      id
+      slug
+      description
+    }
+  }
+`);
 
-  const database = data.question.database;
+export function DatabaseCard({ fragment }: { fragment: FragmentType<typeof QUESTION_DATABASE_CARD_FRAGMENT> }) {
+  const { database } = useFragment(QUESTION_DATABASE_CARD_FRAGMENT, fragment);
 
   return (
     <CardLayout title="所屬資料庫" description="這個題目要操作的資料庫。">

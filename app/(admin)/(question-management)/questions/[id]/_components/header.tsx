@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { Suspense } from "react";
 import { Remark } from "react-remark";
-import { QUESTION_DETAIL_QUERY } from "./query";
+import { graphql } from "@/gql";
 
 export function Header({ id }: { id: string }) {
   return (
@@ -21,8 +21,20 @@ const difficultyMap = {
   unspecified: { label: "未指定", variant: "outline" as const },
 };
 
+const QUESTION_HEADER_QUERY = graphql(`
+  query QuestionHeader($id: ID!) {
+    question(id: $id) {
+      id
+      title
+      description
+      category
+      difficulty
+    }
+  }
+`);
+
 function HeaderMain({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(QUESTION_DETAIL_QUERY, {
+  const { data } = useSuspenseQuery(QUESTION_HEADER_QUERY, {
     variables: { id },
   });
 

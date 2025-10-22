@@ -2,10 +2,10 @@
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { graphql } from "@/gql";
 import { useQuery } from "@apollo/client/react";
 import { AlertTriangle, ChevronDown, Database, Table } from "lucide-react";
 import { useState } from "react";
-import { QUESTION_REFERENCE_ANSWER_RESULT_QUERY } from "./query";
 
 export function ReferenceAnswerResult({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +40,18 @@ export function ReferenceAnswerResult({ id }: { id: string }) {
     </div>
   );
 }
+
+const QUESTION_REFERENCE_ANSWER_RESULT_QUERY = graphql(`
+  query QuestionReferenceAnswerResult($id: ID!) {
+    question(id: $id) {
+      id
+      referenceAnswerResult {
+        columns
+        rows
+      }
+    }
+  }
+`);
 
 function ReferenceAnswerResultContent({ id, open }: { id: string; open: boolean }) {
   const { data, loading, error } = useQuery(QUESTION_REFERENCE_ANSWER_RESULT_QUERY, {
