@@ -5,9 +5,8 @@ import { DeleteUserButtonTrigger } from "../_components/delete";
 import { ImpersonateUserButtonTrigger } from "../_components/impersonate";
 import { LogoutUserDevicesButtonTrigger } from "../_components/logout-devices";
 import { UpdateUserButtonTrigger } from "../_components/update";
-import { AuditInfoCard } from "./_components/audit-info";
-import { GroupsCard } from "./_components/groups";
 import { Header } from "./_components/header";
+import { UserCards } from "./_components/user-cards";
 
 export const metadata: Metadata = {
   title: "使用者資訊",
@@ -44,17 +43,9 @@ export default async function UserPage({
             <DeleteUserButtonTrigger id={id as string} />
           </div>
         </div>
-        <div
-          className={`
-            grid grid-cols-1 gap-4
-            lg:grid-cols-2
-          `}
-        >
-          <Suspense>
-            <GroupsCard id={id as string} />
-            <AuditInfoCard id={id as string} />
-          </Suspense>
-        </div>
+        <Suspense>
+          <UserCards id={id as string} />
+        </Suspense>
       </main>
     </>
   );

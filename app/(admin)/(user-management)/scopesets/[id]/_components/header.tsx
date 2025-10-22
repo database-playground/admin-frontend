@@ -1,9 +1,19 @@
 "use client";
 
 import PageHeader, { PageHeaderSkeleton } from "@/components/page-header";
+import { graphql } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { Suspense } from "react";
-import { SCOPE_SET_HEADER_QUERY } from "./query";
+
+const SCOPE_SET_HEADER_QUERY = graphql(`
+  query ScopeSetHeader($id: ID!) {
+    scopeSet(filter: { id: $id }) {
+      id
+      slug
+      description
+    }
+  }
+`);
 
 export function Header({ id }: { id: string }) {
   return (

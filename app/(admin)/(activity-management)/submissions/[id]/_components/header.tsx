@@ -1,9 +1,19 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { graphql } from "@/gql";
 import { SubmissionStatus } from "@/gql/graphql";
 import { useSuspenseQuery } from "@apollo/client/react";
-import { SUBMISSION_BY_ID_QUERY } from "./query";
+
+const SUBMISSION_HEADER_QUERY = graphql(`
+  query SubmissionHeader($id: ID!) {
+    submission(id: $id) {
+      id
+      status
+      submittedAt
+    }
+  }
+`);
 
 interface HeaderProps {
   id: string;
@@ -19,7 +29,7 @@ const statusMap: Record<
 };
 
 export function Header({ id }: HeaderProps) {
-  const { data } = useSuspenseQuery(SUBMISSION_BY_ID_QUERY, {
+  const { data } = useSuspenseQuery(SUBMISSION_HEADER_QUERY, {
     variables: { id },
   });
 

@@ -1,19 +1,21 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { SUBMISSION_BY_ID_QUERY } from "./query";
+import { type FragmentType, graphql, useFragment } from "@/gql";
+
+const SUBMISSION_DETAILS_CARD_FRAGMENT = graphql(`
+  fragment SubmissionDetailsCard on Submission {
+    submittedCode
+    error
+  }
+`);
 
 interface SubmissionDetailsCardProps {
-  id: string;
+  fragment: FragmentType<typeof SUBMISSION_DETAILS_CARD_FRAGMENT>;
 }
 
-export function SubmissionDetailsCard({ id }: SubmissionDetailsCardProps) {
-  const { data } = useSuspenseQuery(SUBMISSION_BY_ID_QUERY, {
-    variables: { id },
-  });
-
-  const submission = data.submission;
+export function SubmissionDetailsCard({ fragment }: SubmissionDetailsCardProps) {
+  const submission = useFragment(SUBMISSION_DETAILS_CARD_FRAGMENT, fragment);
 
   return (
     <Card>

@@ -1,8 +1,16 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
+import { graphql } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
-import { GROUP_MEMBERS_QUERY } from "./query";
+
+const GROUP_MEMBERS_QUERY = graphql(`
+  query GroupMembers($id: ID!) {
+    users(where: { hasGroupWith: { id: $id } }) {
+      totalCount
+    }
+  }
+`);
 
 export function MembersCard({ id }: { id: string }) {
   const { data } = useSuspenseQuery(GROUP_MEMBERS_QUERY, {

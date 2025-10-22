@@ -1,8 +1,8 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 import { Remark } from "react-remark";
-import { graphql, useFragment, type FragmentType } from "@/gql";
 
 const QUESTION_DESCRIPTION_CARD_FRAGMENT = graphql(`
   fragment QuestionDescriptionCard on Question {

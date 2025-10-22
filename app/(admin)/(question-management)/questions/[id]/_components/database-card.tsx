@@ -2,7 +2,7 @@
 
 import { CardLayout } from "@/components/card-layout";
 import { StyledLink } from "@/components/ui/link";
-import { graphql, useFragment, type FragmentType } from "@/gql";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const QUESTION_DATABASE_CARD_FRAGMENT = graphql(`
   fragment QuestionDatabaseCard on Question {

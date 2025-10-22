@@ -1,19 +1,22 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { POINT_BY_ID_QUERY } from "./query";
+import { type FragmentType, graphql, useFragment } from "@/gql";
+
+const POINT_DETAILS_CARD_FRAGMENT = graphql(`
+  fragment PointDetailsCard on Point {
+    points
+    description
+    grantedAt
+  }
+`);
 
 interface PointDetailsCardProps {
-  id: string;
+  fragment: FragmentType<typeof POINT_DETAILS_CARD_FRAGMENT>;
 }
 
-export function PointDetailsCard({ id }: PointDetailsCardProps) {
-  const { data } = useSuspenseQuery(POINT_BY_ID_QUERY, {
-    variables: { id },
-  });
-
-  const point = data.pointGrant;
+export function PointDetailsCard({ fragment }: PointDetailsCardProps) {
+  const point = useFragment(POINT_DETAILS_CARD_FRAGMENT, fragment);
 
   const isPositive = point.points >= 0;
 

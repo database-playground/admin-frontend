@@ -16,11 +16,22 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
 type Documents = {
     "\n    query EventById($id: ID!) {\n      event(id: $id) {\n        id\n        user {\n          id\n          name\n        }\n        type\n        payload\n        triggeredAt\n      }\n    }\n": typeof types.EventByIdDocument,
     "\n  query EventsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: EventWhereInput\n  ) {\n    events(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: TRIGGERED_AT, direction: DESC }) {\n      edges {\n        node {\n          id\n          user {\n            id\n            name\n          }\n          type\n          triggeredAt\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": typeof types.EventsTableDocument,
-    "\n  query PointById($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      user {\n        id\n        name\n      }\n      points\n      description\n      grantedAt\n    }\n  }\n": typeof types.PointByIdDocument,
+    "\n  query PointHeader($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      points\n      grantedAt\n    }\n  }\n": typeof types.PointHeaderDocument,
+    "\n  query PointCards($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      ...PointDetailsCard\n      ...PointUserCard\n    }\n  }\n": typeof types.PointCardsDocument,
+    "\n  fragment PointDetailsCard on Point {\n    points\n    description\n    grantedAt\n  }\n": typeof types.PointDetailsCardFragmentDoc,
+    "\n  fragment PointUserCard on Point {\n    user {\n      id\n      name\n    }\n  }\n": typeof types.PointUserCardFragmentDoc,
     "\n  query PointsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: PointWhereInput\n  ) {\n    points(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: GRANTED_AT, direction: DESC }) {\n      edges {\n        node {\n          id\n          user {\n            id\n            name\n          }\n          points\n          description\n          grantedAt\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": typeof types.PointsTableDocument,
-    "\n  query SubmissionById($id: ID!) {\n    submission(id: $id) {\n      id\n      user {\n        id\n        name\n      }\n      queryResult {\n        columns\n        rows\n        matchAnswer\n      }\n      question {\n          id\n      }\n      error\n      submittedCode\n      status\n      submittedAt\n    }\n  }\n": typeof types.SubmissionByIdDocument,
+    "\n  query SubmissionHeader($id: ID!) {\n    submission(id: $id) {\n      id\n      status\n      submittedAt\n    }\n  }\n": typeof types.SubmissionHeaderDocument,
+    "\n  fragment SubmissionResultCard on Submission {\n    queryResult {\n      columns\n      rows\n      matchAnswer\n    }\n    question {\n      id\n    }\n  }\n": typeof types.SubmissionResultCardFragmentDoc,
+    "\n  query SubmissionCards($id: ID!) {\n    submission(id: $id) {\n      id\n      ...SubmissionDetailsCard\n      ...SubmissionUserCard\n      ...SubmissionResultCard\n    }\n  }\n": typeof types.SubmissionCardsDocument,
+    "\n  fragment SubmissionDetailsCard on Submission {\n    submittedCode\n    error\n  }\n": typeof types.SubmissionDetailsCardFragmentDoc,
+    "\n  fragment SubmissionUserCard on Submission {\n    user {\n      id\n      name\n    }\n  }\n": typeof types.SubmissionUserCardFragmentDoc,
     "\n  query SubmissionsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n  ) {\n    submissions(first: $first, after: $after, last: $last, before: $before, orderBy: { field: SUBMITTED_AT, direction: DESC }) {\n      edges {\n        node {\n          id\n          submittedCode\n          status\n          user {\n            id\n            name\n          }\n          question {\n            id\n            title\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": typeof types.SubmissionsTableDocument,
-    "\n  query DatabaseDetail($id: ID!) {\n    database(id: $id) {\n      id\n      slug\n      description\n      schema\n      relationFigure\n    }\n  }\n": typeof types.DatabaseDetailDocument,
+    "\n  query DatabaseCards($id: ID!) {\n    database(id: $id) {\n      id\n      ...DatabaseDescriptionCard\n      ...DatabaseRelationCard\n      ...DatabaseSchemaCard\n    }\n  }\n": typeof types.DatabaseCardsDocument,
+    "\n  fragment DatabaseDescriptionCard on Database {\n    description\n  }\n": typeof types.DatabaseDescriptionCardFragmentDoc,
+    "\n  query DatabaseHeader($id: ID!) {\n    database(id: $id) {\n      id\n      slug\n      description\n    }\n  }\n": typeof types.DatabaseHeaderDocument,
+    "\n  fragment DatabaseRelationCard on Database {\n    relationFigure\n  }\n": typeof types.DatabaseRelationCardFragmentDoc,
+    "\n  fragment DatabaseSchemaCard on Database {\n    schema\n  }\n": typeof types.DatabaseSchemaCardFragmentDoc,
     "\n  mutation CreateDatabase($input: CreateDatabaseInput!) {\n    createDatabase(input: $input) {\n      id\n    }\n  }\n": typeof types.CreateDatabaseDocument,
     "\n  mutation UpdateDatabase($id: ID!, $input: UpdateDatabaseInput!) {\n    updateDatabase(id: $id, input: $input) {\n      id\n    }\n  }\n": typeof types.UpdateDatabaseDocument,
     "\n  mutation DeleteDatabase($id: ID!) {\n    deleteDatabase(id: $id)\n  }\n": typeof types.DeleteDatabaseDocument,
@@ -41,27 +52,30 @@ type Documents = {
     "\n  query QuestionsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor,\n    $query: String,\n    $difficulty: QuestionDifficulty\n  ) {\n    questions(\n      first: $first,\n      after: $after,\n      last: $last,\n      before: $before,\n      where: {\n        or: [\n          { titleContains: $query },\n          { categoryContains: $query },\n          { descriptionContains: $query },\n        ],\n        difficulty: $difficulty,\n      },\n    ) {\n      edges {\n        node {\n          id\n          title\n          description\n          category\n          difficulty\n          referenceAnswer\n          database {\n            id\n            slug\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": typeof types.QuestionsTableDocument,
     "\n  fragment QuestionUpdateForm on Query {\n    databases {\n      id\n      slug\n    }\n\n    questionCategories\n  }\n": typeof types.QuestionUpdateFormFragmentDoc,
     "\n  query UpdateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n": typeof types.UpdateQuestionDialogContentDocument,
-    "\n  query GroupAuditInfo($id: ID!) {\n    group(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GroupAuditInfoDocument,
+    "\n  fragment GroupAuditInfoCard on Group {\n    createdAt\n    updatedAt\n  }\n": typeof types.GroupAuditInfoCardFragmentDoc,
+    "\n  query GroupCards($id: ID!) {\n    group(id: $id) {\n      id\n      ...GroupAuditInfoCard\n      ...GroupScopeCard\n    }\n  }\n": typeof types.GroupCardsDocument,
     "\n  query GroupHeader($id: ID!) {\n    group(id: $id) {\n      id\n      name\n      description\n    }\n  }\n": typeof types.GroupHeaderDocument,
     "\n  query GroupMembers($id: ID!) {\n    users(where: { hasGroupWith: { id: $id } }) {\n      totalCount\n    }\n  }\n": typeof types.GroupMembersDocument,
-    "\n  query GroupScopes($id: ID!) {\n    group(id: $id) {\n      id\n      scopeSets {\n        id\n        slug\n        scopes\n      }\n    }\n  }\n": typeof types.GroupScopesDocument,
+    "\n  fragment GroupScopeCard on Group {\n    scopeSets {\n      id\n      slug\n      scopes\n    }\n  }\n": typeof types.GroupScopeCardFragmentDoc,
     "\n  mutation CreateGroup($input: CreateGroupInput!) {\n    createGroup(input: $input) {\n      id\n    }\n  }\n": typeof types.CreateGroupDocument,
     "\n  mutation UpdateGroup($id: ID!, $input: UpdateGroupInput!) {\n    updateGroup(id: $id, input: $input) {\n      id\n    }\n  }\n": typeof types.UpdateGroupDocument,
     "\n  mutation DeleteGroup($id: ID!) {\n    deleteGroup(id: $id)\n  }\n": typeof types.DeleteGroupDocument,
     "\n  query GroupsTable {\n    groups {\n      id\n      name\n      description\n      scopeSets {\n        id\n        slug\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GroupsTableDocument,
     "\n  query GroupById($id: ID!) {\n    group(id: $id) {\n      id\n      name\n      description\n      scopeSets {\n        id\n        slug\n      }\n    }\n  }\n": typeof types.GroupByIdDocument,
     "\n  query ScopeSetList {\n    scopeSets {\n      id\n      slug\n    }\n  }\n": typeof types.ScopeSetListDocument,
-    "\n  query ScopeSetHeader($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      slug\n      description\n    }\n  }\n": typeof types.ScopeSetHeaderDocument,
-    "\n  query ScopeSetScopes($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      scopes\n    }\n  }\n": typeof types.ScopeSetScopesDocument,
     "\n  query GroupsWithScopeSet {\n    groups {\n      id\n      name\n      scopeSets {\n        id\n      }\n    }\n  }\n": typeof types.GroupsWithScopeSetDocument,
+    "\n  query ScopeSetHeader($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      slug\n      description\n    }\n  }\n": typeof types.ScopeSetHeaderDocument,
+    "\n  fragment ScopeSetScopesCard on ScopeSet {\n    scopes\n  }\n": typeof types.ScopeSetScopesCardFragmentDoc,
+    "\n  query ScopeSetCards($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      ...ScopeSetScopesCard\n    }\n  }\n": typeof types.ScopeSetCardsDocument,
     "\n  mutation CreateScopeSet($input: CreateScopeSetInput!) {\n    createScopeSet(input: $input) {\n      id\n    }\n  }\n": typeof types.CreateScopeSetDocument,
     "\n  mutation UpdateScopeSet($id: ID!, $input: UpdateScopeSetInput!) {\n    updateScopeSet(id: $id, input: $input) {\n      id\n    }\n  }\n": typeof types.UpdateScopeSetDocument,
     "\n  mutation DeleteScopeSet($id: ID!) {\n    deleteScopeSet(id: $id)\n  }\n": typeof types.DeleteScopeSetDocument,
     "\n  query ScopeSetTable {\n    scopeSets {\n      id\n      slug\n      description\n      scopes\n    }\n  }\n": typeof types.ScopeSetTableDocument,
     "\n  query ScopeSetById($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      slug\n      description\n      scopes\n    }\n  }\n": typeof types.ScopeSetByIdDocument,
+    "\n  fragment UserAuditInfoCard on User {\n    createdAt\n    updatedAt\n  }\n": typeof types.UserAuditInfoCardFragmentDoc,
+    "\n  fragment UserGroupsCard on User {\n    group {\n      id\n      name\n    }\n  }\n": typeof types.UserGroupsCardFragmentDoc,
     "\n  query UserHeader($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n      avatar\n    }\n  }\n": typeof types.UserHeaderDocument,
-    "\n  query UserGroups($id: ID!) {\n    user(id: $id) {\n      id\n      group {\n        id\n        name\n      }\n    }\n  }\n": typeof types.UserGroupsDocument,
-    "\n  query UserAuditInfo($id: ID!) {\n    user(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.UserAuditInfoDocument,
+    "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      id\n      ...UserGroupsCard\n      ...UserAuditInfoCard\n    }\n  }\n": typeof types.UserCardsDocument,
     "\n  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {\n    updateUser(id: $id, input: $input) {\n      id\n    }\n  }\n": typeof types.UpdateUserDocument,
     "\n  mutation DeleteUser($id: ID!) {\n    deleteUser(id: $id)\n  }\n": typeof types.DeleteUserDocument,
     "\n  mutation LogoutUserDevices($userID: ID!) {\n    logoutUser(userID: $userID)\n  }\n": typeof types.LogoutUserDevicesDocument,
@@ -83,11 +97,22 @@ type Documents = {
 const documents: Documents = {
     "\n    query EventById($id: ID!) {\n      event(id: $id) {\n        id\n        user {\n          id\n          name\n        }\n        type\n        payload\n        triggeredAt\n      }\n    }\n": types.EventByIdDocument,
     "\n  query EventsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: EventWhereInput\n  ) {\n    events(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: TRIGGERED_AT, direction: DESC }) {\n      edges {\n        node {\n          id\n          user {\n            id\n            name\n          }\n          type\n          triggeredAt\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": types.EventsTableDocument,
-    "\n  query PointById($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      user {\n        id\n        name\n      }\n      points\n      description\n      grantedAt\n    }\n  }\n": types.PointByIdDocument,
+    "\n  query PointHeader($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      points\n      grantedAt\n    }\n  }\n": types.PointHeaderDocument,
+    "\n  query PointCards($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      ...PointDetailsCard\n      ...PointUserCard\n    }\n  }\n": types.PointCardsDocument,
+    "\n  fragment PointDetailsCard on Point {\n    points\n    description\n    grantedAt\n  }\n": types.PointDetailsCardFragmentDoc,
+    "\n  fragment PointUserCard on Point {\n    user {\n      id\n      name\n    }\n  }\n": types.PointUserCardFragmentDoc,
     "\n  query PointsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: PointWhereInput\n  ) {\n    points(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: GRANTED_AT, direction: DESC }) {\n      edges {\n        node {\n          id\n          user {\n            id\n            name\n          }\n          points\n          description\n          grantedAt\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": types.PointsTableDocument,
-    "\n  query SubmissionById($id: ID!) {\n    submission(id: $id) {\n      id\n      user {\n        id\n        name\n      }\n      queryResult {\n        columns\n        rows\n        matchAnswer\n      }\n      question {\n          id\n      }\n      error\n      submittedCode\n      status\n      submittedAt\n    }\n  }\n": types.SubmissionByIdDocument,
+    "\n  query SubmissionHeader($id: ID!) {\n    submission(id: $id) {\n      id\n      status\n      submittedAt\n    }\n  }\n": types.SubmissionHeaderDocument,
+    "\n  fragment SubmissionResultCard on Submission {\n    queryResult {\n      columns\n      rows\n      matchAnswer\n    }\n    question {\n      id\n    }\n  }\n": types.SubmissionResultCardFragmentDoc,
+    "\n  query SubmissionCards($id: ID!) {\n    submission(id: $id) {\n      id\n      ...SubmissionDetailsCard\n      ...SubmissionUserCard\n      ...SubmissionResultCard\n    }\n  }\n": types.SubmissionCardsDocument,
+    "\n  fragment SubmissionDetailsCard on Submission {\n    submittedCode\n    error\n  }\n": types.SubmissionDetailsCardFragmentDoc,
+    "\n  fragment SubmissionUserCard on Submission {\n    user {\n      id\n      name\n    }\n  }\n": types.SubmissionUserCardFragmentDoc,
     "\n  query SubmissionsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n  ) {\n    submissions(first: $first, after: $after, last: $last, before: $before, orderBy: { field: SUBMITTED_AT, direction: DESC }) {\n      edges {\n        node {\n          id\n          submittedCode\n          status\n          user {\n            id\n            name\n          }\n          question {\n            id\n            title\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": types.SubmissionsTableDocument,
-    "\n  query DatabaseDetail($id: ID!) {\n    database(id: $id) {\n      id\n      slug\n      description\n      schema\n      relationFigure\n    }\n  }\n": types.DatabaseDetailDocument,
+    "\n  query DatabaseCards($id: ID!) {\n    database(id: $id) {\n      id\n      ...DatabaseDescriptionCard\n      ...DatabaseRelationCard\n      ...DatabaseSchemaCard\n    }\n  }\n": types.DatabaseCardsDocument,
+    "\n  fragment DatabaseDescriptionCard on Database {\n    description\n  }\n": types.DatabaseDescriptionCardFragmentDoc,
+    "\n  query DatabaseHeader($id: ID!) {\n    database(id: $id) {\n      id\n      slug\n      description\n    }\n  }\n": types.DatabaseHeaderDocument,
+    "\n  fragment DatabaseRelationCard on Database {\n    relationFigure\n  }\n": types.DatabaseRelationCardFragmentDoc,
+    "\n  fragment DatabaseSchemaCard on Database {\n    schema\n  }\n": types.DatabaseSchemaCardFragmentDoc,
     "\n  mutation CreateDatabase($input: CreateDatabaseInput!) {\n    createDatabase(input: $input) {\n      id\n    }\n  }\n": types.CreateDatabaseDocument,
     "\n  mutation UpdateDatabase($id: ID!, $input: UpdateDatabaseInput!) {\n    updateDatabase(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateDatabaseDocument,
     "\n  mutation DeleteDatabase($id: ID!) {\n    deleteDatabase(id: $id)\n  }\n": types.DeleteDatabaseDocument,
@@ -108,27 +133,30 @@ const documents: Documents = {
     "\n  query QuestionsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor,\n    $query: String,\n    $difficulty: QuestionDifficulty\n  ) {\n    questions(\n      first: $first,\n      after: $after,\n      last: $last,\n      before: $before,\n      where: {\n        or: [\n          { titleContains: $query },\n          { categoryContains: $query },\n          { descriptionContains: $query },\n        ],\n        difficulty: $difficulty,\n      },\n    ) {\n      edges {\n        node {\n          id\n          title\n          description\n          category\n          difficulty\n          referenceAnswer\n          database {\n            id\n            slug\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": types.QuestionsTableDocument,
     "\n  fragment QuestionUpdateForm on Query {\n    databases {\n      id\n      slug\n    }\n\n    questionCategories\n  }\n": types.QuestionUpdateFormFragmentDoc,
     "\n  query UpdateQuestionDialogContent {\n    ...QuestionUpdateForm\n  }\n": types.UpdateQuestionDialogContentDocument,
-    "\n  query GroupAuditInfo($id: ID!) {\n    group(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n": types.GroupAuditInfoDocument,
+    "\n  fragment GroupAuditInfoCard on Group {\n    createdAt\n    updatedAt\n  }\n": types.GroupAuditInfoCardFragmentDoc,
+    "\n  query GroupCards($id: ID!) {\n    group(id: $id) {\n      id\n      ...GroupAuditInfoCard\n      ...GroupScopeCard\n    }\n  }\n": types.GroupCardsDocument,
     "\n  query GroupHeader($id: ID!) {\n    group(id: $id) {\n      id\n      name\n      description\n    }\n  }\n": types.GroupHeaderDocument,
     "\n  query GroupMembers($id: ID!) {\n    users(where: { hasGroupWith: { id: $id } }) {\n      totalCount\n    }\n  }\n": types.GroupMembersDocument,
-    "\n  query GroupScopes($id: ID!) {\n    group(id: $id) {\n      id\n      scopeSets {\n        id\n        slug\n        scopes\n      }\n    }\n  }\n": types.GroupScopesDocument,
+    "\n  fragment GroupScopeCard on Group {\n    scopeSets {\n      id\n      slug\n      scopes\n    }\n  }\n": types.GroupScopeCardFragmentDoc,
     "\n  mutation CreateGroup($input: CreateGroupInput!) {\n    createGroup(input: $input) {\n      id\n    }\n  }\n": types.CreateGroupDocument,
     "\n  mutation UpdateGroup($id: ID!, $input: UpdateGroupInput!) {\n    updateGroup(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateGroupDocument,
     "\n  mutation DeleteGroup($id: ID!) {\n    deleteGroup(id: $id)\n  }\n": types.DeleteGroupDocument,
     "\n  query GroupsTable {\n    groups {\n      id\n      name\n      description\n      scopeSets {\n        id\n        slug\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": types.GroupsTableDocument,
     "\n  query GroupById($id: ID!) {\n    group(id: $id) {\n      id\n      name\n      description\n      scopeSets {\n        id\n        slug\n      }\n    }\n  }\n": types.GroupByIdDocument,
     "\n  query ScopeSetList {\n    scopeSets {\n      id\n      slug\n    }\n  }\n": types.ScopeSetListDocument,
-    "\n  query ScopeSetHeader($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      slug\n      description\n    }\n  }\n": types.ScopeSetHeaderDocument,
-    "\n  query ScopeSetScopes($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      scopes\n    }\n  }\n": types.ScopeSetScopesDocument,
     "\n  query GroupsWithScopeSet {\n    groups {\n      id\n      name\n      scopeSets {\n        id\n      }\n    }\n  }\n": types.GroupsWithScopeSetDocument,
+    "\n  query ScopeSetHeader($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      slug\n      description\n    }\n  }\n": types.ScopeSetHeaderDocument,
+    "\n  fragment ScopeSetScopesCard on ScopeSet {\n    scopes\n  }\n": types.ScopeSetScopesCardFragmentDoc,
+    "\n  query ScopeSetCards($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      ...ScopeSetScopesCard\n    }\n  }\n": types.ScopeSetCardsDocument,
     "\n  mutation CreateScopeSet($input: CreateScopeSetInput!) {\n    createScopeSet(input: $input) {\n      id\n    }\n  }\n": types.CreateScopeSetDocument,
     "\n  mutation UpdateScopeSet($id: ID!, $input: UpdateScopeSetInput!) {\n    updateScopeSet(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateScopeSetDocument,
     "\n  mutation DeleteScopeSet($id: ID!) {\n    deleteScopeSet(id: $id)\n  }\n": types.DeleteScopeSetDocument,
     "\n  query ScopeSetTable {\n    scopeSets {\n      id\n      slug\n      description\n      scopes\n    }\n  }\n": types.ScopeSetTableDocument,
     "\n  query ScopeSetById($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      slug\n      description\n      scopes\n    }\n  }\n": types.ScopeSetByIdDocument,
+    "\n  fragment UserAuditInfoCard on User {\n    createdAt\n    updatedAt\n  }\n": types.UserAuditInfoCardFragmentDoc,
+    "\n  fragment UserGroupsCard on User {\n    group {\n      id\n      name\n    }\n  }\n": types.UserGroupsCardFragmentDoc,
     "\n  query UserHeader($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n      avatar\n    }\n  }\n": types.UserHeaderDocument,
-    "\n  query UserGroups($id: ID!) {\n    user(id: $id) {\n      id\n      group {\n        id\n        name\n      }\n    }\n  }\n": types.UserGroupsDocument,
-    "\n  query UserAuditInfo($id: ID!) {\n    user(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n": types.UserAuditInfoDocument,
+    "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      id\n      ...UserGroupsCard\n      ...UserAuditInfoCard\n    }\n  }\n": types.UserCardsDocument,
     "\n  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {\n    updateUser(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateUserDocument,
     "\n  mutation DeleteUser($id: ID!) {\n    deleteUser(id: $id)\n  }\n": types.DeleteUserDocument,
     "\n  mutation LogoutUserDevices($userID: ID!) {\n    logoutUser(userID: $userID)\n  }\n": types.LogoutUserDevicesDocument,
@@ -173,7 +201,19 @@ export function graphql(source: "\n  query EventsTable(\n    $first: Int\n    $a
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query PointById($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      user {\n        id\n        name\n      }\n      points\n      description\n      grantedAt\n    }\n  }\n"): (typeof documents)["\n  query PointById($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      user {\n        id\n        name\n      }\n      points\n      description\n      grantedAt\n    }\n  }\n"];
+export function graphql(source: "\n  query PointHeader($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      points\n      grantedAt\n    }\n  }\n"): (typeof documents)["\n  query PointHeader($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      points\n      grantedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query PointCards($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      ...PointDetailsCard\n      ...PointUserCard\n    }\n  }\n"): (typeof documents)["\n  query PointCards($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      ...PointDetailsCard\n      ...PointUserCard\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment PointDetailsCard on Point {\n    points\n    description\n    grantedAt\n  }\n"): (typeof documents)["\n  fragment PointDetailsCard on Point {\n    points\n    description\n    grantedAt\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment PointUserCard on Point {\n    user {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  fragment PointUserCard on Point {\n    user {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -181,7 +221,23 @@ export function graphql(source: "\n  query PointsTable(\n    $first: Int\n    $a
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query SubmissionById($id: ID!) {\n    submission(id: $id) {\n      id\n      user {\n        id\n        name\n      }\n      queryResult {\n        columns\n        rows\n        matchAnswer\n      }\n      question {\n          id\n      }\n      error\n      submittedCode\n      status\n      submittedAt\n    }\n  }\n"): (typeof documents)["\n  query SubmissionById($id: ID!) {\n    submission(id: $id) {\n      id\n      user {\n        id\n        name\n      }\n      queryResult {\n        columns\n        rows\n        matchAnswer\n      }\n      question {\n          id\n      }\n      error\n      submittedCode\n      status\n      submittedAt\n    }\n  }\n"];
+export function graphql(source: "\n  query SubmissionHeader($id: ID!) {\n    submission(id: $id) {\n      id\n      status\n      submittedAt\n    }\n  }\n"): (typeof documents)["\n  query SubmissionHeader($id: ID!) {\n    submission(id: $id) {\n      id\n      status\n      submittedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment SubmissionResultCard on Submission {\n    queryResult {\n      columns\n      rows\n      matchAnswer\n    }\n    question {\n      id\n    }\n  }\n"): (typeof documents)["\n  fragment SubmissionResultCard on Submission {\n    queryResult {\n      columns\n      rows\n      matchAnswer\n    }\n    question {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query SubmissionCards($id: ID!) {\n    submission(id: $id) {\n      id\n      ...SubmissionDetailsCard\n      ...SubmissionUserCard\n      ...SubmissionResultCard\n    }\n  }\n"): (typeof documents)["\n  query SubmissionCards($id: ID!) {\n    submission(id: $id) {\n      id\n      ...SubmissionDetailsCard\n      ...SubmissionUserCard\n      ...SubmissionResultCard\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment SubmissionDetailsCard on Submission {\n    submittedCode\n    error\n  }\n"): (typeof documents)["\n  fragment SubmissionDetailsCard on Submission {\n    submittedCode\n    error\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment SubmissionUserCard on Submission {\n    user {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  fragment SubmissionUserCard on Submission {\n    user {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -189,7 +245,23 @@ export function graphql(source: "\n  query SubmissionsTable(\n    $first: Int\n 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query DatabaseDetail($id: ID!) {\n    database(id: $id) {\n      id\n      slug\n      description\n      schema\n      relationFigure\n    }\n  }\n"): (typeof documents)["\n  query DatabaseDetail($id: ID!) {\n    database(id: $id) {\n      id\n      slug\n      description\n      schema\n      relationFigure\n    }\n  }\n"];
+export function graphql(source: "\n  query DatabaseCards($id: ID!) {\n    database(id: $id) {\n      id\n      ...DatabaseDescriptionCard\n      ...DatabaseRelationCard\n      ...DatabaseSchemaCard\n    }\n  }\n"): (typeof documents)["\n  query DatabaseCards($id: ID!) {\n    database(id: $id) {\n      id\n      ...DatabaseDescriptionCard\n      ...DatabaseRelationCard\n      ...DatabaseSchemaCard\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment DatabaseDescriptionCard on Database {\n    description\n  }\n"): (typeof documents)["\n  fragment DatabaseDescriptionCard on Database {\n    description\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query DatabaseHeader($id: ID!) {\n    database(id: $id) {\n      id\n      slug\n      description\n    }\n  }\n"): (typeof documents)["\n  query DatabaseHeader($id: ID!) {\n    database(id: $id) {\n      id\n      slug\n      description\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment DatabaseRelationCard on Database {\n    relationFigure\n  }\n"): (typeof documents)["\n  fragment DatabaseRelationCard on Database {\n    relationFigure\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment DatabaseSchemaCard on Database {\n    schema\n  }\n"): (typeof documents)["\n  fragment DatabaseSchemaCard on Database {\n    schema\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -273,7 +345,11 @@ export function graphql(source: "\n  query UpdateQuestionDialogContent {\n    ..
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GroupAuditInfo($id: ID!) {\n    group(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GroupAuditInfo($id: ID!) {\n    group(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n"];
+export function graphql(source: "\n  fragment GroupAuditInfoCard on Group {\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment GroupAuditInfoCard on Group {\n    createdAt\n    updatedAt\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GroupCards($id: ID!) {\n    group(id: $id) {\n      id\n      ...GroupAuditInfoCard\n      ...GroupScopeCard\n    }\n  }\n"): (typeof documents)["\n  query GroupCards($id: ID!) {\n    group(id: $id) {\n      id\n      ...GroupAuditInfoCard\n      ...GroupScopeCard\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -285,7 +361,7 @@ export function graphql(source: "\n  query GroupMembers($id: ID!) {\n    users(w
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GroupScopes($id: ID!) {\n    group(id: $id) {\n      id\n      scopeSets {\n        id\n        slug\n        scopes\n      }\n    }\n  }\n"): (typeof documents)["\n  query GroupScopes($id: ID!) {\n    group(id: $id) {\n      id\n      scopeSets {\n        id\n        slug\n        scopes\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  fragment GroupScopeCard on Group {\n    scopeSets {\n      id\n      slug\n      scopes\n    }\n  }\n"): (typeof documents)["\n  fragment GroupScopeCard on Group {\n    scopeSets {\n      id\n      slug\n      scopes\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -313,15 +389,19 @@ export function graphql(source: "\n  query ScopeSetList {\n    scopeSets {\n    
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  query GroupsWithScopeSet {\n    groups {\n      id\n      name\n      scopeSets {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  query GroupsWithScopeSet {\n    groups {\n      id\n      name\n      scopeSets {\n        id\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query ScopeSetHeader($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      slug\n      description\n    }\n  }\n"): (typeof documents)["\n  query ScopeSetHeader($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      slug\n      description\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query ScopeSetScopes($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      scopes\n    }\n  }\n"): (typeof documents)["\n  query ScopeSetScopes($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      scopes\n    }\n  }\n"];
+export function graphql(source: "\n  fragment ScopeSetScopesCard on ScopeSet {\n    scopes\n  }\n"): (typeof documents)["\n  fragment ScopeSetScopesCard on ScopeSet {\n    scopes\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GroupsWithScopeSet {\n    groups {\n      id\n      name\n      scopeSets {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  query GroupsWithScopeSet {\n    groups {\n      id\n      name\n      scopeSets {\n        id\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query ScopeSetCards($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      ...ScopeSetScopesCard\n    }\n  }\n"): (typeof documents)["\n  query ScopeSetCards($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      ...ScopeSetScopesCard\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -345,15 +425,19 @@ export function graphql(source: "\n  query ScopeSetById($id: ID!) {\n    scopeSe
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  fragment UserAuditInfoCard on User {\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment UserAuditInfoCard on User {\n    createdAt\n    updatedAt\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment UserGroupsCard on User {\n    group {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  fragment UserGroupsCard on User {\n    group {\n      id\n      name\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query UserHeader($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n      avatar\n    }\n  }\n"): (typeof documents)["\n  query UserHeader($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n      avatar\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query UserGroups($id: ID!) {\n    user(id: $id) {\n      id\n      group {\n        id\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query UserGroups($id: ID!) {\n    user(id: $id) {\n      id\n      group {\n        id\n        name\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query UserAuditInfo($id: ID!) {\n    user(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query UserAuditInfo($id: ID!) {\n    user(id: $id) {\n      id\n      createdAt\n      updatedAt\n    }\n  }\n"];
+export function graphql(source: "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      id\n      ...UserGroupsCard\n      ...UserAuditInfoCard\n    }\n  }\n"): (typeof documents)["\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      id\n      ...UserGroupsCard\n      ...UserAuditInfoCard\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

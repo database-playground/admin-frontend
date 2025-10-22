@@ -3,9 +3,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DeleteScopeSetButtonTrigger } from "../_components/delete";
 import { UpdateScopeSetButtonTrigger } from "../_components/update";
-import { GroupsCard } from "./_components/groups";
 import { Header } from "./_components/header";
-import { ScopesCard } from "./_components/scopes";
+import { ScopeSetCards } from "./_components/scopeset-cards";
 
 export const metadata: Metadata = {
   title: "權限集資訊",
@@ -35,17 +34,9 @@ export default async function ScopeSetPage({
             <DeleteScopeSetButtonTrigger id={id as string} />
           </div>
         </div>
-        <div
-          className={`
-            grid grid-cols-1 gap-4
-            lg:grid-cols-2
-          `}
-        >
-          <Suspense>
-            <ScopesCard id={id as string} />
-            <GroupsCard id={id as string} />
-          </Suspense>
-        </div>
+        <Suspense>
+          <ScopeSetCards id={id as string} />
+        </Suspense>
       </main>
     </>
   );

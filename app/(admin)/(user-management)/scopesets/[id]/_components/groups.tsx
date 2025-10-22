@@ -2,9 +2,21 @@
 
 import { CardLayout } from "@/components/card-layout";
 import { Badge } from "@/components/ui/badge";
+import { graphql } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import Link from "next/link";
-import { GROUPS_WITH_SCOPE_SET_QUERY } from "./query";
+
+const GROUPS_WITH_SCOPE_SET_QUERY = graphql(`
+  query GroupsWithScopeSet {
+    groups {
+      id
+      name
+      scopeSets {
+        id
+      }
+    }
+  }
+`);
 
 export function GroupsCard({ id }: { id: string }) {
   const { data } = useSuspenseQuery(GROUPS_WITH_SCOPE_SET_QUERY);

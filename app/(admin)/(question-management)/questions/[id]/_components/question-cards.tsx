@@ -1,10 +1,10 @@
 "use client";
 
 import { graphql } from "@/gql";
-import { DescriptionCard } from "./description-card";
-import { DatabaseCard } from "./database-card";
-import { AnswerCard } from "./answer-card";
 import { useSuspenseQuery } from "@apollo/client/react";
+import { AnswerCard } from "./answer-card";
+import { DatabaseCard } from "./database-card";
+import { DescriptionCard } from "./description-card";
 
 const QUESTION_CARDS_QUERY = graphql(`
   query QuestionCards($id: ID!) {

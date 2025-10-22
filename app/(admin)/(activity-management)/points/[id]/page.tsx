@@ -2,8 +2,7 @@ import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Header } from "./_components/header";
-import { PointDetailsCard } from "./_components/point-details-card";
-import { UserCard } from "./_components/user-card";
+import { PointCards } from "./_components/point-cards";
 
 export const metadata: Metadata = {
   title: "積分記錄詳情",
@@ -28,17 +27,9 @@ export default async function PointPage({
         <div className="flex items-center justify-between space-y-2">
           <Header id={id as string} />
         </div>
-        <div
-          className={`
-            grid grid-cols-1 gap-4
-            lg:grid-cols-2
-          `}
-        >
-          <Suspense>
-            <PointDetailsCard id={id as string} />
-            <UserCard id={id as string} />
-          </Suspense>
-        </div>
+        <Suspense>
+          <PointCards id={id as string} />
+        </Suspense>
       </main>
     </>
   );

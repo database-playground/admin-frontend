@@ -2,19 +2,25 @@
 
 import { CardLayout } from "@/components/card-layout";
 import { StyledLink } from "@/components/ui/link";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { USER_GROUP_QUERY } from "./query";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 
-export function GroupsCard({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(USER_GROUP_QUERY, {
-    variables: { id },
-  });
+const USER_GROUPS_CARD_FRAGMENT = graphql(`
+  fragment UserGroupsCard on User {
+    group {
+      id
+      name
+    }
+  }
+`);
+
+export function GroupsCard({ fragment }: { fragment: FragmentType<typeof USER_GROUPS_CARD_FRAGMENT> }) {
+  const { group } = useFragment(USER_GROUPS_CARD_FRAGMENT, fragment);
 
   return (
     <CardLayout title="所屬群組" description="這個使用者所屬的群組。">
-      <p>{data.user.group?.name}</p>
+      <p>{group?.name}</p>
       <p className="text-sm text-muted-foreground">
-        <StyledLink href={`/groups/${data.user.group?.id}`}>
+        <StyledLink href={`/groups/${group?.id}`}>
           詳細資訊和權限 →
         </StyledLink>
       </p>

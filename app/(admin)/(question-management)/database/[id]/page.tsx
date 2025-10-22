@@ -3,10 +3,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DeleteDatabaseButtonTrigger } from "../_components/delete";
 import { UpdateDatabaseButtonTrigger } from "../_components/update";
-import { DescriptionCard } from "./_components/description-card";
+import { DatabaseCards } from "./_components/database-cards";
 import { Header } from "./_components/header";
-import { RelationCard } from "./_components/relation-card";
-import { SchemaCard } from "./_components/schema-card";
 
 export const metadata: Metadata = {
   title: "資料庫資訊",
@@ -36,18 +34,9 @@ export default async function DatabasePage({
             <DeleteDatabaseButtonTrigger id={id as string} />
           </div>
         </div>
-        <div
-          className={`
-            grid grid-cols-1 gap-4
-            lg:grid-cols-2
-          `}
-        >
-          <Suspense>
-            <DescriptionCard id={id as string} />
-            <RelationCard id={id as string} />
-            <SchemaCard id={id as string} />
-          </Suspense>
-        </div>
+        <Suspense>
+          <DatabaseCards id={id as string} />
+        </Suspense>
       </main>
     </>
   );

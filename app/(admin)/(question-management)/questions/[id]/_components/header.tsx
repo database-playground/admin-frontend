@@ -1,10 +1,10 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { graphql } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { Suspense } from "react";
 import { Remark } from "react-remark";
-import { graphql } from "@/gql";
 
 export function Header({ id }: { id: string }) {
   return (

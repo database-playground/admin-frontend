@@ -1,9 +1,19 @@
 "use client";
 
 import PageHeader, { PageHeaderSkeleton } from "@/components/page-header";
+import { graphql } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { Suspense } from "react";
-import { DATABASE_DETAIL_QUERY } from "./query";
+
+const DATABASE_HEADER_QUERY = graphql(`
+  query DatabaseHeader($id: ID!) {
+    database(id: $id) {
+      id
+      slug
+      description
+    }
+  }
+`);
 
 export function Header({ id }: { id: string }) {
   return (
@@ -14,7 +24,7 @@ export function Header({ id }: { id: string }) {
 }
 
 function HeaderMain({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(DATABASE_DETAIL_QUERY, {
+  const { data } = useSuspenseQuery(DATABASE_HEADER_QUERY, {
     variables: { id },
   });
 

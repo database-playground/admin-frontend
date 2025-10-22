@@ -4,22 +4,29 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StyledLink } from "@/components/ui/link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useSuspenseQuery } from "@apollo/client/react";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 import { AlertTriangle } from "lucide-react";
-import { SUBMISSION_BY_ID_QUERY } from "./query";
+
+const SUBMISSION_RESULT_CARD_FRAGMENT = graphql(`
+  fragment SubmissionResultCard on Submission {
+    queryResult {
+      columns
+      rows
+      matchAnswer
+    }
+    question {
+      id
+    }
+  }
+`);
 
 interface ResultCardProps {
-  id: string;
+  fragment: FragmentType<typeof SUBMISSION_RESULT_CARD_FRAGMENT>;
 }
 
-export function ResultCard({ id }: ResultCardProps) {
-  const { data } = useSuspenseQuery(SUBMISSION_BY_ID_QUERY, {
-    variables: { id },
-  });
-
-  const submission = data.submission;
-  const question = submission.question;
-  const queryResult = submission.queryResult;
+export function ResultCard({ fragment }: ResultCardProps) {
+  const submission = useFragment(SUBMISSION_RESULT_CARD_FRAGMENT, fragment);
+  const { queryResult, question } = submission;
 
   if (!queryResult) {
     return null;

@@ -2,9 +2,20 @@
 
 import AppAvatar from "@/components/avatar";
 import PageHeader, { PageHeaderSkeleton } from "@/components/page-header";
+import { graphql } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { Suspense } from "react";
-import { USER_HEADER_QUERY } from "./query";
+
+const USER_HEADER_QUERY = graphql(`
+  query UserHeader($id: ID!) {
+    user(id: $id) {
+      id
+      name
+      email
+      avatar
+    }
+  }
+`);
 
 export function Header({ id }: { id: string }) {
   return (

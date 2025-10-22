@@ -1,52 +1,51 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { DATABASE_DETAIL_QUERY } from "./query";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 
-export function RelationCard({ id }: { id: string }) {
-  return (
-    <CardLayout title="關係圖" description="資料庫表格關係圖">
-      <RelationFigure id={id} />
-    </CardLayout>
-  );
-}
+const DATABASE_RELATION_CARD_FRAGMENT = graphql(`
+  fragment DatabaseRelationCard on Database {
+    relationFigure
+  }
+`);
 
-function RelationFigure({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(DATABASE_DETAIL_QUERY, {
-    variables: { id },
-  });
-
-  const database = data.database;
+export function RelationCard({
+  fragment,
+}: {
+  fragment: FragmentType<typeof DATABASE_RELATION_CARD_FRAGMENT>;
+}) {
+  const { relationFigure } = useFragment(DATABASE_RELATION_CARD_FRAGMENT, fragment);
 
   // Check if the relation figure looks like a URL (basic check)
-  const isUrl = database.relationFigure.startsWith("http://")
-    || database.relationFigure.startsWith("https://");
-
-  if (isUrl) {
-    return (
-      <a href={database.relationFigure} aria-label="打開資料庫關係圖" target="_blank" rel="noopener noreferrer">
-        <picture>
-          <img
-            src={database.relationFigure}
-            alt="資料庫關係圖"
-            className="h-auto max-h-80 w-full rounded object-contain"
-          />
-        </picture>
-      </a>
-    );
-  }
+  const isUrl = relationFigure.startsWith("http://")
+    || relationFigure.startsWith("https://");
 
   return (
-    <div>
-      <pre
-        className={`
-          max-h-80 overflow-x-auto rounded-lg border bg-muted p-4 font-mono
-          text-sm whitespace-pre-wrap
-        `}
-      >
-        {database.relationFigure}
-      </pre>
-    </div>
+    <CardLayout title="關係圖" description="資料庫表格關係圖">
+      {isUrl
+        ? (
+          <a href={relationFigure} aria-label="打開資料庫關係圖" target="_blank" rel="noopener noreferrer">
+            <picture>
+              <img
+                src={relationFigure}
+                alt="資料庫關係圖"
+                className="h-auto max-h-80 w-full rounded object-contain"
+              />
+            </picture>
+          </a>
+        )
+        : (
+          <div>
+            <pre
+              className={`
+                max-h-80 overflow-x-auto rounded-lg border bg-muted p-4
+                font-mono text-sm whitespace-pre-wrap
+              `}
+            >
+              {relationFigure}
+            </pre>
+          </div>
+        )}
+    </CardLayout>
   );
 }

@@ -2,19 +2,23 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StyledLink } from "@/components/ui/link";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { SUBMISSION_BY_ID_QUERY } from "./query";
+import { type FragmentType, graphql, useFragment } from "@/gql";
+
+const SUBMISSION_USER_CARD_FRAGMENT = graphql(`
+  fragment SubmissionUserCard on Submission {
+    user {
+      id
+      name
+    }
+  }
+`);
 
 interface UserCardProps {
-  id: string;
+  fragment: FragmentType<typeof SUBMISSION_USER_CARD_FRAGMENT>;
 }
 
-export function UserCard({ id }: UserCardProps) {
-  const { data } = useSuspenseQuery(SUBMISSION_BY_ID_QUERY, {
-    variables: { id },
-  });
-
-  const submission = data.submission;
+export function UserCard({ fragment }: UserCardProps) {
+  const { user } = useFragment(SUBMISSION_USER_CARD_FRAGMENT, fragment);
 
   return (
     <Card>
@@ -24,10 +28,10 @@ export function UserCard({ id }: UserCardProps) {
       </CardHeader>
       <CardContent>
         <div className="mb-2">
-          {submission.user.name} (#{submission.user.id})
+          {user.name} (#{user.id})
         </div>
         <div className="text-sm text-muted-foreground">
-          <StyledLink href={`/users/${submission.user.id}`}>
+          <StyledLink href={`/users/${user.id}`}>
             檢視使用者資訊 →
           </StyledLink>
         </div>

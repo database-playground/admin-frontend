@@ -1,15 +1,25 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { graphql } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
-import { POINT_BY_ID_QUERY } from "./query";
+
+const POINT_HEADER_QUERY = graphql(`
+  query PointHeader($id: ID!) {
+    pointGrant(id: $id) {
+      id
+      points
+      grantedAt
+    }
+  }
+`);
 
 interface HeaderProps {
   id: string;
 }
 
 export function Header({ id }: HeaderProps) {
-  const { data } = useSuspenseQuery(POINT_BY_ID_QUERY, {
+  const { data } = useSuspenseQuery(POINT_HEADER_QUERY, {
     variables: { id },
   });
 

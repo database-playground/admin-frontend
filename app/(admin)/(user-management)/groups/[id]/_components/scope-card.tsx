@@ -3,15 +3,22 @@
 import { CardLayout } from "@/components/card-layout";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { GROUP_SCOPES_QUERY } from "./query";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 
-export function ScopeCard({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(GROUP_SCOPES_QUERY, {
-    variables: { id },
-  });
+const GROUP_SCOPE_CARD_FRAGMENT = graphql(`
+  fragment GroupScopeCard on Group {
+    scopeSets {
+      id
+      slug
+      scopes
+    }
+  }
+`);
 
-  const permissionsList = data.group.scopeSets
+export function ScopeCard({ fragment }: { fragment: FragmentType<typeof GROUP_SCOPE_CARD_FRAGMENT> }) {
+  const { scopeSets } = useFragment(GROUP_SCOPE_CARD_FRAGMENT, fragment);
+
+  const permissionsList = scopeSets
     ?.map((scopeSet) => {
       return scopeSet.scopes.map((scope) => {
         return {

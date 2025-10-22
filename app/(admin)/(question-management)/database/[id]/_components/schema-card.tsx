@@ -1,15 +1,33 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
-import { useSuspenseQuery } from "@apollo/client/react";
-import { DATABASE_DETAIL_QUERY } from "./query";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 
-export function SchemaCard({ id }: { id: string }) {
+const DATABASE_SCHEMA_CARD_FRAGMENT = graphql(`
+  fragment DatabaseSchemaCard on Database {
+    schema
+  }
+`);
+
+export function SchemaCard({
+  fragment,
+}: {
+  fragment: FragmentType<typeof DATABASE_SCHEMA_CARD_FRAGMENT>;
+}) {
+  const { schema } = useFragment(DATABASE_SCHEMA_CARD_FRAGMENT, fragment);
+
   return (
     <CardLayout title="資料結構" description="SQL DDL 建表語句">
       <div className="space-y-4">
         <div>
-          <Schema id={id} />
+          <pre
+            className={`
+              max-h-96 overflow-x-auto rounded-lg border bg-muted p-4 font-mono
+              text-xs whitespace-pre-wrap
+            `}
+          >
+            {schema}
+          </pre>
         </div>
 
         <div className="border-t pt-2">
@@ -19,24 +37,5 @@ export function SchemaCard({ id }: { id: string }) {
         </div>
       </div>
     </CardLayout>
-  );
-}
-
-function Schema({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(DATABASE_DETAIL_QUERY, {
-    variables: { id },
-  });
-
-  const database = data.database;
-
-  return (
-    <pre
-      className={`
-        max-h-96 overflow-x-auto rounded-lg border bg-muted p-4 font-mono
-        text-xs whitespace-pre-wrap
-      `}
-    >
-      {database.schema}
-    </pre>
   );
 }

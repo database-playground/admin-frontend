@@ -1,11 +1,22 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
-import { useSuspenseQuery } from "@apollo/client/react";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 import { Remark } from "react-remark";
-import { DATABASE_DETAIL_QUERY } from "./query";
 
-export function DescriptionCard({ id }: { id: string }) {
+const DATABASE_DESCRIPTION_CARD_FRAGMENT = graphql(`
+  fragment DatabaseDescriptionCard on Database {
+    description
+  }
+`);
+
+export function DescriptionCard({
+  fragment,
+}: {
+  fragment: FragmentType<typeof DATABASE_DESCRIPTION_CARD_FRAGMENT>;
+}) {
+  const { description } = useFragment(DATABASE_DESCRIPTION_CARD_FRAGMENT, fragment);
+
   return (
     <CardLayout title="資料表描述" description="這個資料表的簡單介紹。">
       <article
@@ -14,22 +25,10 @@ export function DescriptionCard({ id }: { id: string }) {
           dark:prose-invert
         `}
       >
-        <Description id={id} />
+        {!description
+          ? <p className="text-muted-foreground">無描述</p>
+          : <Remark>{description}</Remark>}
       </article>
     </CardLayout>
   );
-}
-
-function Description({ id }: { id: string }) {
-  const { data } = useSuspenseQuery(DATABASE_DETAIL_QUERY, {
-    variables: { id },
-  });
-
-  const database = data.database;
-
-  if (!database.description) {
-    return <p className="text-muted-foreground">無描述</p>;
-  }
-
-  return <Remark>{database.description ?? ""}</Remark>;
 }
