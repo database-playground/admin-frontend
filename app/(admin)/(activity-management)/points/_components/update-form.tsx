@@ -93,11 +93,16 @@ export function UpdatePointsForm({
               <Input {...field} placeholder="請輸入使用者 ID" />
             </FormControl>
             <FormDescription>
-              選擇要發放點數的使用者。可以到使用者管理頁面確認對應代號。<br />
-              {loading ? <Spinner className="mr-4 inline-block size-4" /> : null}
-              {userInfoData?.user
-                ? `您正要發放給：${userInfoData.user.name} (${userInfoData.user.email})`
-                : "您輸入的使用者 ID 不存在。"}
+              <div>
+                選擇要發放點數的使用者。可以到使用者管理頁面確認對應代號。
+              </div>
+
+              <div className="flex items-center gap-4">
+                {loading ? <Spinner className="mr-4 inline-block size-4" /> : null}
+                {userInfoData?.user
+                  ? `您正要發放給：${userInfoData.user.name} (${userInfoData.user.email})`
+                  : "您輸入的使用者 ID 不存在。"}
+              </div>
             </FormDescription>
             <FormMessage />
           </FormItem>

@@ -39,7 +39,7 @@ export const POINTS_TABLE_QUERY = graphql(`
   }
 `);
 
-const POINTS_TABLE_ROW_FRAGEMENT = graphql(`
+const POINTS_TABLE_ROW_FRAGMENT = graphql(`
   fragment PointsTableRow on Point {
     id
     user {
@@ -74,7 +74,7 @@ export function PointsDataTable({ query }: { query?: string }) {
       const node = edge?.node;
       if (!node) return null;
 
-      const point = readFragment(POINTS_TABLE_ROW_FRAGEMENT, node);
+      const point = readFragment(POINTS_TABLE_ROW_FRAGMENT, node);
 
       if (!point) return null;
       return {
