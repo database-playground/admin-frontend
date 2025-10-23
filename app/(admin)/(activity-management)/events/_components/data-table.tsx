@@ -18,7 +18,15 @@ export function EventsDataTable({ query }: { query?: string }) {
   const variables = {
     first: PAGE_SIZE,
     after,
-    where: query ? { typeContains: query } : undefined,
+    where: query
+      ? {
+        or: [
+          { typeContains: query },
+          { hasUserWith: [{ nameContains: query }] },
+          { hasUserWith: [{ emailContains: query }] },
+        ],
+      }
+      : undefined,
   } satisfies VariablesOf<typeof EVENTS_TABLE_QUERY>;
 
   const { data } = useSuspenseQuery(EVENTS_TABLE_QUERY, {

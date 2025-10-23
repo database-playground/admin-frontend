@@ -6,8 +6,9 @@ export const SUBMISSIONS_TABLE_QUERY = graphql(`
     $after: Cursor
     $last: Int
     $before: Cursor
+    $where: SubmissionWhereInput
   ) {
-    submissions(first: $first, after: $after, last: $last, before: $before, orderBy: { field: SUBMITTED_AT, direction: DESC }) {
+    submissions(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: SUBMITTED_AT, direction: DESC }) {
       edges {
         node {
           id
@@ -16,6 +17,7 @@ export const SUBMISSIONS_TABLE_QUERY = graphql(`
           user {
             id
             name
+            email
           }
           question {
             id

@@ -62,7 +62,15 @@ export function PointsDataTable({ query }: { query?: string }) {
   const variables = {
     first: PAGE_SIZE,
     after,
-    where: query ? { descriptionContains: query } : undefined,
+    where: query
+      ? {
+        or: [
+          { descriptionContains: query },
+          { hasUserWith: [{ nameContains: query }] },
+          { hasUserWith: [{ emailContains: query }] },
+        ],
+      }
+      : undefined,
   } satisfies VariablesOf<typeof POINTS_TABLE_QUERY>;
 
   const { data } = useSuspenseQuery(POINTS_TABLE_QUERY, {
