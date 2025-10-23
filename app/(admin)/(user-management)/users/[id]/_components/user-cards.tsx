@@ -4,6 +4,8 @@ import { graphql } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import { AuditInfoCard } from "./audit-info";
 import { GroupsCard } from "./groups";
+import { PointsCard } from "./points";
+import { QuestionsCard } from "./questions";
 
 const USER_CARDS_QUERY = graphql(`
   query UserCards($id: ID!) {
@@ -11,6 +13,8 @@ const USER_CARDS_QUERY = graphql(`
       id
       ...UserGroupsCard
       ...UserAuditInfoCard
+      ...UserPointsCard
+      ...UserQuestionsCard
     }
   }
 `);
@@ -31,6 +35,8 @@ export function UserCards({ id }: { id: string }) {
     >
       <GroupsCard fragment={fragment} />
       <AuditInfoCard fragment={fragment} />
+      <PointsCard fragment={fragment} />
+      <QuestionsCard fragment={fragment} />
     </div>
   );
 }
