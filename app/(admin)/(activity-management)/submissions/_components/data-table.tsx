@@ -30,6 +30,7 @@ export function SubmissionsDataTable({
       or: [
         { hasUserWith: [{ nameContains: query }] },
         { hasUserWith: [{ emailContains: query }] },
+        { hasQuestionWith: [{ titleContains: query }] },
       ],
       status: status === "all" ? undefined : status,
     },
