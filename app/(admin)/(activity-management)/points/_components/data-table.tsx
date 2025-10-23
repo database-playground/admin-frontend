@@ -6,7 +6,51 @@ import { useSuspenseQuery } from "@apollo/client/react";
 import type { VariablesOf } from "@graphql-typed-document-node/core";
 import { useState } from "react";
 import { columns, type Point } from "./data-table-columns";
-import { POINTS_TABLE_QUERY } from "./query";
+import { graphql, useFragment as readFragment } from "@/gql";
+
+const POINTS_TABLE_QUERY = graphql(`
+  query PointsTable(
+    $first: Int
+    $after: Cursor
+    $last: Int
+    $before: Cursor
+    $where: PointWhereInput
+  ) {
+    points(
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      where: $where
+      orderBy: { field: GRANTED_AT, direction: DESC }
+    ) {
+      edges {
+        node {
+          id
+          ...PointsTableRow
+        }
+      }
+      totalCount
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`);
+
+const POINTS_TABLE_ROW_FRAGEMENT = graphql(`
+  fragment PointsTableRow on Point {
+    id
+    user {
+      id
+      name
+    }
+    points
+    description
+    grantedAt
+  }
+`);
 
 export function PointsDataTable({ query }: { query?: string }) {
   const PAGE_SIZE = 20;
@@ -25,22 +69,27 @@ export function PointsDataTable({ query }: { query?: string }) {
     variables,
   });
 
-  const pointsList = data?.points.edges
-    ?.map((edge) => {
-      const point = edge?.node;
-      if (!point) return null;
-      return {
-        id: point.id,
-        user: {
-          id: point.user.id,
-          name: point.user.name,
-        },
-        points: point.points,
-        description: point.description ?? "",
-        grantedAt: point.grantedAt,
-      } satisfies Point;
-    })
-    .filter((point) => point !== null) ?? [];
+  const pointsList =
+    data?.points.edges
+      ?.map((edge) => {
+        const node = edge?.node;
+        if (!node) return null;
+
+        const point = readFragment(POINTS_TABLE_ROW_FRAGEMENT, node);
+
+        if (!point) return null;
+        return {
+          id: point.id,
+          user: {
+            id: point.user.id,
+            name: point.user.name,
+          },
+          points: point.points,
+          description: point.description ?? "",
+          grantedAt: point.grantedAt,
+        } satisfies Point;
+      })
+      .filter((point) => point !== null) ?? [];
 
   const pageInfo = data?.points.pageInfo;
 
@@ -48,7 +97,7 @@ export function PointsDataTable({ query }: { query?: string }) {
     if (!pageInfo) return;
     if (direction === "forward" && pageInfo.hasNextPage) {
       const nextCursor = pageInfo.endCursor ?? null;
-      setCursors(prev => {
+      setCursors((prev) => {
         const newCursors = prev.slice(0, currentIndex + 1);
         newCursors.push(nextCursor);
         return newCursors;
