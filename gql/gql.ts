@@ -20,8 +20,11 @@ type Documents = {
     "\n  query PointCards($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      ...PointDetailsCard\n      ...PointUserCard\n    }\n  }\n": typeof types.PointCardsDocument,
     "\n  fragment PointDetailsCard on Point {\n    points\n    description\n    grantedAt\n  }\n": typeof types.PointDetailsCardFragmentDoc,
     "\n  fragment PointUserCard on Point {\n    user {\n      id\n      name\n    }\n  }\n": typeof types.PointUserCardFragmentDoc,
+    "\n  mutation CreatePoint($input: CreatePointInput!) {\n    createPoint(input: $input) {\n      id\n    }\n  }\n": typeof types.CreatePointDocument,
+    "\n  query CreatePointDialogContent {\n    users(first: 100) {\n      edges {\n        node {\n          id\n          name\n          email\n        }\n      }\n    }\n  }\n": typeof types.CreatePointDialogContentDocument,
     "\n  query PointsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: PointWhereInput\n  ) {\n    points(\n      first: $first\n      after: $after\n      last: $last\n      before: $before\n      where: $where\n      orderBy: { field: GRANTED_AT, direction: DESC }\n    ) {\n      edges {\n        node {\n          id\n          ...PointsTableRow\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": typeof types.PointsTableDocument,
     "\n  fragment PointsTableRow on Point {\n    id\n    user {\n      id\n      name\n    }\n    points\n    description\n    grantedAt\n  }\n": typeof types.PointsTableRowFragmentDoc,
+    "\n  query UpdatePointsFormUserInfo($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n    }\n  }\n": typeof types.UpdatePointsFormUserInfoDocument,
     "\n  query SubmissionHeader($id: ID!) {\n    submission(id: $id) {\n      id\n      status\n      submittedAt\n    }\n  }\n": typeof types.SubmissionHeaderDocument,
     "\n  fragment SubmissionResultCard on Submission {\n    queryResult {\n      columns\n      rows\n      matchAnswer\n    }\n    question {\n      id\n    }\n  }\n": typeof types.SubmissionResultCardFragmentDoc,
     "\n  query SubmissionCards($id: ID!) {\n    submission(id: $id) {\n      id\n      ...SubmissionDetailsCard\n      ...SubmissionUserCard\n      ...SubmissionResultCard\n    }\n  }\n": typeof types.SubmissionCardsDocument,
@@ -103,8 +106,11 @@ const documents: Documents = {
     "\n  query PointCards($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      ...PointDetailsCard\n      ...PointUserCard\n    }\n  }\n": types.PointCardsDocument,
     "\n  fragment PointDetailsCard on Point {\n    points\n    description\n    grantedAt\n  }\n": types.PointDetailsCardFragmentDoc,
     "\n  fragment PointUserCard on Point {\n    user {\n      id\n      name\n    }\n  }\n": types.PointUserCardFragmentDoc,
+    "\n  mutation CreatePoint($input: CreatePointInput!) {\n    createPoint(input: $input) {\n      id\n    }\n  }\n": types.CreatePointDocument,
+    "\n  query CreatePointDialogContent {\n    users(first: 100) {\n      edges {\n        node {\n          id\n          name\n          email\n        }\n      }\n    }\n  }\n": types.CreatePointDialogContentDocument,
     "\n  query PointsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: PointWhereInput\n  ) {\n    points(\n      first: $first\n      after: $after\n      last: $last\n      before: $before\n      where: $where\n      orderBy: { field: GRANTED_AT, direction: DESC }\n    ) {\n      edges {\n        node {\n          id\n          ...PointsTableRow\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.PointsTableDocument,
     "\n  fragment PointsTableRow on Point {\n    id\n    user {\n      id\n      name\n    }\n    points\n    description\n    grantedAt\n  }\n": types.PointsTableRowFragmentDoc,
+    "\n  query UpdatePointsFormUserInfo($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n    }\n  }\n": types.UpdatePointsFormUserInfoDocument,
     "\n  query SubmissionHeader($id: ID!) {\n    submission(id: $id) {\n      id\n      status\n      submittedAt\n    }\n  }\n": types.SubmissionHeaderDocument,
     "\n  fragment SubmissionResultCard on Submission {\n    queryResult {\n      columns\n      rows\n      matchAnswer\n    }\n    question {\n      id\n    }\n  }\n": types.SubmissionResultCardFragmentDoc,
     "\n  query SubmissionCards($id: ID!) {\n    submission(id: $id) {\n      id\n      ...SubmissionDetailsCard\n      ...SubmissionUserCard\n      ...SubmissionResultCard\n    }\n  }\n": types.SubmissionCardsDocument,
@@ -221,11 +227,23 @@ export function graphql(source: "\n  fragment PointUserCard on Point {\n    user
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation CreatePoint($input: CreatePointInput!) {\n    createPoint(input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreatePoint($input: CreatePointInput!) {\n    createPoint(input: $input) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query CreatePointDialogContent {\n    users(first: 100) {\n      edges {\n        node {\n          id\n          name\n          email\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query CreatePointDialogContent {\n    users(first: 100) {\n      edges {\n        node {\n          id\n          name\n          email\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query PointsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: PointWhereInput\n  ) {\n    points(\n      first: $first\n      after: $after\n      last: $last\n      before: $before\n      where: $where\n      orderBy: { field: GRANTED_AT, direction: DESC }\n    ) {\n      edges {\n        node {\n          id\n          ...PointsTableRow\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n"): (typeof documents)["\n  query PointsTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: PointWhereInput\n  ) {\n    points(\n      first: $first\n      after: $after\n      last: $last\n      before: $before\n      where: $where\n      orderBy: { field: GRANTED_AT, direction: DESC }\n    ) {\n      edges {\n        node {\n          id\n          ...PointsTableRow\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment PointsTableRow on Point {\n    id\n    user {\n      id\n      name\n    }\n    points\n    description\n    grantedAt\n  }\n"): (typeof documents)["\n  fragment PointsTableRow on Point {\n    id\n    user {\n      id\n      name\n    }\n    points\n    description\n    grantedAt\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query UpdatePointsFormUserInfo($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n    }\n  }\n"): (typeof documents)["\n  query UpdatePointsFormUserInfo($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

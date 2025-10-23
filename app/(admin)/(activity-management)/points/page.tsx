@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
+import { CreatePointTrigger } from "./_components/create";
 import FilterableDataTable from "./_components/filterable-data-table";
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function Page() {
             <h2 className="text-2xl font-bold tracking-tight">積分管理</h2>
             <p className="text-muted-foreground">查看和管理使用者的積分獲得記錄。</p>
           </div>
+          <CreatePointTrigger />
         </div>
         <div>
           <FilterableDataTable />

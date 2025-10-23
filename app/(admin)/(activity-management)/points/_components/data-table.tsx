@@ -2,13 +2,13 @@
 
 import { CursorDataTable } from "@/components/data-table/cursor";
 import type { Direction } from "@/components/data-table/pagination";
+import { graphql, useFragment as readFragment } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import type { VariablesOf } from "@graphql-typed-document-node/core";
 import { useState } from "react";
 import { columns, type Point } from "./data-table-columns";
-import { graphql, useFragment as readFragment } from "@/gql";
 
-const POINTS_TABLE_QUERY = graphql(`
+export const POINTS_TABLE_QUERY = graphql(`
   query PointsTable(
     $first: Int
     $after: Cursor
@@ -69,27 +69,26 @@ export function PointsDataTable({ query }: { query?: string }) {
     variables,
   });
 
-  const pointsList =
-    data?.points.edges
-      ?.map((edge) => {
-        const node = edge?.node;
-        if (!node) return null;
+  const pointsList = data?.points.edges
+    ?.map((edge) => {
+      const node = edge?.node;
+      if (!node) return null;
 
-        const point = readFragment(POINTS_TABLE_ROW_FRAGEMENT, node);
+      const point = readFragment(POINTS_TABLE_ROW_FRAGEMENT, node);
 
-        if (!point) return null;
-        return {
-          id: point.id,
-          user: {
-            id: point.user.id,
-            name: point.user.name,
-          },
-          points: point.points,
-          description: point.description ?? "",
-          grantedAt: point.grantedAt,
-        } satisfies Point;
-      })
-      .filter((point) => point !== null) ?? [];
+      if (!point) return null;
+      return {
+        id: point.id,
+        user: {
+          id: point.user.id,
+          name: point.user.name,
+        },
+        points: point.points,
+        description: point.description ?? "",
+        grantedAt: point.grantedAt,
+      } satisfies Point;
+    })
+    .filter((point) => point !== null) ?? [];
 
   const pageInfo = data?.points.pageInfo;
 
