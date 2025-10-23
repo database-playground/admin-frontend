@@ -71,7 +71,7 @@ export function UpdatePointsForm({
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     onSubmit({
       userID: data.userID,
-      points: data.points as number,
+      points: data.points,
       description: data.description,
     });
   };
