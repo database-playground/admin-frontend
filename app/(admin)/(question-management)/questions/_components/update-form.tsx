@@ -29,7 +29,7 @@ export interface UpdateQuestionFormData {
   databaseID?: string; // Changed to single databaseID for 1-N relationship
 }
 
-const QUESTION_UPDATE_FORM_FRAGEMENT = graphql(`
+const QUESTION_UPDATE_FORM_FRAGMENT = graphql(`
   fragment QuestionUpdateForm on Query {
     databases {
       id
@@ -42,7 +42,7 @@ const QUESTION_UPDATE_FORM_FRAGEMENT = graphql(`
 
 export interface UpdateQuestionFormProps extends Omit<UpdateFormBaseProps<z.infer<typeof formSchema>>, "onSubmit"> {
   onSubmit: (newValues: UpdateQuestionFormData) => void;
-  fragment: FragmentType<typeof QUESTION_UPDATE_FORM_FRAGEMENT>;
+  fragment: FragmentType<typeof QUESTION_UPDATE_FORM_FRAGMENT>;
 }
 
 const difficultyOptions = [
@@ -59,7 +59,7 @@ export function UpdateQuestionForm({
   onFormStateChange,
   fragment,
 }: UpdateQuestionFormProps) {
-  const { databases, questionCategories } = useFragment(QUESTION_UPDATE_FORM_FRAGEMENT, fragment);
+  const { databases, questionCategories } = useFragment(QUESTION_UPDATE_FORM_FRAGMENT, fragment);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
