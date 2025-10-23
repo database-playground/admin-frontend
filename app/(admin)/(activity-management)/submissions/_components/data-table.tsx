@@ -3,17 +3,29 @@
 import { CursorDataTable } from "@/components/data-table/cursor";
 import type { Direction } from "@/components/data-table/pagination";
 import { useSuspenseQuery } from "@apollo/client/react";
+import type { VariablesOf } from "@graphql-typed-document-node/core";
 import { useState } from "react";
 import { columns, type Submission } from "./data-table-columns";
 import { SUBMISSIONS_TABLE_QUERY } from "./query";
 
-export function SubmissionsDataTable() {
+export function SubmissionsDataTable({ query }: { query?: string }) {
   const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const after = cursors[currentIndex];
-  const variables = { first: PAGE_SIZE, after };
+  const variables = {
+    first: PAGE_SIZE,
+    after,
+    where: query
+      ? {
+        or: [
+          { hasUserWith: [{ nameContains: query }] },
+          { hasUserWith: [{ emailContains: query }] },
+        ],
+      }
+      : undefined,
+  } satisfies VariablesOf<typeof SUBMISSIONS_TABLE_QUERY>;
 
   const { data } = useSuspenseQuery(SUBMISSIONS_TABLE_QUERY, {
     variables,
