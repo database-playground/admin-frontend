@@ -2,13 +2,22 @@
 
 import { CursorDataTable } from "@/components/data-table/cursor";
 import type { Direction } from "@/components/data-table/pagination";
+import type { SubmissionStatus } from "@/gql/graphql";
 import { useSuspenseQuery } from "@apollo/client/react";
 import type { VariablesOf } from "@graphql-typed-document-node/core";
 import { useState } from "react";
 import { columns, type Submission } from "./data-table-columns";
 import { SUBMISSIONS_TABLE_QUERY } from "./query";
 
-export function SubmissionsDataTable({ query }: { query?: string }) {
+export type SubmissionStatusFilter = SubmissionStatus | "all";
+
+export function SubmissionsDataTable({
+  query,
+  status,
+}: {
+  query?: string;
+  status?: SubmissionStatusFilter;
+}) {
   const PAGE_SIZE = 20;
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,14 +26,13 @@ export function SubmissionsDataTable({ query }: { query?: string }) {
   const variables = {
     first: PAGE_SIZE,
     after,
-    where: query
-      ? {
-        or: [
-          { hasUserWith: [{ nameContains: query }] },
-          { hasUserWith: [{ emailContains: query }] },
-        ],
-      }
-      : undefined,
+    where: {
+      or: [
+        { hasUserWith: [{ nameContains: query }] },
+        { hasUserWith: [{ emailContains: query }] },
+      ],
+      status: status === "all" ? undefined : status,
+    },
   } satisfies VariablesOf<typeof SUBMISSIONS_TABLE_QUERY>;
 
   const { data } = useSuspenseQuery(SUBMISSIONS_TABLE_QUERY, {
@@ -57,7 +65,7 @@ export function SubmissionsDataTable({ query }: { query?: string }) {
     if (!pageInfo) return;
     if (direction === "forward" && pageInfo.hasNextPage) {
       const nextCursor = pageInfo.endCursor ?? null;
-      setCursors(prev => {
+      setCursors((prev) => {
         const newCursors = prev.slice(0, currentIndex + 1);
         newCursors.push(nextCursor);
         return newCursors;
