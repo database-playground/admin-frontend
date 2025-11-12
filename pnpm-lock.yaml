@@ -68,8 +68,8 @@ importers:
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.2.3(@types/react@19.2.3))(@types/react@19.2.3)(react-dom@19.3.0-canary-100fc4a8-20251110(react@19.3.0-canary-100fc4a8-20251110))(react@19.3.0-canary-100fc4a8-20251110)
       '@swc-contrib/plugin-graphql-codegen-client-preset':
-        specifier: ^0.10.1
-        version: 0.10.1
+        specifier: ~0.9
+        version: 0.9.0
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.1.17)
@@ -1701,8 +1701,8 @@ packages:
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
-  '@swc-contrib/plugin-graphql-codegen-client-preset@0.10.1':
-    resolution: {integrity: sha512-FcW09vbHv2ms4WTqelU3hLNW6T3v7UMq07w2ESOT5AifsvJxStxGk2ZO4Pp/wtu+eZkGUAUBJ2xrelXFdspmEQ==}
+  '@swc-contrib/plugin-graphql-codegen-client-preset@0.9.0':
+    resolution: {integrity: sha512-+Oh2gdX71fZt+wu4/rBC9mSM9m9beGkaGLQhigvS8ixjk7uyMvUw2r4ORfBkGKsL47TvUJkTW0N6Chn1pLfh0A==}
     engines: {node: '>=16'}
 
   '@swc/helpers@0.5.15':
@@ -6100,7 +6100,7 @@ snapshots:
 
   '@standard-schema/utils@0.3.0': {}
 
-  '@swc-contrib/plugin-graphql-codegen-client-preset@0.10.1': {}
+  '@swc-contrib/plugin-graphql-codegen-client-preset@0.9.0': {}
 
   '@swc/helpers@0.5.15':
     dependencies:
