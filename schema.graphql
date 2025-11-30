@@ -71,6 +71,10 @@ input CreateQuestionInput {
   submissionIDs: [ID!]
   """Question title"""
   title: String!
+  """
+  Only the users with this scope set can see the question. Empty means visible to everyone.
+  """
+  visibleScope: String
 }
 
 """
@@ -740,6 +744,10 @@ type Question implements Node {
   List of your submissions for this question, ordered by submitted at descending.
   """
   userSubmissions: [Submission!]!
+  """
+  Only the users with this scope set can see the question. Empty means visible to everyone.
+  """
+  visibleScope: String
 }
 
 """A connection to a list of items."""
@@ -877,6 +885,22 @@ input QuestionWhereInput {
   titleLTE: String
   titleNEQ: String
   titleNotIn: [String!]
+  """visible_scope field predicates"""
+  visibleScope: String
+  visibleScopeContains: String
+  visibleScopeContainsFold: String
+  visibleScopeEqualFold: String
+  visibleScopeGT: String
+  visibleScopeGTE: String
+  visibleScopeHasPrefix: String
+  visibleScopeHasSuffix: String
+  visibleScopeIn: [String!]
+  visibleScopeIsNil: Boolean
+  visibleScopeLT: String
+  visibleScopeLTE: String
+  visibleScopeNEQ: String
+  visibleScopeNotIn: [String!]
+  visibleScopeNotNil: Boolean
 }
 
 enum RankingBy {
@@ -1165,6 +1189,7 @@ input UpdateQuestionInput {
   """Question category, e.g. 'query'"""
   category: String
   clearSubmissions: Boolean
+  clearVisibleScope: Boolean
   databaseID: ID
   """Question stem"""
   description: String
@@ -1175,6 +1200,10 @@ input UpdateQuestionInput {
   removeSubmissionIDs: [ID!]
   """Question title"""
   title: String
+  """
+  Only the users with this scope set can see the question. Empty means visible to everyone.
+  """
+  visibleScope: String
 }
 
 """
