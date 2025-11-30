@@ -77,6 +77,8 @@ export type CreateQuestionInput = {
   submissionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Question title */
   title: Scalars['String']['input'];
+  /** Only the users with this scope set can see the question. Empty means visible to everyone. */
+  visibleScope?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -859,6 +861,8 @@ export type Question = Node & {
   title: Scalars['String']['output'];
   /** List of your submissions for this question, ordered by submitted at descending. */
   userSubmissions: Array<Submission>;
+  /** Only the users with this scope set can see the question. Empty means visible to everyone. */
+  visibleScope?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -1009,6 +1013,22 @@ export type QuestionWhereInput = {
   titleLTE?: InputMaybe<Scalars['String']['input']>;
   titleNEQ?: InputMaybe<Scalars['String']['input']>;
   titleNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** visible_scope field predicates */
+  visibleScope?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeContains?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeContainsFold?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeEqualFold?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeGT?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeGTE?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  visibleScopeIsNil?: InputMaybe<Scalars['Boolean']['input']>;
+  visibleScopeLT?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeLTE?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeNEQ?: InputMaybe<Scalars['String']['input']>;
+  visibleScopeNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  visibleScopeNotNil?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export enum RankingBy {
@@ -1304,6 +1324,7 @@ export type UpdateQuestionInput = {
   /** Question category, e.g. 'query' */
   category?: InputMaybe<Scalars['String']['input']>;
   clearSubmissions?: InputMaybe<Scalars['Boolean']['input']>;
+  clearVisibleScope?: InputMaybe<Scalars['Boolean']['input']>;
   databaseID?: InputMaybe<Scalars['ID']['input']>;
   /** Question stem */
   description?: InputMaybe<Scalars['String']['input']>;
@@ -1314,6 +1335,8 @@ export type UpdateQuestionInput = {
   removeSubmissionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Question title */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Only the users with this scope set can see the question. Empty means visible to everyone. */
+  visibleScope?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
