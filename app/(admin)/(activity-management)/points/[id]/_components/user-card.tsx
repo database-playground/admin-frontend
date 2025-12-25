@@ -6,6 +6,7 @@ import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const POINT_USER_CARD_FRAGMENT = graphql(`
   fragment PointUserCard on Point {
+    id
     user {
       id
       name

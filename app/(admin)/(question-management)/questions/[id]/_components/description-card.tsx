@@ -6,6 +6,7 @@ import { Remark } from "react-remark";
 
 const QUESTION_DESCRIPTION_CARD_FRAGMENT = graphql(`
   fragment QuestionDescriptionCard on Question {
+    id
     description
   }
 `);

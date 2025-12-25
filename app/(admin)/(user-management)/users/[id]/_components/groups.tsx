@@ -6,6 +6,7 @@ import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const USER_GROUPS_CARD_FRAGMENT = graphql(`
   fragment UserGroupsCard on User {
+    id
     group {
       id
       name

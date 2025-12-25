@@ -12,6 +12,7 @@ export const BASIC_USER_INFO_QUERY = graphql(`
       avatar
 
       group {
+        id
         name
       }
     }

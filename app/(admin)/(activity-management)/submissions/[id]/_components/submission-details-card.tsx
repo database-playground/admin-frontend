@@ -5,6 +5,7 @@ import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const SUBMISSION_DETAILS_CARD_FRAGMENT = graphql(`
   fragment SubmissionDetailsCard on Submission {
+    id
     submittedCode
     error
   }

@@ -39,6 +39,7 @@ const SCORE_CELL_FRAGMENT = graphql(`
 const USER_COMPLETED_QUESTIONS_FRAGMENT = graphql(`
   fragment UserCompletedQuestions on RankingEdge {
     node {
+        id
         submissionStatistics {
           solvedQuestions
         }
@@ -49,6 +50,7 @@ const USER_COMPLETED_QUESTIONS_FRAGMENT = graphql(`
 const USER_TOTAL_POINTS_FRAGMENT = graphql(`
   fragment UserTotalPoints on RankingEdge {
     node {
+      id
       totalPoints
     }
   }

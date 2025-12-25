@@ -7,6 +7,7 @@ import { BookOpen, CheckCircle2, FileQuestion } from "lucide-react";
 
 const USER_QUESTIONS_CARD_FRAGMENT = graphql(`
   fragment UserQuestionsCard on User {
+    id
     submissionStatistics {
       totalQuestions
       solvedQuestions

@@ -5,6 +5,7 @@ import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const DATABASE_SCHEMA_CARD_FRAGMENT = graphql(`
   fragment DatabaseSchemaCard on Database {
+    id
     schema
   }
 `);

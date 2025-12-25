@@ -7,6 +7,7 @@ import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const GROUP_SCOPE_CARD_FRAGMENT = graphql(`
   fragment GroupScopeCard on Group {
+    id
     scopeSets {
       id
       slug
