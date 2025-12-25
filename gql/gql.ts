@@ -92,10 +92,10 @@ type Documents = {
     "\n  query UsersTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: UserWhereInput\n  ) {\n    users(first: $first, after: $after, last: $last, before: $before, where: $where) {\n      edges {\n        node {\n          id\n          name\n          email\n          avatar\n          createdAt\n          updatedAt\n          group {\n            id\n            name\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": typeof types.UsersTableDocument,
     "\n  query LoginTotalCount($where: EventWhereInput!) {\n    events(where: $where) {\n      totalCount\n    }\n  }\n": typeof types.LoginTotalCountDocument,
     "\n  query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {\n    ranking(filter: $filter, first: $first, after: $after) {\n      edges {\n        node {\n          id\n          name\n        }\n        ...ScoreCell\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n": typeof types.OverviewRankingDocument,
-    "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...RankingFragment\n  }\n": typeof types.ScoreCellFragmentDoc,
+    "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...ScoreDiffLine\n  }\n": typeof types.ScoreCellFragmentDoc,
     "\n  fragment UserCompletedQuestions on RankingEdge {\n    node {\n        id\n        submissionStatistics {\n          solvedQuestions\n        }\n    }\n  }\n": typeof types.UserCompletedQuestionsFragmentDoc,
     "\n  fragment UserTotalPoints on RankingEdge {\n    node {\n      id\n      totalPoints\n    }\n  }\n": typeof types.UserTotalPointsFragmentDoc,
-    "\n  fragment RankingFragment on RankingEdge {\n    score\n  }\n": typeof types.RankingFragmentFragmentDoc,
+    "\n  fragment ScoreDiffLine on RankingEdge {\n    score\n  }\n": typeof types.ScoreDiffLineFragmentDoc,
     "\n  query SubmissionsTotalCount($where: SubmissionWhereInput!) {\n    submissions(where: $where) {\n      totalCount\n    }\n  }\n": typeof types.SubmissionsTotalCountDocument,
     "\n  mutation MeUpdateUserInfo($input: UpdateUserInput!) {\n    updateMe(input: $input) {\n      id\n    }\n  }\n": typeof types.MeUpdateUserInfoDocument,
     "\n  query MeUserInfo {\n    me {\n      id\n      name\n      avatar\n    }\n  }\n": typeof types.MeUserInfoDocument,
@@ -180,10 +180,10 @@ const documents: Documents = {
     "\n  query UsersTable(\n    $first: Int\n    $after: Cursor\n    $last: Int\n    $before: Cursor\n    $where: UserWhereInput\n  ) {\n    users(first: $first, after: $after, last: $last, before: $before, where: $where) {\n      edges {\n        node {\n          id\n          name\n          email\n          avatar\n          createdAt\n          updatedAt\n          group {\n            id\n            name\n          }\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n": types.UsersTableDocument,
     "\n  query LoginTotalCount($where: EventWhereInput!) {\n    events(where: $where) {\n      totalCount\n    }\n  }\n": types.LoginTotalCountDocument,
     "\n  query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {\n    ranking(filter: $filter, first: $first, after: $after) {\n      edges {\n        node {\n          id\n          name\n        }\n        ...ScoreCell\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n": types.OverviewRankingDocument,
-    "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...RankingFragment\n  }\n": types.ScoreCellFragmentDoc,
+    "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...ScoreDiffLine\n  }\n": types.ScoreCellFragmentDoc,
     "\n  fragment UserCompletedQuestions on RankingEdge {\n    node {\n        id\n        submissionStatistics {\n          solvedQuestions\n        }\n    }\n  }\n": types.UserCompletedQuestionsFragmentDoc,
     "\n  fragment UserTotalPoints on RankingEdge {\n    node {\n      id\n      totalPoints\n    }\n  }\n": types.UserTotalPointsFragmentDoc,
-    "\n  fragment RankingFragment on RankingEdge {\n    score\n  }\n": types.RankingFragmentFragmentDoc,
+    "\n  fragment ScoreDiffLine on RankingEdge {\n    score\n  }\n": types.ScoreDiffLineFragmentDoc,
     "\n  query SubmissionsTotalCount($where: SubmissionWhereInput!) {\n    submissions(where: $where) {\n      totalCount\n    }\n  }\n": types.SubmissionsTotalCountDocument,
     "\n  mutation MeUpdateUserInfo($input: UpdateUserInput!) {\n    updateMe(input: $input) {\n      id\n    }\n  }\n": types.MeUpdateUserInfoDocument,
     "\n  query MeUserInfo {\n    me {\n      id\n      name\n      avatar\n    }\n  }\n": types.MeUserInfoDocument,
@@ -519,7 +519,7 @@ export function graphql(source: "\n  query OverviewRanking($filter: RankingFilte
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...RankingFragment\n  }\n"): (typeof documents)["\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...RankingFragment\n  }\n"];
+export function graphql(source: "\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...ScoreDiffLine\n  }\n"): (typeof documents)["\n  fragment ScoreCell on RankingEdge {\n    ...UserCompletedQuestions\n    ...UserTotalPoints\n    ...ScoreDiffLine\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -531,7 +531,7 @@ export function graphql(source: "\n  fragment UserTotalPoints on RankingEdge {\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment RankingFragment on RankingEdge {\n    score\n  }\n"): (typeof documents)["\n  fragment RankingFragment on RankingEdge {\n    score\n  }\n"];
+export function graphql(source: "\n  fragment ScoreDiffLine on RankingEdge {\n    score\n  }\n"): (typeof documents)["\n  fragment ScoreDiffLine on RankingEdge {\n    score\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

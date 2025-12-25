@@ -32,7 +32,7 @@ const SCORE_CELL_FRAGMENT = graphql(`
   fragment ScoreCell on RankingEdge {
     ...UserCompletedQuestions
     ...UserTotalPoints
-    ...RankingFragment
+    ...ScoreDiffLine
   }
 `);
 
@@ -56,8 +56,8 @@ const USER_TOTAL_POINTS_FRAGMENT = graphql(`
   }
 `);
 
-const RANKING_FRAGMENT = graphql(`
-  fragment RankingFragment on RankingEdge {
+const SCORE_DIFF_LINE = graphql(`
+  fragment ScoreDiffLine on RankingEdge {
     score
   }
 `);
@@ -299,8 +299,8 @@ function TotalPoints({ userFragment }: { userFragment: FragmentType<typeof USER_
   );
 }
 
-function ScoreDiff({ userFragment }: { userFragment: FragmentType<typeof RANKING_FRAGMENT> }) {
-  const user = useFragment(RANKING_FRAGMENT, userFragment);
+function ScoreDiff({ userFragment }: { userFragment: FragmentType<typeof SCORE_DIFF_LINE> }) {
+  const user = useFragment(SCORE_DIFF_LINE, userFragment);
   const absScore = Math.abs(user.score);
 
   if (user.score > 0) {
