@@ -7,9 +7,9 @@ export const BASIC_USER_INFO_QUERY = graphql(`
   query BasicUserInfo {
     me {
       id
-      name
-      email
       avatar
+      email
+      name
 
       group {
         id

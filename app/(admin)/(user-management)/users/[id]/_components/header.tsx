@@ -10,9 +10,9 @@ const USER_HEADER_QUERY = graphql(`
   query UserHeader($id: ID!) {
     user(id: $id) {
       id
-      name
-      email
       avatar
+      email
+      name
     }
   }
 `);

@@ -9,8 +9,8 @@ const QUESTION_DATABASE_CARD_FRAGMENT = graphql(`
     id
     database {
       id
-      slug
       description
+      slug
     }
   }
 `);

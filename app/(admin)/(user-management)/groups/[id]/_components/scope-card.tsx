@@ -10,8 +10,8 @@ const GROUP_SCOPE_CARD_FRAGMENT = graphql(`
     id
     scopeSets {
       id
-      slug
       scopes
+      slug
     }
   }
 `);

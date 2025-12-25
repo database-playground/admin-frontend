@@ -4,8 +4,8 @@ export const ME_QUERY = graphql(`
   query MeUserInfo {
     me {
       id
-      name
       avatar
+      name
     }
   }
 `);

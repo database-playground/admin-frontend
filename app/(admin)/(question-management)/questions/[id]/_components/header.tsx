@@ -25,10 +25,10 @@ const QUESTION_HEADER_QUERY = graphql(`
   query QuestionHeader($id: ID!) {
     question(id: $id) {
       id
-      title
-      description
       category
+      description
       difficulty
+      title
     }
   }
 `);

@@ -10,30 +10,30 @@ import { columns, type Point } from "./data-table-columns";
 
 export const POINTS_TABLE_QUERY = graphql(`
   query PointsTable(
-    $first: Int
     $after: Cursor
-    $last: Int
     $before: Cursor
+    $first: Int
+    $last: Int
     $where: PointWhereInput
   ) {
     points(
-      first: $first
       after: $after
-      last: $last
       before: $before
-      where: $where
+      first: $first
+      last: $last
       orderBy: { field: GRANTED_AT, direction: DESC }
+      where: $where
     ) {
+      totalCount
       edges {
         node {
-          id
           ...PointsTableRow
+          id
         }
       }
-      totalCount
       pageInfo {
-        hasNextPage
         endCursor
+        hasNextPage
       }
     }
   }
@@ -42,13 +42,13 @@ export const POINTS_TABLE_QUERY = graphql(`
 const POINTS_TABLE_ROW_FRAGMENT = graphql(`
   fragment PointsTableRow on Point {
     id
+    description
+    grantedAt
+    points
     user {
       id
       name
     }
-    points
-    description
-    grantedAt
   }
 `);
 

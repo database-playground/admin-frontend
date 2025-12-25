@@ -8,9 +8,9 @@ import { UserCard } from "./user-card";
 const POINT_CARDS_QUERY = graphql(`
   query PointCards($id: ID!) {
     pointGrant(id: $id) {
-      id
       ...PointDetailsCard
       ...PointUserCard
+      id
     }
   }
 `);

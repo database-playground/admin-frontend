@@ -31,12 +31,12 @@ export interface UpdateQuestionFormData {
 
 const QUESTION_UPDATE_FORM_FRAGMENT = graphql(`
   fragment QuestionUpdateForm on Query {
+    questionCategories
+
     databases {
       id
       slug
     }
-
-    questionCategories
   }
 `);
 

@@ -4,11 +4,11 @@ export const QUESTION_BY_ID_QUERY = graphql(`
   query QuestionById($id: ID!) {
     question(id: $id) {
       id
-      title
-      description
       category
+      description
       difficulty
       referenceAnswer
+      title
       database {
         id
         slug
@@ -21,26 +21,26 @@ export const DATABASE_LIST_QUERY = graphql(`
   query DatabaseList {
     databases {
       id
-      slug
       description
+      slug
     }
   }
 `);
 
 export const QUESTIONS_TABLE_QUERY = graphql(`
   query QuestionsTable(
-    $first: Int
     $after: Cursor
-    $last: Int
-    $before: Cursor,
-    $query: String,
+    $before: Cursor
     $difficulty: QuestionDifficulty
+    $first: Int,
+    $last: Int,
+    $query: String
   ) {
     questions(
-      first: $first,
       after: $after,
-      last: $last,
       before: $before,
+      first: $first,
+      last: $last,
       where: {
         or: [
           { titleContains: $query },
@@ -50,25 +50,25 @@ export const QUESTIONS_TABLE_QUERY = graphql(`
         difficulty: $difficulty,
       },
     ) {
+      totalCount
       edges {
         node {
           id
-          title
-          description
           category
+          description
           difficulty
           referenceAnswer
+          title
           database {
             id
             slug
           }
         }
       }
-      totalCount
       pageInfo {
+        endCursor
         hasNextPage
         hasPreviousPage
-        endCursor
         startCursor
       }
     }

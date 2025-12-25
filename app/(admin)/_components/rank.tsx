@@ -11,14 +11,14 @@ import { useSuspenseQuery } from "@apollo/client/react";
 import { useState } from "react";
 
 const OVERVIEW_RANKING_QUERY = graphql(`
-  query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {
-    ranking(filter: $filter, first: $first, after: $after) {
+  query OverviewRanking($after: Cursor, $filter: RankingFilter!, $first: Int!) {
+    ranking(after: $after, filter: $filter, first: $first) {
       edges {
+        ...ScoreCell
         node {
           id
           name
         }
-        ...ScoreCell
       }
       pageInfo {
         endCursor
@@ -30,9 +30,9 @@ const OVERVIEW_RANKING_QUERY = graphql(`
 
 const SCORE_CELL_FRAGMENT = graphql(`
   fragment ScoreCell on RankingEdge {
+    ...ScoreDiffLine
     ...UserCompletedQuestions
     ...UserTotalPoints
-    ...ScoreDiffLine
   }
 `);
 

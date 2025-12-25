@@ -8,10 +8,10 @@ const QUESTION_PASS_RATE_FRAGMENT = graphql(`
   fragment QuestionPassRateCard on Question {
     id
     statistics {
-      passedUsers
       attemptedUsers
-      submissionCount
       correctSubmissionCount
+      passedUsers
+      submissionCount
     }
   }
 `);

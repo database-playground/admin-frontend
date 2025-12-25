@@ -2,29 +2,29 @@ import { graphql } from "@/gql";
 
 export const EVENTS_TABLE_QUERY = graphql(`
   query EventsTable(
-    $first: Int
     $after: Cursor
-    $last: Int
     $before: Cursor
+    $first: Int
+    $last: Int
     $where: EventWhereInput
   ) {
-    events(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: TRIGGERED_AT, direction: DESC }) {
+    events(after: $after, before: $before, first: $first, last: $last, orderBy: { field: TRIGGERED_AT, direction: DESC }, where: $where) {
+      totalCount
       edges {
         node {
           id
+          triggeredAt
+          type
           user {
             id
             name
           }
-          type
-          triggeredAt
         }
       }
-      totalCount
       pageInfo {
+        endCursor
         hasNextPage
         hasPreviousPage
-        endCursor
         startCursor
       }
     }

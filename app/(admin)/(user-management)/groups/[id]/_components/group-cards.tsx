@@ -9,9 +9,9 @@ import { ScopeCard } from "./scope-card";
 const GROUP_CARDS_QUERY = graphql(`
   query GroupCards($id: ID!) {
     group(id: $id) {
-      id
       ...GroupAuditInfoCard
       ...GroupScopeCard
+      id
     }
   }
 `);

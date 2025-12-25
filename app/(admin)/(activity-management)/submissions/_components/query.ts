@@ -2,34 +2,34 @@ import { graphql } from "@/gql";
 
 export const SUBMISSIONS_TABLE_QUERY = graphql(`
   query SubmissionsTable(
-    $first: Int
     $after: Cursor
-    $last: Int
     $before: Cursor
+    $first: Int
+    $last: Int
     $where: SubmissionWhereInput
   ) {
-    submissions(first: $first, after: $after, last: $last, before: $before, where: $where, orderBy: { field: SUBMITTED_AT, direction: DESC }) {
+    submissions(after: $after, before: $before, first: $first, last: $last, orderBy: { field: SUBMITTED_AT, direction: DESC }, where: $where) {
+      totalCount
       edges {
         node {
           id
-          submittedCode
           status
-          user {
-            id
-            name
-            email
-          }
+          submittedCode
           question {
             id
             title
           }
+          user {
+            id
+            email
+            name
+          }
         }
       }
-      totalCount
       pageInfo {
+        endCursor
         hasNextPage
         hasPreviousPage
-        endCursor
         startCursor
       }
     }

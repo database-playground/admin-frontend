@@ -12,8 +12,8 @@ const SUBMISSION_RESULT_CARD_FRAGMENT = graphql(`
     id
     queryResult {
       columns
-      rows
       matchAnswer
+      rows
     }
     question {
       id

@@ -8,8 +8,8 @@ import { ScopesCard } from "./scopes";
 const SCOPE_SET_CARDS_QUERY = graphql(`
   query ScopeSetCards($id: ID!) {
     scopeSet(filter: { id: $id }) {
-      id
       ...ScopeSetScopesCard
+      id
     }
   }
 `);

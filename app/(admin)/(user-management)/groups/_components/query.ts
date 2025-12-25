@@ -4,14 +4,14 @@ export const GROUPS_TABLE_QUERY = graphql(`
   query GroupsTable {
     groups {
       id
-      name
+      createdAt
       description
+      name
+      updatedAt
       scopeSets {
         id
         slug
       }
-      createdAt
-      updatedAt
     }
   }
 `);
@@ -20,8 +20,8 @@ export const GROUP_BY_ID_QUERY = graphql(`
   query GroupById($id: ID!) {
     group(id: $id) {
       id
-      name
       description
+      name
       scopeSets {
         id
         slug

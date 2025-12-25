@@ -9,10 +9,10 @@ import { UserCard } from "./user-card";
 const SUBMISSION_CARDS_QUERY = graphql(`
   query SubmissionCards($id: ID!) {
     submission(id: $id) {
-      id
       ...SubmissionDetailsCard
-      ...SubmissionUserCard
       ...SubmissionResultCard
+      ...SubmissionUserCard
+      id
     }
   }
 `);

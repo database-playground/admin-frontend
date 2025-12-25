@@ -9,10 +9,10 @@ import { SchemaCard } from "./schema-card";
 const DATABASE_CARDS_QUERY = graphql(`
   query DatabaseCards($id: ID!) {
     database(id: $id) {
-      id
       ...DatabaseDescriptionCard
       ...DatabaseRelationCard
       ...DatabaseSchemaCard
+      id
     }
   }
 `);
