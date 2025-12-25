@@ -63,14 +63,14 @@ const eslintConfig = [
     },
     rules: {
       ...graphqlPlugin.configs["flat/operations-recommended"].rules,
-      '@graphql-eslint/alphabetize': [
-        'error',
+      "@graphql-eslint/alphabetize": [
+        "error",
         {
           definitions: true,
-          selections: ['OperationDefinition', 'FragmentDefinition'],
+          selections: ["OperationDefinition", "FragmentDefinition"],
           variables: true,
-          arguments: ['Field', 'Directive'],
-          groups: ['...', 'id', '*', '{'],
+          arguments: ["Field", "Directive"],
+          groups: ["...", "id", "*", "{"],
         },
       ],
     },
