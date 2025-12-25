@@ -9,8 +9,8 @@ const GROUP_HEADER_QUERY = graphql(`
   query GroupHeader($id: ID!) {
     group(id: $id) {
       id
-      name
       description
+      name
     }
   }
 `);

@@ -6,6 +6,7 @@ import { Clock } from "lucide-react";
 
 const USER_AUDIT_INFO_CARD_FRAGMENT = graphql(`
   fragment UserAuditInfoCard on User {
+    id
     createdAt
     updatedAt
   }

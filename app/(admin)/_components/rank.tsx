@@ -11,14 +11,14 @@ import { useSuspenseQuery } from "@apollo/client/react";
 import { useState } from "react";
 
 const OVERVIEW_RANKING_QUERY = graphql(`
-  query OverviewRanking($filter: RankingFilter!, $first: Int!, $after: Cursor) {
-    ranking(filter: $filter, first: $first, after: $after) {
+  query OverviewRanking($after: Cursor, $filter: RankingFilter!, $first: Int!) {
+    ranking(after: $after, filter: $filter, first: $first) {
       edges {
+        ...ScoreCell
         node {
           id
           name
         }
-        ...ScoreCell
       }
       pageInfo {
         endCursor
@@ -30,15 +30,16 @@ const OVERVIEW_RANKING_QUERY = graphql(`
 
 const SCORE_CELL_FRAGMENT = graphql(`
   fragment ScoreCell on RankingEdge {
+    ...ScoreDiffLine
     ...UserCompletedQuestions
     ...UserTotalPoints
-    ...RankingFragment
   }
 `);
 
 const USER_COMPLETED_QUESTIONS_FRAGMENT = graphql(`
   fragment UserCompletedQuestions on RankingEdge {
     node {
+        id
         submissionStatistics {
           solvedQuestions
         }
@@ -49,13 +50,14 @@ const USER_COMPLETED_QUESTIONS_FRAGMENT = graphql(`
 const USER_TOTAL_POINTS_FRAGMENT = graphql(`
   fragment UserTotalPoints on RankingEdge {
     node {
+      id
       totalPoints
     }
   }
 `);
 
-const RANKING_FRAGMENT = graphql(`
-  fragment RankingFragment on RankingEdge {
+const SCORE_DIFF_LINE = graphql(`
+  fragment ScoreDiffLine on RankingEdge {
     score
   }
 `);
@@ -297,8 +299,8 @@ function TotalPoints({ userFragment }: { userFragment: FragmentType<typeof USER_
   );
 }
 
-function ScoreDiff({ userFragment }: { userFragment: FragmentType<typeof RANKING_FRAGMENT> }) {
-  const user = useFragment(RANKING_FRAGMENT, userFragment);
+function ScoreDiff({ userFragment }: { userFragment: FragmentType<typeof SCORE_DIFF_LINE> }) {
+  const user = useFragment(SCORE_DIFF_LINE, userFragment);
   const absScore = Math.abs(user.score);
 
   if (user.score > 0) {

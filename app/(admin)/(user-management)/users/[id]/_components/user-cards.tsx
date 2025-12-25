@@ -10,11 +10,11 @@ import { QuestionsCard } from "./questions";
 const USER_CARDS_QUERY = graphql(`
   query UserCards($id: ID!) {
     user(id: $id) {
-      id
-      ...UserGroupsCard
       ...UserAuditInfoCard
+      ...UserGroupsCard
       ...UserPointsCard
       ...UserQuestionsCard
+      id
     }
   }
 `);

@@ -6,10 +6,11 @@ import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const QUESTION_DATABASE_CARD_FRAGMENT = graphql(`
   fragment QuestionDatabaseCard on Question {
+    id
     database {
       id
-      slug
       description
+      slug
     }
   }
 `);

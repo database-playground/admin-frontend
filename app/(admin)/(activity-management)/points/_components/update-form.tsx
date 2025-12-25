@@ -31,8 +31,8 @@ const UPDATE_POINTS_FORM_USER_INFO_QUERY = graphql(`
   query UpdatePointsFormUserInfo($id: ID!) {
     user(id: $id) {
       id
-      name
       email
+      name
     }
   }
 `);

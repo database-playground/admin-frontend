@@ -9,8 +9,8 @@ const DATABASE_HEADER_QUERY = graphql(`
   query DatabaseHeader($id: ID!) {
     database(id: $id) {
       id
-      slug
       description
+      slug
     }
   }
 `);

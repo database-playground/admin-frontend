@@ -10,11 +10,11 @@ import { PassRateCard } from "./pass-rate";
 const QUESTION_CARDS_QUERY = graphql(`
   query QuestionCards($id: ID!) {
     question(id: $id) {
-      id
-      ...QuestionDescriptionCard
-      ...QuestionDatabaseCard
       ...QuestionAnswerCard
+      ...QuestionDatabaseCard
+      ...QuestionDescriptionCard
       ...QuestionPassRateCard
+      id
     }
   }
 `);

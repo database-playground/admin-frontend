@@ -6,6 +6,7 @@ import { Clock } from "lucide-react";
 
 const GROUP_AUDIT_INFO_CARD_FRAGMENT = graphql(`
   fragment GroupAuditInfoCard on Group {
+    id
     createdAt
     updatedAt
   }

@@ -6,6 +6,7 @@ import { Remark } from "react-remark";
 
 const DATABASE_DESCRIPTION_CARD_FRAGMENT = graphql(`
   fragment DatabaseDescriptionCard on Database {
+    id
     description
   }
 `);

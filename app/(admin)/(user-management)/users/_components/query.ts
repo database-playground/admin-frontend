@@ -4,10 +4,10 @@ export const USER_BY_ID_QUERY = graphql(`
   query UserById($id: ID!) {
     user(id: $id) {
       id
-      name
-      email
       avatar
       createdAt
+      email
+      name
       updatedAt
       group {
         id
@@ -28,20 +28,21 @@ export const GROUP_LIST_QUERY = graphql(`
 
 export const USERS_TABLE_QUERY = graphql(`
   query UsersTable(
-    $first: Int
     $after: Cursor
-    $last: Int
     $before: Cursor
+    $first: Int
+    $last: Int
     $where: UserWhereInput
   ) {
-    users(first: $first, after: $after, last: $last, before: $before, where: $where) {
+    users(after: $after, before: $before, first: $first, last: $last, where: $where) {
+      totalCount
       edges {
         node {
           id
-          name
-          email
           avatar
           createdAt
+          email
+          name
           updatedAt
           group {
             id
@@ -49,11 +50,10 @@ export const USERS_TABLE_QUERY = graphql(`
           }
         }
       }
-      totalCount
       pageInfo {
+        endCursor
         hasNextPage
         hasPreviousPage
-        endCursor
         startCursor
       }
     }

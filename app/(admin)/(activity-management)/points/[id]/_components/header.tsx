@@ -8,8 +8,8 @@ const POINT_HEADER_QUERY = graphql(`
   query PointHeader($id: ID!) {
     pointGrant(id: $id) {
       id
-      points
       grantedAt
+      points
     }
   }
 `);

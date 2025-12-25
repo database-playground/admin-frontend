@@ -6,13 +6,14 @@ import { Trophy } from "lucide-react";
 
 const USER_POINTS_CARD_FRAGMENT = graphql(`
   fragment UserPointsCard on User {
+    id
     totalPoints
 
     points(first: 5, orderBy: { field: GRANTED_AT, direction: DESC }) {
       edges {
         node {
-          id
           ...UserPointHistoryLine
+          id
         }
       }
     }
@@ -21,9 +22,10 @@ const USER_POINTS_CARD_FRAGMENT = graphql(`
 
 const USER_POINT_HISTORY_LINE_FRAGMENT = graphql(`
   fragment UserPointHistoryLine on Point {
-    points
+    id
     description
     grantedAt
+    points
   }
 `);
 

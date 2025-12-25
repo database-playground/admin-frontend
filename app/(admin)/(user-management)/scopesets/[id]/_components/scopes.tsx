@@ -6,6 +6,7 @@ import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const SCOPE_SET_SCOPES_CARD_FRAGMENT = graphql(`
   fragment ScopeSetScopesCard on ScopeSet {
+    id
     scopes
   }
 `);

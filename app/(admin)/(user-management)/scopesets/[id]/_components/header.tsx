@@ -9,8 +9,8 @@ const SCOPE_SET_HEADER_QUERY = graphql(`
   query ScopeSetHeader($id: ID!) {
     scopeSet(filter: { id: $id }) {
       id
-      slug
       description
+      slug
     }
   }
 `);

@@ -9,10 +9,11 @@ import { AlertTriangle } from "lucide-react";
 
 const SUBMISSION_RESULT_CARD_FRAGMENT = graphql(`
   fragment SubmissionResultCard on Submission {
+    id
     queryResult {
       columns
-      rows
       matchAnswer
+      rows
     }
     question {
       id

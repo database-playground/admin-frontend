@@ -6,6 +6,7 @@ import { type FragmentType, graphql, useFragment } from "@/gql";
 
 const SUBMISSION_USER_CARD_FRAGMENT = graphql(`
   fragment SubmissionUserCard on Submission {
+    id
     user {
       id
       name
