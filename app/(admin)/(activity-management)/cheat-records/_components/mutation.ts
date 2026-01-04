@@ -4,12 +4,12 @@ export const CREATE_CHEAT_RECORD_MUTATION = graphql(`
   mutation CreateCheatRecord($reason: String!, $userID: ID) {
     createCheatRecord(reason: $reason, userID: $userID) {
       id
-      reason
       cheatedAt
+      reason
       user {
         id
-        name
         email
+        name
       }
     }
   }

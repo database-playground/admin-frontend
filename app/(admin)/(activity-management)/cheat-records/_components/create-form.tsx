@@ -1,15 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
@@ -97,8 +89,8 @@ export function CreateCheatRecordForm({
                   {userInfoData?.user
                     ? `您正要為：${userInfoData.user.name} (${userInfoData.user.email}) 新增作弊記錄`
                     : userIDDebounced
-                      ? "您輸入的使用者 ID 不存在。"
-                      : ""}
+                    ? "您輸入的使用者 ID 不存在。"
+                    : ""}
                 </div>
               </FormDescription>
               <FormMessage />

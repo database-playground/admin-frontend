@@ -1,8 +1,8 @@
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Header } from "./_components/header";
 import { CheatRecordDetails } from "./_components/details";
+import { Header } from "./_components/header";
 import { ResolveButton } from "./_components/resolve-button";
 
 export const metadata: Metadata = {

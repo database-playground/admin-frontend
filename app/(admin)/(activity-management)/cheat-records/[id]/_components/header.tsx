@@ -13,9 +13,9 @@ const CHEAT_RECORD_HEADER_QUERY = graphql(`
       reason
       user {
         id
-        name
-        email
         avatar
+        email
+        name
       }
     }
   }

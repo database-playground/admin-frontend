@@ -1,8 +1,8 @@
 "use client";
 
 import { CardLayout } from "@/components/card-layout";
-import { StyledLink } from "@/components/ui/link";
 import { Badge } from "@/components/ui/badge";
+import { StyledLink } from "@/components/ui/link";
 import { type FragmentType, graphql, useFragment } from "@/gql";
 import { AlertTriangle } from "lucide-react";
 
@@ -68,9 +68,7 @@ export function CheatRecordsCard({
             <div className="space-y-2">
               {unresolvedRecords.map((record) => {
                 if (!record) return null;
-                return (
-                  <CheatRecordLine key={record.id} fragment={record} />
-                );
+                return <CheatRecordLine key={record.id} fragment={record} />;
               })}
             </div>
             {totalUnresolved > unresolvedRecords.length && (

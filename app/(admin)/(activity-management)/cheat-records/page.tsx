@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import type { Metadata } from "next";
-import FilterableDataTable from "./_components/filterable-data-table";
 import { CreateCheatRecordButtonTrigger } from "./_components/create";
+import FilterableDataTable from "./_components/filterable-data-table";
 
 export const metadata: Metadata = {
   title: "作弊記錄",

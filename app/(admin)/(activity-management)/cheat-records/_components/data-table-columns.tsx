@@ -1,4 +1,5 @@
 import AppAvatar from "@/components/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { StyledLink } from "@/components/ui/link";
-import { Badge } from "@/components/ui/badge";
 import type { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
@@ -52,7 +52,7 @@ export const columns: ColumnDef<CheatRecord>[] = [
         <div className="flex items-center gap-2">
           <AppAvatar src={user.avatar} name={user.name} />
           <div>
-            <StyledLink href={`/users/${user.id}`} className="font-medium">
+            <StyledLink href={`/users/${user.id}`}>
               {user.name}
             </StyledLink>
             <p className="text-xs text-muted-foreground">{user.email}</p>
@@ -89,9 +89,7 @@ export const columns: ColumnDef<CheatRecord>[] = [
           </Badge>
         );
       }
-      return (
-        <Badge variant="destructive">未解決</Badge>
-      );
+      return <Badge variant="destructive">未解決</Badge>;
     },
   },
   {

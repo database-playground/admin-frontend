@@ -4,15 +4,15 @@ export const CHEAT_RECORD_BY_ID_QUERY = graphql(`
   query CheatRecordById($id: ID!) {
     cheatRecord(id: $id) {
       id
-      reason
       cheatedAt
+      reason
       resolvedAt
       resolvedReason
       user {
         id
-        name
-        email
         avatar
+        email
+        name
       }
     }
   }
@@ -37,15 +37,15 @@ export const CHEAT_RECORDS_TABLE_QUERY = graphql(`
       edges {
         node {
           id
-          reason
           cheatedAt
+          reason
           resolvedAt
           resolvedReason
           user {
             id
-            name
-            email
             avatar
+            email
+            name
           }
         }
       }

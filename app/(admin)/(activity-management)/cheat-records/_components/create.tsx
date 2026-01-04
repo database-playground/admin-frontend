@@ -16,9 +16,9 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
+import { CreateCheatRecordForm, type CreateCheatRecordFormData } from "./create-form";
 import { CREATE_CHEAT_RECORD_MUTATION } from "./mutation";
 import { CHEAT_RECORDS_TABLE_QUERY } from "./query";
-import { CreateCheatRecordForm, type CreateCheatRecordFormData } from "./create-form";
 
 export function CreateCheatRecordButtonTrigger({
   userId,
@@ -65,7 +65,6 @@ export function CreateCheatRecordButtonTrigger({
         <Suspense>
           <CreateCheatRecordDialogContent
             userId={userId}
-            open={open}
             onCompleted={handleCompleted}
             onFormStateChange={handleFormStateChange}
           />
@@ -84,12 +83,10 @@ export function CreateCheatRecordButtonTrigger({
 
 function CreateCheatRecordDialogContent({
   userId,
-  open,
   onCompleted,
   onFormStateChange,
 }: {
   userId?: string;
-  open: boolean;
   onCompleted: () => void;
   onFormStateChange: (isDirty: boolean) => void;
 }) {

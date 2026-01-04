@@ -1,11 +1,11 @@
 "use client";
 
+import AppAvatar from "@/components/avatar";
 import { CardLayout } from "@/components/card-layout";
 import { Badge } from "@/components/ui/badge";
 import { StyledLink } from "@/components/ui/link";
-import { graphql, useFragment, type FragmentType } from "@/gql";
+import { type FragmentType, graphql, useFragment } from "@/gql";
 import { useSuspenseQuery } from "@apollo/client/react";
-import AppAvatar from "@/components/avatar";
 
 const CHEAT_RECORD_DETAILS_QUERY = graphql(`
   query CheatRecordDetails($id: ID!) {
@@ -19,15 +19,15 @@ const CHEAT_RECORD_DETAILS_QUERY = graphql(`
 const CHEAT_RECORD_DETAILS_FRAGMENT = graphql(`
   fragment CheatRecordDetailsCard on CheatRecord {
     id
-    reason
     cheatedAt
+    reason
     resolvedAt
     resolvedReason
     user {
       id
-      name
-      email
       avatar
+      email
+      name
     }
   }
 `);
@@ -40,7 +40,12 @@ export function CheatRecordDetails({ id }: { id: string }) {
   const fragment = data.cheatRecord;
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div
+      className={`
+        grid grid-cols-1 gap-4
+        lg:grid-cols-2
+      `}
+    >
       <DetailsCard fragment={fragment} />
     </div>
   );
@@ -66,13 +71,16 @@ function DetailsCard({
       <div className="space-y-4">
         <div>
           <p className="text-sm font-medium text-muted-foreground">狀態</p>
-          {isResolved ? (
-            <Badge variant="secondary" className="mt-1 bg-green-100 text-green-800">
-              已解決
-            </Badge>
-          ) : (
-            <Badge variant="destructive" className="mt-1">未解決</Badge>
-          )}
+          {isResolved
+            ? (
+              <Badge
+                variant="secondary"
+                className={`mt-1 bg-green-100 text-green-800`}
+              >
+                已解決
+              </Badge>
+            )
+            : <Badge variant="destructive" className="mt-1">未解決</Badge>}
         </div>
 
         <div>
@@ -80,10 +88,7 @@ function DetailsCard({
           <div className="mt-1 flex items-center gap-2">
             <AppAvatar src={user.avatar} name={user.name} />
             <div>
-              <StyledLink
-                href={`/users/${user.id}`}
-                className="font-medium"
-              >
+              <StyledLink href={`/users/${user.id}`}>
                 {user.name}
               </StyledLink>
               <p className="text-xs text-muted-foreground">{user.email}</p>

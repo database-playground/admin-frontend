@@ -127,7 +127,7 @@ const buildNavbar = (
           url: "/cheat-records",
           icon: Ban,
           isActive: pathname.startsWith("/cheat-records"),
-        }
+        },
       ],
     },
   ],

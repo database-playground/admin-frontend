@@ -5,7 +5,7 @@ import type { Direction } from "@/components/data-table/pagination";
 import { useSuspenseQuery } from "@apollo/client/react";
 import type { VariablesOf } from "@graphql-typed-document-node/core";
 import { useState } from "react";
-import { columns, type CheatRecord } from "./data-table-columns";
+import { type CheatRecord, columns } from "./data-table-columns";
 import { CHEAT_RECORDS_TABLE_QUERY } from "./query";
 
 export function CheatRecordsDataTable({ query }: { query?: string }) {
