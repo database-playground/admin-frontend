@@ -73,7 +73,7 @@ export const columns: ColumnDef<CheatRecord>[] = [
     header: "作弊時間",
     cell: ({ row }) => {
       const cheatedAt = new Date(row.original.cheatedAt);
-      return <div>{cheatedAt.toLocaleString("zh-tw")}</div>;
+      return <div>{cheatedAt.toLocaleString("zh-TW")}</div>;
     },
   },
   {
@@ -99,7 +99,7 @@ export const columns: ColumnDef<CheatRecord>[] = [
     cell: ({ row }) => {
       const resolvedAt = row.original.resolvedAt;
       if (resolvedAt) {
-        return <div>{new Date(resolvedAt).toLocaleString("zh-tw")}</div>;
+        return <div>{new Date(resolvedAt).toLocaleString("zh-TW")}</div>;
       }
       return <div className="text-muted-foreground">-</div>;
     },

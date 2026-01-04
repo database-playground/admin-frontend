@@ -31,16 +31,16 @@ export default async function CheatRecordPage({
             lg:flex-row
           `}
         >
-          <Header id={id as string} />
+          <Header id={id} />
 
           <div className="flex items-center gap-2">
             <Suspense>
-              <ResolveButton id={id as string} />
+              <ResolveButton id={id} />
             </Suspense>
           </div>
         </div>
         <Suspense>
-          <CheatRecordDetails id={id as string} />
+          <CheatRecordDetails id={id} />
         </Suspense>
       </main>
     </>
