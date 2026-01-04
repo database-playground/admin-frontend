@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, Book, Code, Coins, LibrarySquare, type LucideIcon, Send, SquareUser } from "lucide-react";
+import { Activity, Ban, Book, Code, Coins, LibrarySquare, type LucideIcon, Send, SquareUser } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
@@ -122,6 +122,12 @@ const buildNavbar = (
           icon: Coins,
           isActive: pathname.startsWith("/points"),
         },
+        {
+          title: "作弊記錄",
+          url: "/cheat-records",
+          icon: Ban,
+          isActive: pathname.startsWith("/cheat-records"),
+        }
       ],
     },
   ],
