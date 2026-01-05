@@ -6,6 +6,7 @@ import { AnswerCard } from "./answer-card";
 import { DatabaseCard } from "./database-card";
 import { DescriptionCard } from "./description-card";
 import { PassRateCard } from "./pass-rate";
+import { VisibleScopeCard } from "./visible-scope-card";
 
 const QUESTION_CARDS_QUERY = graphql(`
   query QuestionCards($id: ID!) {
@@ -14,6 +15,7 @@ const QUESTION_CARDS_QUERY = graphql(`
       ...QuestionDatabaseCard
       ...QuestionDescriptionCard
       ...QuestionPassRateCard
+      ...QuestionVisibleScopeCard
       id
     }
   }
@@ -36,7 +38,12 @@ export function QuestionCards({ id }: { id: string }) {
       <DescriptionCard fragment={fragment} />
       <DatabaseCard fragment={fragment} />
       <AnswerCard fragment={fragment} />
-      <PassRateCard fragment={fragment} />
+
+      <div className="flex flex-col gap-4">
+        {/* These cards are small, so we group them together in a single section */}
+        <PassRateCard fragment={fragment} />
+        <VisibleScopeCard fragment={fragment} />
+      </div>
     </div>
   );
 }

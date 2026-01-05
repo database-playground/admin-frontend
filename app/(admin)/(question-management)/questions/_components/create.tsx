@@ -115,6 +115,7 @@ function CreateQuestionDialogContent({
             difficulty: data.difficulty,
             referenceAnswer: data.referenceAnswer,
             databaseID: data.databaseID, // Now single ID as per new schema
+            visibleScope: data.visibleScope || undefined,
           },
         },
       });
@@ -141,6 +142,7 @@ function CreateQuestionDialogContent({
           difficulty: QuestionDifficulty.Unspecified,
           referenceAnswer: "",
           databaseID: undefined,
+          visibleScope: undefined,
         }}
         onSubmit={onSubmit}
         action="create"

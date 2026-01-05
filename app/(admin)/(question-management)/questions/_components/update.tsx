@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { graphql } from "@/gql";
-import { QuestionDifficulty } from "@/gql/graphql";
+import { QuestionDifficulty, type UpdateQuestionInput } from "@/gql/graphql";
 import { useDialogCloseConfirmation } from "@/hooks/use-dialog-close-confirmation";
 import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client/react";
 import { Pencil } from "lucide-react";
@@ -187,10 +187,20 @@ function UpdateQuestionDialogContent({
 
   const onSubmit = (data: UpdateQuestionFormData) => {
     try {
+      const { visibleScope, ...restData } = data;
+      const input: UpdateQuestionInput = restData;
+
+      // Handle visibleScope: if empty/undefined, clear it; otherwise set it
+      if (visibleScope && visibleScope.trim()) {
+        input.visibleScope = visibleScope.trim();
+      } else {
+        input.clearVisibleScope = true;
+      }
+
       updateQuestion({
         variables: {
           id,
-          input: data,
+          input,
         },
       });
     } catch (error) {
@@ -216,6 +226,7 @@ function UpdateQuestionDialogContent({
           difficulty: question?.question.difficulty || QuestionDifficulty.Easy,
           referenceAnswer: question?.question.referenceAnswer || "",
           databaseID: question?.question.database.id || "",
+          visibleScope: question?.question.visibleScope || undefined,
         }}
         onSubmit={onSubmit}
         action="update"
