@@ -40,7 +40,7 @@ export function QuestionCards({ id }: { id: string }) {
       <AnswerCard fragment={fragment} />
 
       <div className="flex flex-col gap-4">
-        {/* These cards are small, so we can put them in a row */}
+        {/* These cards are small, so we group them together in a single section */}
         <PassRateCard fragment={fragment} />
         <VisibleScopeCard fragment={fragment} />
       </div>
