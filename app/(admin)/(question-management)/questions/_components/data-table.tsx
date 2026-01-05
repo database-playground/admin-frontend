@@ -39,6 +39,7 @@ export function QuestionsDataTable({ query, difficulty }: { query?: string; diff
         category: question.category,
         difficulty: question.difficulty as "easy" | "medium" | "hard" | "unspecified",
         referenceAnswer: question.referenceAnswer,
+        visibleScope: question.visibleScope,
         database: question.database ? [question.database] : [], // Convert single database to array for table display
       } satisfies Question;
     })
