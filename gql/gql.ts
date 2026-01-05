@@ -14,6 +14,15 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  query CheatRecordDetails($id: ID!) {\n    cheatRecord(id: $id) {\n      ...CheatRecordDetailsCard\n      id\n    }\n  }\n": typeof types.CheatRecordDetailsDocument,
+    "\n  fragment CheatRecordDetailsCard on CheatRecord {\n    id\n    cheatedAt\n    reason\n    resolvedAt\n    resolvedReason\n    user {\n      id\n      avatar\n      email\n      name\n    }\n  }\n": typeof types.CheatRecordDetailsCardFragmentDoc,
+    "\n  query CheatRecordHeader($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      reason\n      user {\n        id\n        avatar\n        email\n        name\n      }\n    }\n  }\n": typeof types.CheatRecordHeaderDocument,
+    "\n  query CheatRecordResolveButton($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      resolvedAt\n    }\n  }\n": typeof types.CheatRecordResolveButtonDocument,
+    "\n  query CreateCheatRecordFormUserInfo($id: ID!) {\n    user(id: $id) {\n      id\n      email\n      name\n    }\n  }\n": typeof types.CreateCheatRecordFormUserInfoDocument,
+    "\n  mutation CreateCheatRecord($reason: String!, $userID: ID) {\n    createCheatRecord(reason: $reason, userID: $userID) {\n      id\n      cheatedAt\n      reason\n      user {\n        id\n        email\n        name\n      }\n    }\n  }\n": typeof types.CreateCheatRecordDocument,
+    "\n  mutation ResolveCheatRecord($cheatRecordID: ID!, $reason: String!) {\n    resolveCheatRecord(cheatRecordID: $cheatRecordID, reason: $reason)\n  }\n": typeof types.ResolveCheatRecordDocument,
+    "\n  query CheatRecordById($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      cheatedAt\n      reason\n      resolvedAt\n      resolvedReason\n      user {\n        id\n        avatar\n        email\n        name\n      }\n    }\n  }\n": typeof types.CheatRecordByIdDocument,
+    "\n  query CheatRecordsTable(\n    $after: Cursor\n    $before: Cursor\n    $first: Int\n    $last: Int\n    $where: CheatRecordWhereInput\n  ) {\n    cheatRecords(\n      after: $after\n      before: $before\n      first: $first\n      last: $last\n      where: $where\n    ) {\n      totalCount\n      edges {\n        node {\n          id\n          cheatedAt\n          reason\n          resolvedAt\n          resolvedReason\n          user {\n            id\n            avatar\n            email\n            name\n          }\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n        hasPreviousPage\n        startCursor\n      }\n    }\n  }\n": typeof types.CheatRecordsTableDocument,
     "\n    query EventById($id: ID!) {\n      event(id: $id) {\n        id\n        payload\n        triggeredAt\n        type\n        user {\n          id\n          name\n        }\n      }\n    }\n": typeof types.EventByIdDocument,
     "\n  query EventsTable(\n    $after: Cursor\n    $before: Cursor\n    $first: Int\n    $last: Int\n    $where: EventWhereInput\n  ) {\n    events(after: $after, before: $before, first: $first, last: $last, orderBy: { field: TRIGGERED_AT, direction: DESC }, where: $where) {\n      totalCount\n      edges {\n        node {\n          id\n          triggeredAt\n          type\n          user {\n            id\n            name\n          }\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n        hasPreviousPage\n        startCursor\n      }\n    }\n  }\n": typeof types.EventsTableDocument,
     "\n  query PointHeader($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      grantedAt\n      points\n    }\n  }\n": typeof types.PointHeaderDocument,
@@ -77,12 +86,14 @@ type Documents = {
     "\n  query ScopeSetTable {\n    scopeSets {\n      id\n      description\n      scopes\n      slug\n    }\n  }\n": typeof types.ScopeSetTableDocument,
     "\n  query ScopeSetById($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      description\n      scopes\n      slug\n    }\n  }\n": typeof types.ScopeSetByIdDocument,
     "\n  fragment UserAuditInfoCard on User {\n    id\n    createdAt\n    updatedAt\n  }\n": typeof types.UserAuditInfoCardFragmentDoc,
+    "\n  fragment UserCheatRecordsCard on User {\n    id\n    cheating\n    cheatRecords(first: 5, where: { resolvedAtIsNil: true }) {\n      totalCount\n      edges {\n        node {\n          ...UserCheatRecordLine\n          id\n        }\n      }\n    }\n  }\n": typeof types.UserCheatRecordsCardFragmentDoc,
+    "\n  fragment UserCheatRecordLine on CheatRecord {\n    id\n    cheatedAt\n    reason\n  }\n": typeof types.UserCheatRecordLineFragmentDoc,
     "\n  fragment UserGroupsCard on User {\n    id\n    group {\n      id\n      name\n    }\n  }\n": typeof types.UserGroupsCardFragmentDoc,
     "\n  query UserHeader($id: ID!) {\n    user(id: $id) {\n      id\n      avatar\n      email\n      name\n    }\n  }\n": typeof types.UserHeaderDocument,
     "\n  fragment UserPointsCard on User {\n    id\n    totalPoints\n\n    points(first: 5, orderBy: { field: GRANTED_AT, direction: DESC }) {\n      edges {\n        node {\n          ...UserPointHistoryLine\n          id\n        }\n      }\n    }\n  }\n": typeof types.UserPointsCardFragmentDoc,
     "\n  fragment UserPointHistoryLine on Point {\n    id\n    description\n    grantedAt\n    points\n  }\n": typeof types.UserPointHistoryLineFragmentDoc,
     "\n  fragment UserQuestionsCard on User {\n    id\n    submissionStatistics {\n      attemptedQuestions\n      solvedQuestions\n      totalQuestions\n\n      solvedQuestionByDifficulty {\n        difficulty\n        solvedQuestions\n      }\n    }\n  }\n": typeof types.UserQuestionsCardFragmentDoc,
-    "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      ...UserAuditInfoCard\n      ...UserGroupsCard\n      ...UserPointsCard\n      ...UserQuestionsCard\n      id\n    }\n  }\n": typeof types.UserCardsDocument,
+    "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      ...UserAuditInfoCard\n      ...UserCheatRecordsCard\n      ...UserGroupsCard\n      ...UserPointsCard\n      ...UserQuestionsCard\n      id\n    }\n  }\n": typeof types.UserCardsDocument,
     "\n  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {\n    updateUser(id: $id, input: $input) {\n      id\n    }\n  }\n": typeof types.UpdateUserDocument,
     "\n  mutation DeleteUser($id: ID!) {\n    deleteUser(id: $id)\n  }\n": typeof types.DeleteUserDocument,
     "\n  mutation LogoutUserDevices($userID: ID!) {\n    logoutUser(userID: $userID)\n  }\n": typeof types.LogoutUserDevicesDocument,
@@ -102,6 +113,15 @@ type Documents = {
     "\n  query BasicUserInfo {\n    me {\n      id\n      avatar\n      email\n      name\n\n      group {\n        id\n        name\n      }\n    }\n  }\n": typeof types.BasicUserInfoDocument,
 };
 const documents: Documents = {
+    "\n  query CheatRecordDetails($id: ID!) {\n    cheatRecord(id: $id) {\n      ...CheatRecordDetailsCard\n      id\n    }\n  }\n": types.CheatRecordDetailsDocument,
+    "\n  fragment CheatRecordDetailsCard on CheatRecord {\n    id\n    cheatedAt\n    reason\n    resolvedAt\n    resolvedReason\n    user {\n      id\n      avatar\n      email\n      name\n    }\n  }\n": types.CheatRecordDetailsCardFragmentDoc,
+    "\n  query CheatRecordHeader($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      reason\n      user {\n        id\n        avatar\n        email\n        name\n      }\n    }\n  }\n": types.CheatRecordHeaderDocument,
+    "\n  query CheatRecordResolveButton($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      resolvedAt\n    }\n  }\n": types.CheatRecordResolveButtonDocument,
+    "\n  query CreateCheatRecordFormUserInfo($id: ID!) {\n    user(id: $id) {\n      id\n      email\n      name\n    }\n  }\n": types.CreateCheatRecordFormUserInfoDocument,
+    "\n  mutation CreateCheatRecord($reason: String!, $userID: ID) {\n    createCheatRecord(reason: $reason, userID: $userID) {\n      id\n      cheatedAt\n      reason\n      user {\n        id\n        email\n        name\n      }\n    }\n  }\n": types.CreateCheatRecordDocument,
+    "\n  mutation ResolveCheatRecord($cheatRecordID: ID!, $reason: String!) {\n    resolveCheatRecord(cheatRecordID: $cheatRecordID, reason: $reason)\n  }\n": types.ResolveCheatRecordDocument,
+    "\n  query CheatRecordById($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      cheatedAt\n      reason\n      resolvedAt\n      resolvedReason\n      user {\n        id\n        avatar\n        email\n        name\n      }\n    }\n  }\n": types.CheatRecordByIdDocument,
+    "\n  query CheatRecordsTable(\n    $after: Cursor\n    $before: Cursor\n    $first: Int\n    $last: Int\n    $where: CheatRecordWhereInput\n  ) {\n    cheatRecords(\n      after: $after\n      before: $before\n      first: $first\n      last: $last\n      where: $where\n    ) {\n      totalCount\n      edges {\n        node {\n          id\n          cheatedAt\n          reason\n          resolvedAt\n          resolvedReason\n          user {\n            id\n            avatar\n            email\n            name\n          }\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n        hasPreviousPage\n        startCursor\n      }\n    }\n  }\n": types.CheatRecordsTableDocument,
     "\n    query EventById($id: ID!) {\n      event(id: $id) {\n        id\n        payload\n        triggeredAt\n        type\n        user {\n          id\n          name\n        }\n      }\n    }\n": types.EventByIdDocument,
     "\n  query EventsTable(\n    $after: Cursor\n    $before: Cursor\n    $first: Int\n    $last: Int\n    $where: EventWhereInput\n  ) {\n    events(after: $after, before: $before, first: $first, last: $last, orderBy: { field: TRIGGERED_AT, direction: DESC }, where: $where) {\n      totalCount\n      edges {\n        node {\n          id\n          triggeredAt\n          type\n          user {\n            id\n            name\n          }\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n        hasPreviousPage\n        startCursor\n      }\n    }\n  }\n": types.EventsTableDocument,
     "\n  query PointHeader($id: ID!) {\n    pointGrant(id: $id) {\n      id\n      grantedAt\n      points\n    }\n  }\n": types.PointHeaderDocument,
@@ -165,12 +185,14 @@ const documents: Documents = {
     "\n  query ScopeSetTable {\n    scopeSets {\n      id\n      description\n      scopes\n      slug\n    }\n  }\n": types.ScopeSetTableDocument,
     "\n  query ScopeSetById($id: ID!) {\n    scopeSet(filter: { id: $id }) {\n      id\n      description\n      scopes\n      slug\n    }\n  }\n": types.ScopeSetByIdDocument,
     "\n  fragment UserAuditInfoCard on User {\n    id\n    createdAt\n    updatedAt\n  }\n": types.UserAuditInfoCardFragmentDoc,
+    "\n  fragment UserCheatRecordsCard on User {\n    id\n    cheating\n    cheatRecords(first: 5, where: { resolvedAtIsNil: true }) {\n      totalCount\n      edges {\n        node {\n          ...UserCheatRecordLine\n          id\n        }\n      }\n    }\n  }\n": types.UserCheatRecordsCardFragmentDoc,
+    "\n  fragment UserCheatRecordLine on CheatRecord {\n    id\n    cheatedAt\n    reason\n  }\n": types.UserCheatRecordLineFragmentDoc,
     "\n  fragment UserGroupsCard on User {\n    id\n    group {\n      id\n      name\n    }\n  }\n": types.UserGroupsCardFragmentDoc,
     "\n  query UserHeader($id: ID!) {\n    user(id: $id) {\n      id\n      avatar\n      email\n      name\n    }\n  }\n": types.UserHeaderDocument,
     "\n  fragment UserPointsCard on User {\n    id\n    totalPoints\n\n    points(first: 5, orderBy: { field: GRANTED_AT, direction: DESC }) {\n      edges {\n        node {\n          ...UserPointHistoryLine\n          id\n        }\n      }\n    }\n  }\n": types.UserPointsCardFragmentDoc,
     "\n  fragment UserPointHistoryLine on Point {\n    id\n    description\n    grantedAt\n    points\n  }\n": types.UserPointHistoryLineFragmentDoc,
     "\n  fragment UserQuestionsCard on User {\n    id\n    submissionStatistics {\n      attemptedQuestions\n      solvedQuestions\n      totalQuestions\n\n      solvedQuestionByDifficulty {\n        difficulty\n        solvedQuestions\n      }\n    }\n  }\n": types.UserQuestionsCardFragmentDoc,
-    "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      ...UserAuditInfoCard\n      ...UserGroupsCard\n      ...UserPointsCard\n      ...UserQuestionsCard\n      id\n    }\n  }\n": types.UserCardsDocument,
+    "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      ...UserAuditInfoCard\n      ...UserCheatRecordsCard\n      ...UserGroupsCard\n      ...UserPointsCard\n      ...UserQuestionsCard\n      id\n    }\n  }\n": types.UserCardsDocument,
     "\n  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {\n    updateUser(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateUserDocument,
     "\n  mutation DeleteUser($id: ID!) {\n    deleteUser(id: $id)\n  }\n": types.DeleteUserDocument,
     "\n  mutation LogoutUserDevices($userID: ID!) {\n    logoutUser(userID: $userID)\n  }\n": types.LogoutUserDevicesDocument,
@@ -204,6 +226,42 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query CheatRecordDetails($id: ID!) {\n    cheatRecord(id: $id) {\n      ...CheatRecordDetailsCard\n      id\n    }\n  }\n"): (typeof documents)["\n  query CheatRecordDetails($id: ID!) {\n    cheatRecord(id: $id) {\n      ...CheatRecordDetailsCard\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment CheatRecordDetailsCard on CheatRecord {\n    id\n    cheatedAt\n    reason\n    resolvedAt\n    resolvedReason\n    user {\n      id\n      avatar\n      email\n      name\n    }\n  }\n"): (typeof documents)["\n  fragment CheatRecordDetailsCard on CheatRecord {\n    id\n    cheatedAt\n    reason\n    resolvedAt\n    resolvedReason\n    user {\n      id\n      avatar\n      email\n      name\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query CheatRecordHeader($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      reason\n      user {\n        id\n        avatar\n        email\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query CheatRecordHeader($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      reason\n      user {\n        id\n        avatar\n        email\n        name\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query CheatRecordResolveButton($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      resolvedAt\n    }\n  }\n"): (typeof documents)["\n  query CheatRecordResolveButton($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      resolvedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query CreateCheatRecordFormUserInfo($id: ID!) {\n    user(id: $id) {\n      id\n      email\n      name\n    }\n  }\n"): (typeof documents)["\n  query CreateCheatRecordFormUserInfo($id: ID!) {\n    user(id: $id) {\n      id\n      email\n      name\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateCheatRecord($reason: String!, $userID: ID) {\n    createCheatRecord(reason: $reason, userID: $userID) {\n      id\n      cheatedAt\n      reason\n      user {\n        id\n        email\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateCheatRecord($reason: String!, $userID: ID) {\n    createCheatRecord(reason: $reason, userID: $userID) {\n      id\n      cheatedAt\n      reason\n      user {\n        id\n        email\n        name\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ResolveCheatRecord($cheatRecordID: ID!, $reason: String!) {\n    resolveCheatRecord(cheatRecordID: $cheatRecordID, reason: $reason)\n  }\n"): (typeof documents)["\n  mutation ResolveCheatRecord($cheatRecordID: ID!, $reason: String!) {\n    resolveCheatRecord(cheatRecordID: $cheatRecordID, reason: $reason)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query CheatRecordById($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      cheatedAt\n      reason\n      resolvedAt\n      resolvedReason\n      user {\n        id\n        avatar\n        email\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query CheatRecordById($id: ID!) {\n    cheatRecord(id: $id) {\n      id\n      cheatedAt\n      reason\n      resolvedAt\n      resolvedReason\n      user {\n        id\n        avatar\n        email\n        name\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query CheatRecordsTable(\n    $after: Cursor\n    $before: Cursor\n    $first: Int\n    $last: Int\n    $where: CheatRecordWhereInput\n  ) {\n    cheatRecords(\n      after: $after\n      before: $before\n      first: $first\n      last: $last\n      where: $where\n    ) {\n      totalCount\n      edges {\n        node {\n          id\n          cheatedAt\n          reason\n          resolvedAt\n          resolvedReason\n          user {\n            id\n            avatar\n            email\n            name\n          }\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n        hasPreviousPage\n        startCursor\n      }\n    }\n  }\n"): (typeof documents)["\n  query CheatRecordsTable(\n    $after: Cursor\n    $before: Cursor\n    $first: Int\n    $last: Int\n    $where: CheatRecordWhereInput\n  ) {\n    cheatRecords(\n      after: $after\n      before: $before\n      first: $first\n      last: $last\n      where: $where\n    ) {\n      totalCount\n      edges {\n        node {\n          id\n          cheatedAt\n          reason\n          resolvedAt\n          resolvedReason\n          user {\n            id\n            avatar\n            email\n            name\n          }\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n        hasPreviousPage\n        startCursor\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -459,6 +517,14 @@ export function graphql(source: "\n  fragment UserAuditInfoCard on User {\n    i
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  fragment UserCheatRecordsCard on User {\n    id\n    cheating\n    cheatRecords(first: 5, where: { resolvedAtIsNil: true }) {\n      totalCount\n      edges {\n        node {\n          ...UserCheatRecordLine\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment UserCheatRecordsCard on User {\n    id\n    cheating\n    cheatRecords(first: 5, where: { resolvedAtIsNil: true }) {\n      totalCount\n      edges {\n        node {\n          ...UserCheatRecordLine\n          id\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment UserCheatRecordLine on CheatRecord {\n    id\n    cheatedAt\n    reason\n  }\n"): (typeof documents)["\n  fragment UserCheatRecordLine on CheatRecord {\n    id\n    cheatedAt\n    reason\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  fragment UserGroupsCard on User {\n    id\n    group {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  fragment UserGroupsCard on User {\n    id\n    group {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -479,7 +545,7 @@ export function graphql(source: "\n  fragment UserQuestionsCard on User {\n    i
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      ...UserAuditInfoCard\n      ...UserGroupsCard\n      ...UserPointsCard\n      ...UserQuestionsCard\n      id\n    }\n  }\n"): (typeof documents)["\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      ...UserAuditInfoCard\n      ...UserGroupsCard\n      ...UserPointsCard\n      ...UserQuestionsCard\n      id\n    }\n  }\n"];
+export function graphql(source: "\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      ...UserAuditInfoCard\n      ...UserCheatRecordsCard\n      ...UserGroupsCard\n      ...UserPointsCard\n      ...UserQuestionsCard\n      id\n    }\n  }\n"): (typeof documents)["\n  query UserCards($id: ID!) {\n    user(id: $id) {\n      ...UserAuditInfoCard\n      ...UserCheatRecordsCard\n      ...UserGroupsCard\n      ...UserPointsCard\n      ...UserQuestionsCard\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
