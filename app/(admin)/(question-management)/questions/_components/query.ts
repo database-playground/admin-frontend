@@ -9,6 +9,7 @@ export const QUESTION_BY_ID_QUERY = graphql(`
       difficulty
       referenceAnswer
       title
+      visibleScope
       database {
         id
         slug
@@ -59,6 +60,7 @@ export const QUESTIONS_TABLE_QUERY = graphql(`
           difficulty
           referenceAnswer
           title
+          visibleScope
           database {
             id
             slug

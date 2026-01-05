@@ -22,6 +22,7 @@ export interface Question {
   category: string;
   difficulty: "easy" | "medium" | "hard" | "unspecified";
   referenceAnswer: string;
+  visibleScope?: string | null;
   database: { id: string; slug: string }[]; // Keep as array for table display compatibility
 }
 
@@ -90,6 +91,17 @@ export const columns: ColumnDef<Question>[] = [
           </Badge>
         </StyledLink>
       );
+    },
+  },
+  {
+    accessorKey: "visibleScope",
+    header: "可見範圍",
+    cell: ({ row }) => {
+      const visibleScope = row.original.visibleScope;
+      if (!visibleScope) {
+        return <Badge variant="outline" className="text-xs">所有人</Badge>;
+      }
+      return <Badge variant="secondary" className="text-xs">{visibleScope}</Badge>;
     },
   },
   {

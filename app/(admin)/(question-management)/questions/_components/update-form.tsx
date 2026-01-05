@@ -18,6 +18,7 @@ export const formSchema = z.object({
   difficulty: z.enum(QuestionDifficulty),
   referenceAnswer: z.string().min(1, "參考答案不能為空"),
   databaseID: z.string().optional(), // Optional, validation handled dynamically
+  visibleScope: z.string().optional(), // Optional, empty means visible to everyone
 });
 
 export interface UpdateQuestionFormData {
@@ -27,6 +28,7 @@ export interface UpdateQuestionFormData {
   difficulty: QuestionDifficulty;
   referenceAnswer: string;
   databaseID?: string; // Changed to single databaseID for 1-N relationship
+  visibleScope?: string; // Optional, empty means visible to everyone
 }
 
 const QUESTION_UPDATE_FORM_FRAGMENT = graphql(`
@@ -80,6 +82,7 @@ export function UpdateQuestionForm({
       difficulty: data.difficulty,
       referenceAnswer: data.referenceAnswer,
       databaseID: data.databaseID,
+      visibleScope: data.visibleScope || undefined,
     });
   };
 
@@ -208,6 +211,27 @@ export function UpdateQuestionForm({
               </Select>
             </FormControl>
             <FormDescription>選擇此題目所屬的資料庫（一個題目只能屬於一個資料庫）。</FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="visibleScope"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>可見範圍</FormLabel>
+            <FormControl>
+              <Input
+                {...field}
+                value={field.value || ""}
+                placeholder="留空表示所有人可見"
+              />
+            </FormControl>
+            <FormDescription>
+              只有擁有此 scope 的使用者可以看到此題目。留空表示所有人可見。
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
