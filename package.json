@@ -43,7 +43,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.19",
-    "foxact": "^0.2.49",
+    "foxact": "^0.2.52",
     "graphql": "^16.12.0",
     "lucide-react": "^0.562.0",
     "next": "^16.1.1",

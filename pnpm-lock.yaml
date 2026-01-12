@@ -87,8 +87,8 @@ importers:
         specifier: ^1.11.19
         version: 1.11.19
       foxact:
-        specifier: ^0.2.49
-        version: 0.2.49(react@19.2.3)
+        specifier: ^0.2.52
+        version: 0.2.52(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       graphql:
         specifier: ^16.12.0
         version: 16.12.0
@@ -2826,12 +2826,15 @@ packages:
     resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
     engines: {node: '>=12.20.0'}
 
-  foxact@0.2.49:
-    resolution: {integrity: sha512-9Pbu4IbkaNqtS/H4887/QWegclMpBn54mzbPp3t1mg0iJuB83jpQGBY2fshal50NmchlAFIT/GSWBFsa0YI31Q==}
+  foxact@0.2.52:
+    resolution: {integrity: sha512-cc3ydJkM/mYkof1/ofI4VlVAiRyfsSDsHRC4UIAXQcnUXCuo0rXM66Zy1ggdxAXL03ikHnh3bPnQ7AYuI/Yzow==}
     peerDependencies:
       react: '*'
+      react-dom: '*'
     peerDependenciesMeta:
       react:
+        optional: true
+      react-dom:
         optional: true
 
   function-bind@1.1.2:
@@ -7542,12 +7545,13 @@ snapshots:
     dependencies:
       fetch-blob: 3.2.0
 
-  foxact@0.2.49(react@19.2.3):
+  foxact@0.2.52(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       client-only: 0.0.1
       server-only: 0.0.1
     optionalDependencies:
       react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
 
   function-bind@1.1.2: {}
 
